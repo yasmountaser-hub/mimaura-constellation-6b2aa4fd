@@ -4,8 +4,12 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
-import PatternNudgeSection from "@/components/PatternNudgeSection";
+import JourneyMapSection from "@/components/JourneyMapSection";
+import DifferenceSection from "@/components/DifferenceSection";
+import PatternNudgeSneakPeek from "@/components/PatternNudgeSneakPeek";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import MeetMimiSection from "@/components/MeetMimiSection";
+import TeamSection from "@/components/TeamSection";
 import EducationSection from "@/components/EducationSection";
 import TrustSection from "@/components/TrustSection";
 import WaitlistSection from "@/components/WaitlistSection";
@@ -35,19 +39,39 @@ const Index = () => {
           <FeaturesSection />
         </section>
 
-        {/* Pattern Nudge System */}
-        <section id="how-it-works">
-          <PatternNudgeSection />
+        {/* Journey Map */}
+        <section id="journey">
+          <JourneyMapSection />
         </section>
 
-        {/* Education Hub */}
-        <section id="education">
-          <EducationSection />
+        {/* What Makes Us Different */}
+        <section id="difference">
+          <DifferenceSection />
+        </section>
+
+        {/* Pattern Nudge Sneak Peek */}
+        <section id="how-it-works">
+          <PatternNudgeSneakPeek />
+        </section>
+
+        {/* Testimonials */}
+        <section id="testimonials">
+          <TestimonialsSection />
         </section>
 
         {/* Meet Mimi */}
         <section id="meet-mimi">
           <MeetMimiSection />
+        </section>
+
+        {/* Meet the Team */}
+        <section id="team">
+          <TeamSection />
+        </section>
+
+        {/* Education Hub */}
+        <section id="education">
+          <EducationSection />
         </section>
 
         {/* Trust & Privacy */}
