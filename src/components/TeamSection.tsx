@@ -39,20 +39,6 @@ const team = [
 const TeamSection = () => {
   return (
     <section className="relative py-24 px-6 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div
-          className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/10 rounded-full blur-3xl"
-          animate={{ x: [0, -20, 0], y: [0, 20, 0] }}
-          transition={{ duration: 12, repeat: Infinity }}
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
