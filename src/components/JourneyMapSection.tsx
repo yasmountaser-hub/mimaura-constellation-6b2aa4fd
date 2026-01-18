@@ -12,6 +12,8 @@ const journeySteps = [
     description: "Quick check-ins on symptoms, mood, and energy. Takes seconds, not minutes.",
     position: { x: 20, y: 25 },
     starSize: "lg",
+    labelPosition: "bottom" as const,
+    tooltipPosition: "right" as const,
   },
   {
     id: "learn",
@@ -21,6 +23,8 @@ const journeySteps = [
     description: "AI-powered pattern recognition surfaces insights you might miss.",
     position: { x: 50, y: 12 },
     starSize: "xl",
+    labelPosition: "bottom" as const,
+    tooltipPosition: "bottom" as const,
   },
   {
     id: "nudge",
@@ -30,6 +34,8 @@ const journeySteps = [
     description: "Soft notifications when Mimi notices something that might help.",
     position: { x: 80, y: 25 },
     starSize: "lg",
+    labelPosition: "bottom" as const,
+    tooltipPosition: "left" as const,
   },
   {
     id: "grow",
@@ -39,6 +45,8 @@ const journeySteps = [
     description: "Over time, understand your body like never before.",
     position: { x: 72, y: 65 },
     starSize: "md",
+    labelPosition: "top" as const,
+    tooltipPosition: "left" as const,
   },
   {
     id: "thrive",
@@ -48,6 +56,8 @@ const journeySteps = [
     description: "Make decisions aligned with your natural rhythms.",
     position: { x: 28, y: 65 },
     starSize: "md",
+    labelPosition: "top" as const,
+    tooltipPosition: "right" as const,
   },
 ];
 
@@ -299,8 +309,8 @@ const JourneyMapSection = () => {
               <motion.div
                 className="absolute left-1/2 -translate-x-1/2 text-center whitespace-nowrap"
                 style={{
-                  top: index < 3 ? "calc(100% + 12px)" : "auto",
-                  bottom: index >= 3 ? "calc(100% + 12px)" : "auto",
+                  top: step.labelPosition === "bottom" ? "calc(100% + 12px)" : "auto",
+                  bottom: step.labelPosition === "top" ? "calc(100% + 12px)" : "auto",
                 }}
                 animate={{ 
                   y: activeStep === step.id ? [0, -3, 0] : 0,
@@ -311,22 +321,34 @@ const JourneyMapSection = () => {
                 <p className="text-xs text-muted-foreground">{step.subtitle}</p>
               </motion.div>
 
-              {/* Info tooltip */}
+              {/* Info tooltip - positioned based on tooltipPosition */}
               <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{
                   opacity: activeStep === step.id ? 1 : 0,
-                  y: activeStep === step.id ? 0 : 10,
                   scale: activeStep === step.id ? 1 : 0.9,
-                  pointerEvents: activeStep === step.id ? "auto" : "none",
                 }}
-                className="absolute z-30 glass-card rounded-2xl p-4 w-64"
+                className="absolute z-50 bg-card border border-border rounded-2xl p-4 w-56 shadow-lg"
                 style={{
-                  left: step.position.x > 50 ? "auto" : "50%",
-                  right: step.position.x > 50 ? "50%" : "auto",
-                  transform: step.position.x > 50 ? "translateX(50%)" : "translateX(-50%)",
-                  top: index < 3 ? "calc(100% + 70px)" : "auto",
-                  bottom: index >= 3 ? "calc(100% + 70px)" : "auto",
+                  // Right positioning
+                  ...(step.tooltipPosition === "right" && {
+                    left: "calc(100% + 20px)",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }),
+                  // Left positioning
+                  ...(step.tooltipPosition === "left" && {
+                    right: "calc(100% + 20px)",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }),
+                  // Bottom positioning
+                  ...(step.tooltipPosition === "bottom" && {
+                    left: "50%",
+                    top: "calc(100% + 60px)",
+                    transform: "translateX(-50%)",
+                  }),
+                  pointerEvents: activeStep === step.id ? "auto" : "none",
                 }}
               >
                 <div className="flex items-center gap-2 mb-2">
