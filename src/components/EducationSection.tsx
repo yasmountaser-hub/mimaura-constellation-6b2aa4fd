@@ -37,14 +37,6 @@ const resources = [
 const EducationSection = () => {
   return (
     <section className="relative py-24 px-6 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.15, 1] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-      </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -83,11 +75,6 @@ const EducationSection = () => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <motion.div
-              className="absolute inset-0 bg-accent/20 blur-3xl rounded-full scale-75"
-              animate={{ scale: [0.75, 0.85, 0.75] }}
-              transition={{ duration: 6, repeat: Infinity }}
-            />
             <motion.div
               className="relative z-10 rounded-3xl overflow-hidden shadow-float border border-accent/20"
               whileHover={{ scale: 1.02 }}

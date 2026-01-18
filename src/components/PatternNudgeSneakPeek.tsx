@@ -65,21 +65,6 @@ const PatternNudgeSneakPeek = () => {
 
   return (
     <section className="relative py-24 px-6 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 aurora-bg opacity-30" />
-        <motion.div
-          className="absolute top-1/3 left-1/4 w-96 h-96 bg-primary/15 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], x: [0, 30, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/15 rounded-full blur-3xl"
-          animate={{ scale: [1.1, 1, 1.1], y: [0, -20, 0] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-      </div>
-
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div

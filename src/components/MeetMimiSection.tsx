@@ -5,20 +5,6 @@ import mimiPoses from "@/assets/mimi-poses.png";
 const MeetMimiSection = () => {
   return (
     <section className="relative py-24 px-6 overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div
-          className="absolute top-20 right-10 w-64 h-64 bg-accent/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-      </div>
-
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}

@@ -28,16 +28,6 @@ const WaitlistSection = () => {
 
   return (
     <section className="relative py-24 px-6 overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 aurora-bg opacity-40" />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-      </div>
-
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -46,8 +36,6 @@ const WaitlistSection = () => {
           transition={{ duration: 0.8 }}
           className="glass-card rounded-[2rem] p-8 md:p-12 text-center relative overflow-hidden"
         >
-          {/* Corner decorations */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
 
           {/* Mimi floating */}

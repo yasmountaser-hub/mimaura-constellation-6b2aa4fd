@@ -101,14 +101,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
           className="relative flex justify-center items-center"
         >
-          {/* Glow ring */}
-          <motion.div
-            className="absolute w-80 h-80 md:w-96 md:h-96 rounded-full bg-primary/10 blur-2xl"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          />
-          
-          {/* Outer ring */}
+          {/* Outer ring - subtle border only */}
           <motion.div
             className="absolute w-72 h-72 md:w-80 md:h-80 rounded-full border-2 border-primary/20"
             animate={{ rotate: 360 }}
