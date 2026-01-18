@@ -13,12 +13,13 @@ const FloatingParticles = () => {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-    const newParticles: Particle[] = Array.from({ length: 30 }, (_, i) => ({
+    // Reduced particle count for better performance
+    const newParticles: Particle[] = Array.from({ length: 10 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
-      size: Math.random() * 8 + 4,
-      duration: Math.random() * 20 + 15,
-      delay: Math.random() * 10,
+      size: Math.random() * 6 + 3,
+      duration: Math.random() * 30 + 25,
+      delay: Math.random() * 15,
     }));
     setParticles(newParticles);
   }, []);
@@ -36,7 +37,7 @@ const FloatingParticles = () => {
           }}
           animate={{ 
             y: "-100vh", 
-            opacity: [0, 0.6, 0.6, 0] 
+            opacity: [0, 0.3, 0.3, 0] 
           }}
           transition={{
             duration: particle.duration,
@@ -52,11 +53,11 @@ const FloatingParticles = () => {
         />
       ))}
       
-      {/* Floating sparkles */}
-      {Array.from({ length: 15 }).map((_, i) => (
+      {/* Reduced floating sparkles */}
+      {Array.from({ length: 6 }).map((_, i) => (
         <motion.div
           key={`sparkle-${i}`}
-          className="absolute text-accent/40"
+          className="absolute text-accent/30"
           initial={{ 
             x: `${Math.random() * 100}vw`, 
             y: `${Math.random() * 100}vh`,
@@ -64,15 +65,15 @@ const FloatingParticles = () => {
           }}
           animate={{ 
             scale: [0, 1, 0],
-            opacity: [0, 1, 0] 
+            opacity: [0, 0.6, 0] 
           }}
           transition={{
-            duration: 3,
+            duration: 4,
             repeat: Infinity,
-            delay: Math.random() * 3,
+            delay: Math.random() * 5,
             ease: "easeInOut",
           }}
-          style={{ fontSize: Math.random() * 12 + 8 }}
+          style={{ fontSize: Math.random() * 10 + 8 }}
         >
           ✦
         </motion.div>

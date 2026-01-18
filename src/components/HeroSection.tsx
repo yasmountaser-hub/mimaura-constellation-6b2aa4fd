@@ -6,35 +6,8 @@ import mimiMagic from "@/assets/mimi-magic.png";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden">
-      {/* Aurora background blobs */}
-      <div className="absolute inset-0 -z-10">
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            x: [0, 30, 0],
-            y: [0, -20, 0]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute top-40 right-20 w-96 h-96 bg-accent/20 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            x: [0, -40, 0],
-            y: [0, 30, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-20 left-1/3 w-80 h-80 bg-rose/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.3, 1],
-            y: [0, -30, 0]
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
+      {/* Subtle gradient background - no animated blobs */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
         {/* Left content */}

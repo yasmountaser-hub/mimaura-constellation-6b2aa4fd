@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sparkles, Download } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
+import logo from "@/assets/mimaura-logo.png";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,12 +25,12 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto glass-card rounded-2xl px-6 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <motion.div
-            whileHover={{ rotate: 10, scale: 1.1 }}
-            className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center"
-          >
-            <Sparkles className="w-5 h-5 text-primary" />
-          </motion.div>
+          <motion.img
+            src={logo}
+            alt="Mimaura"
+            whileHover={{ scale: 1.05 }}
+            className="w-10 h-10 rounded-xl object-contain"
+          />
           <span className="font-display text-xl font-bold">Mimaura</span>
         </Link>
 
