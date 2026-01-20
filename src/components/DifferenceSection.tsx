@@ -4,39 +4,51 @@ import mimiMagic from "@/assets/mimi-magic.png";
 
 const comparisons = [
   {
-    feature: "Neurodivergent-friendly design",
-    mimaura: true,
-    others: false,
-    detail: "Low-stim mode, gentle nudges, no guilt trips",
+    feature: "🗓️ Period & Cycle Tracking",
+    mimaura: "plus",
+    others: true,
+    detail: "Basic tracking + AI-powered pattern insights",
   },
   {
-    feature: "Pattern recognition that learns YOU",
-    mimaura: true,
-    others: false,
-    detail: "AI that adapts to your unique rhythms, not generic cycles",
+    feature: "📊 Symptom Logging",
+    mimaura: "plus",
+    others: true,
+    detail: "100+ symptoms + custom tracking tailored to you",
   },
   {
-    feature: "Chronic condition support",
-    mimaura: true,
-    others: false,
-    detail: "Built for PCOS, endo, fibro, and more",
+    feature: "🔔 Reminders & Notifications",
+    mimaura: "plus",
+    others: true,
+    detail: "Gentle, trauma-informed nudges (never guilt trips!)",
   },
   {
-    feature: "Cultural & faith inclusivity",
-    mimaura: true,
+    feature: "🧠 Neurodivergent-Friendly Design",
+    mimaura: "plus",
+    others: false,
+    detail: "Low-stim mode, ADHD-friendly UI, no overwhelm",
+  },
+  {
+    feature: "✨ AI Pattern Recognition",
+    mimaura: "plus",
+    others: "partial",
+    detail: "Learns YOUR unique patterns, not generic 28-day cycles",
+  },
+  {
+    feature: "💜 Chronic Condition Support",
+    mimaura: "plus",
+    others: false,
+    detail: "Built for PCOS, endo, fibro & more from day one",
+  },
+  {
+    feature: "🌍 Cultural & Faith Inclusivity",
+    mimaura: "plus",
     others: false,
     detail: "Respects all backgrounds without assumptions",
   },
   {
-    feature: "Trauma-informed approach",
-    mimaura: true,
-    others: false,
-    detail: "No pushy notifications or guilt-inducing language",
-  },
-  {
-    feature: "100% data privacy",
-    mimaura: true,
-    others: false,
+    feature: "🔒 100% Data Privacy",
+    mimaura: "plus",
+    others: "partial",
     detail: "Never sold, never shared, always encrypted",
   },
 ];
@@ -144,15 +156,33 @@ const DifferenceSection = () => {
                 <div className="flex justify-center">
                   <motion.div
                     whileHover={{ scale: 1.2 }}
-                    className="w-10 h-10 rounded-full bg-mint/20 flex items-center justify-center"
+                    className="flex items-center gap-1"
                   >
-                    <Check className="w-5 h-5 text-mint" />
+                    <div className="w-10 h-10 rounded-full bg-mint/20 flex items-center justify-center">
+                      <Check className="w-5 h-5 text-mint" />
+                    </div>
+                    {item.mimaura === "plus" && (
+                      <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">+MORE</span>
+                    )}
                   </motion.div>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                    <X className="w-5 h-5 text-muted-foreground" />
-                  </div>
+                  {item.others === true ? (
+                    <div className="w-10 h-10 rounded-full bg-mint/10 flex items-center justify-center">
+                      <Check className="w-5 h-5 text-mint/60" />
+                    </div>
+                  ) : item.others === "partial" ? (
+                    <div className="flex items-center gap-1">
+                      <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+                        <span className="text-amber-500 text-sm">~</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground">limited</span>
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                      <X className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}
