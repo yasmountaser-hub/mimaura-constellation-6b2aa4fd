@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import mimiWizard from "@/assets/mimi-wizard.png";
 import mimiPersonalities from "@/assets/mimi-personalities.png";
 import mimiTypes from "@/assets/mimi-types.png";
+import mimiWarrior from "@/assets/mimi-warrior.png";
+import mimiFairy from "@/assets/mimi-fairy.png";
+import mimiAngel from "@/assets/mimi-angel.png";
+import mimiMystic from "@/assets/mimi-mystic.png";
 
 interface Question {
   id: number;
@@ -28,13 +32,14 @@ interface MimiResult {
   color: string;
   bgGradient: string;
   icon: React.ReactNode;
+  image: string;
 }
 
 const questions: Question[] = [
   {
     id: 1,
-    question: "When your energy dips, what's your go-to move?",
-    subtitle: "We all have those days...",
+    question: "When your energy dips, what's your go-to move? 💭",
+    subtitle: "We all have those days... ✨",
     options: [
       { text: "Push through it—I've got things to do!", emoji: "💪", type: "warrior" },
       { text: "Light candles and create a cozy sanctuary", emoji: "✨", type: "fairy" },
@@ -44,8 +49,8 @@ const questions: Question[] = [
   },
   {
     id: 2,
-    question: "Your ideal way to spend a slow weekend?",
-    subtitle: "Self-care Saturday vibes",
+    question: "Your ideal way to spend a slow weekend? 🌸",
+    subtitle: "Self-care Saturday vibes 💆‍♀️",
     options: [
       { text: "Tackling my to-do list and feeling productive", emoji: "📋", type: "warrior" },
       { text: "Creating something—art, crafts, or recipes", emoji: "🎨", type: "fairy" },
@@ -55,8 +60,8 @@ const questions: Question[] = [
   },
   {
     id: 3,
-    question: "When you're feeling emotionally sensitive, you...",
-    subtitle: "Those heightened feelings",
+    question: "When you're feeling emotionally sensitive, you... 🦋",
+    subtitle: "Those heightened feelings 💫",
     options: [
       { text: "Channel it into motivation", emoji: "🔥", type: "warrior" },
       { text: "Express it through creativity", emoji: "🌈", type: "fairy" },
@@ -66,8 +71,8 @@ const questions: Question[] = [
   },
   {
     id: 4,
-    question: "Your ideal tracker would focus on...",
-    subtitle: "What matters most to you",
+    question: "Your ideal tracker would focus on... 📱",
+    subtitle: "What matters most to you 💜",
     options: [
       { text: "Goals, workouts, and peak performance days", emoji: "⚡", type: "warrior" },
       { text: "Mood patterns and creative energy flows", emoji: "🦋", type: "fairy" },
@@ -77,8 +82,8 @@ const questions: Question[] = [
   },
   {
     id: 5,
-    question: "When cravings hit, what speaks to you?",
-    subtitle: "Everyone has their thing...",
+    question: "When cravings hit, what speaks to you? 🍫",
+    subtitle: "Everyone has their thing... 🥐",
     options: [
       { text: "Something energizing—I need fuel!", emoji: "🍌", type: "warrior" },
       { text: "Something sweet and a little indulgent", emoji: "🧁", type: "fairy" },
@@ -92,52 +97,57 @@ const mimiResults: Record<MimiType, MimiResult> = {
   warrior: {
     type: "warrior",
     name: "Warrior Mimi",
-    title: "The Unstoppable Force",
-    description: "You tackle every phase of your cycle like a champion! Even on low-energy days, you find ways to stay active and productive. Your determination is inspiring, but remember—rest is part of the journey too.",
-    cycleVibe: "You thrive during your follicular and ovulation phases when energy peaks. Learn to work WITH your cycle for even more power!",
+    title: "The Unstoppable Force ⚔️",
+    description: "You tackle every phase of your cycle like a champion! Even on low-energy days, you find ways to stay active and productive. Your determination is inspiring, but remember—rest is part of the journey too. 💪✨",
+    cycleVibe: "You thrive during your follicular and ovulation phases when energy peaks. Learn to work WITH your cycle for even more power! 🌟",
     color: "from-rose-400 to-orange-400",
     bgGradient: "bg-gradient-to-br from-rose-500/20 to-orange-500/20",
     icon: <Zap className="w-5 h-5" />,
+    image: mimiWarrior,
   },
   fairy: {
     type: "fairy",
     name: "Fairy Mimi",
-    title: "The Creative Dreamer",
-    description: "You're in tune with the magic of your cycle! Creative and expressive, you flow with your emotions and turn them into beautiful things. Your sensitivity is your superpower.",
-    cycleVibe: "Your creative peaks often align with ovulation, while your luteal phase brings deeper, more introspective art. Embrace all your creative moods!",
+    title: "The Creative Dreamer 🧚‍♀️",
+    description: "You're in tune with the magic of your cycle! Creative and expressive, you flow with your emotions and turn them into beautiful things. Your sensitivity is your superpower. ✨🎨",
+    cycleVibe: "Your creative peaks often align with ovulation, while your luteal phase brings deeper, more introspective art. Embrace all your creative moods! 🌈",
     color: "from-pink-400 to-purple-400",
     bgGradient: "bg-gradient-to-br from-pink-500/20 to-purple-500/20",
     icon: <Flower2 className="w-5 h-5" />,
+    image: mimiFairy,
   },
   angel: {
     type: "angel",
     name: "Angel Mimi",
-    title: "The Gentle Nurturer",
-    description: "You lead with compassion—for yourself and others! You understand that being kind to your body through every phase is the ultimate form of self-love. Your warmth makes everyone feel safe.",
-    cycleVibe: "You naturally slow down during your menstrual phase and bloom during your follicular phase. Your body wisdom is already strong!",
+    title: "The Gentle Nurturer 😇",
+    description: "You lead with compassion—for yourself and others! You understand that being kind to your body through every phase is the ultimate form of self-love. Your warmth makes everyone feel safe. 💕🌸",
+    cycleVibe: "You naturally slow down during your menstrual phase and bloom during your follicular phase. Your body wisdom is already strong! 🌷",
     color: "from-amber-300 to-yellow-400",
     bgGradient: "bg-gradient-to-br from-amber-500/20 to-yellow-500/20",
     icon: <Heart className="w-5 h-5" />,
+    image: mimiAngel,
   },
   mystic: {
     type: "mystic",
     name: "Mystic Mimi",
-    title: "The Intuitive Oracle",
-    description: "You're deeply connected to your inner wisdom! You see your cycle as a source of insight and power. Your reflective nature helps you understand patterns others might miss.",
-    cycleVibe: "Your luteal phase brings powerful intuition, while menstruation offers deep clarity. You're already unlocking your cycle's secrets!",
+    title: "The Intuitive Oracle 🔮",
+    description: "You're deeply connected to your inner wisdom! You see your cycle as a source of insight and power. Your reflective nature helps you understand patterns others might miss. 🌙✨",
+    cycleVibe: "Your luteal phase brings powerful intuition, while menstruation offers deep clarity. You're already unlocking your cycle's secrets! 🌟",
     color: "from-indigo-400 to-violet-500",
     bgGradient: "bg-gradient-to-br from-indigo-500/20 to-violet-500/20",
     icon: <Moon className="w-5 h-5" />,
+    image: mimiMystic,
   },
   rebel: {
     type: "rebel",
     name: "Rebel Mimi",
-    title: "The Bold Trailblazer",
-    description: "You don't follow the rules—you make your own! You're learning to embrace your unique cycle journey and aren't afraid to try new approaches. Your authenticity is refreshing.",
-    cycleVibe: "Every phase is an adventure for you! Mimi will help you discover which approaches work best for YOUR unique body.",
+    title: "The Bold Trailblazer 🚀",
+    description: "You don't follow the rules—you make your own! You're learning to embrace your unique cycle journey and aren't afraid to try new approaches. Your authenticity is refreshing. 💥🌟",
+    cycleVibe: "Every phase is an adventure for you! Mimi will help you discover which approaches work best for YOUR unique body. 🎯",
     color: "from-emerald-400 to-teal-500",
     bgGradient: "bg-gradient-to-br from-emerald-500/20 to-teal-500/20",
     icon: <Sun className="w-5 h-5" />,
+    image: mimiMystic, // fallback
   },
 };
 
@@ -271,11 +281,13 @@ const MimiQuizSection = () => {
                         transition={{ type: "spring", delay: 0.2 }}
                         className="mb-8"
                       >
-                        <div className={`w-32 h-32 mx-auto rounded-full bg-gradient-to-r ${result.color} p-1 mb-6`}>
-                          <div className="w-full h-full rounded-full bg-background flex items-center justify-center">
-                            <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${result.color} flex items-center justify-center text-white`}>
-                              {result.icon}
-                            </div>
+                        <div className={`w-40 h-40 mx-auto rounded-full bg-gradient-to-r ${result.color} p-1 mb-6`}>
+                          <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
+                            <img 
+                              src={result.image} 
+                              alt={result.name}
+                              className="w-36 h-36 object-contain"
+                            />
                           </div>
                         </div>
 
