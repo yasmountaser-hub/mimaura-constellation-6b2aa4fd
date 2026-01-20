@@ -9,6 +9,7 @@ import DifferenceSection from "@/components/DifferenceSection";
 import PatternNudgeSneakPeek from "@/components/PatternNudgeSneakPeek";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import MeetMimiSection from "@/components/MeetMimiSection";
+import MimiQuizSection from "@/components/MimiQuizSection";
 import TeamSection from "@/components/TeamSection";
 import EducationSection from "@/components/EducationSection";
 import TrustSection from "@/components/TrustSection";
@@ -62,6 +63,11 @@ const Index = () => {
         {/* Meet Mimi */}
         <section id="meet-mimi">
           <MeetMimiSection />
+        </section>
+
+        {/* Mimi Personality Quiz */}
+        <section id="quiz">
+          <MimiQuizSection />
         </section>
 
         {/* Meet the Team */}
