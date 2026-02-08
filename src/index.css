@@ -150,12 +150,21 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     @apply bg-background text-foreground font-body antialiased;
     background: var(--gradient-celestial);
     min-height: 100vh;
+    text-rendering: optimizeLegibility;
+  }
+
+  img {
+    image-rendering: auto;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 }
 
@@ -164,6 +173,8 @@
   .glass-card {
     @apply bg-card/70 backdrop-blur-xl border border-white/30 shadow-card;
     background: var(--gradient-card);
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   /* Aurora background animation */

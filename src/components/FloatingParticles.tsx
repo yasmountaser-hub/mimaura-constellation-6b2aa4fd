@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 interface Particle {
   id: number;
@@ -10,34 +10,44 @@ interface Particle {
 }
 
 const FloatingParticles = () => {
-  const [particles, setParticles] = useState<Particle[]>([]);
+  // Memoize particles so they don't re-create on every render
+  const particles = useMemo<Particle[]>(
+    () =>
+      Array.from({ length: 8 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        size: Math.random() * 5 + 2,
+        duration: Math.random() * 30 + 30,
+        delay: Math.random() * 15,
+      })),
+    []
+  );
 
-  useEffect(() => {
-    // Reduced particle count for better performance
-    const newParticles: Particle[] = Array.from({ length: 10 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      size: Math.random() * 6 + 3,
-      duration: Math.random() * 30 + 25,
-      delay: Math.random() * 15,
-    }));
-    setParticles(newParticles);
-  }, []);
+  const sparkles = useMemo(
+    () =>
+      Array.from({ length: 5 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        delay: Math.random() * 6,
+        size: Math.random() * 8 + 8,
+      })),
+    []
+  );
 
   return (
-    <div className="particles">
+    <div className="particles" style={{ willChange: "auto" }}>
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
           className="particle"
-          initial={{ 
-            y: "100vh", 
-            x: `${particle.x}vw`, 
-            opacity: 0 
+          initial={{
+            y: "100vh",
+            opacity: 0,
           }}
-          animate={{ 
-            y: "-100vh", 
-            opacity: [0, 0.3, 0.3, 0] 
+          animate={{
+            y: "-100vh",
+            opacity: [0, 0.25, 0.25, 0],
           }}
           transition={{
             duration: particle.duration,
@@ -49,31 +59,30 @@ const FloatingParticles = () => {
             width: particle.size,
             height: particle.size,
             left: `${particle.x}%`,
+            willChange: "transform",
           }}
         />
       ))}
-      
-      {/* Reduced floating sparkles */}
-      {Array.from({ length: 6 }).map((_, i) => (
+
+      {sparkles.map((s) => (
         <motion.div
-          key={`sparkle-${i}`}
-          className="absolute text-accent/30"
-          initial={{ 
-            x: `${Math.random() * 100}vw`, 
-            y: `${Math.random() * 100}vh`,
-            scale: 0 
-          }}
-          animate={{ 
+          key={`sparkle-${s.id}`}
+          className="absolute text-accent/20 pointer-events-none select-none"
+          animate={{
             scale: [0, 1, 0],
-            opacity: [0, 0.6, 0] 
+            opacity: [0, 0.4, 0],
           }}
           transition={{
-            duration: 4,
+            duration: 5,
             repeat: Infinity,
-            delay: Math.random() * 5,
+            delay: s.delay,
             ease: "easeInOut",
           }}
-          style={{ fontSize: Math.random() * 10 + 8 }}
+          style={{
+            left: `${s.x}vw`,
+            top: `${s.y}vh`,
+            fontSize: s.size,
+          }}
         >
           ✦
         </motion.div>
