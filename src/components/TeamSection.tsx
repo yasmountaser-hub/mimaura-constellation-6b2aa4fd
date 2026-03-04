@@ -279,7 +279,7 @@ const ConstellationView = () => {
           </motion.div>
 
           {/* Members in floating constellation arrangement */}
-          <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10">
+          <div className="flex flex-wrap justify-center gap-10 sm:gap-14 md:gap-16 pt-4">
             {group.members.map((member, index) => (
               <motion.div
                 key={member.name}
