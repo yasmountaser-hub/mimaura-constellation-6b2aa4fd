@@ -148,7 +148,7 @@ const TeamCard = ({ member, index }: TeamCardProps) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 5, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="absolute top-full mt-2 z-30 w-52 sm:w-56"
+              className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 z-30 w-52 sm:w-56"
             >
               <div className="glass-card rounded-2xl p-4 border border-primary/20 shadow-float">
                 <p className="text-xs text-muted-foreground leading-relaxed mb-3 italic">
