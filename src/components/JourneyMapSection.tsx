@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Moon, Sun, Brain, Heart, Zap, Star } from "lucide-react";
+import { Moon, Sun, Brain, Heart, Zap, Star, ChevronRight } from "lucide-react";
 import mimiMagic from "@/assets/mimi-magic.png";
 
 const journeySteps = [
@@ -10,10 +10,7 @@ const journeySteps = [
     title: "Track",
     subtitle: "Log your patterns",
     description: "Quick check-ins on symptoms, mood, and energy. Takes seconds, not minutes.",
-    position: { x: 20, y: 25 },
-    starSize: "lg",
-    labelPosition: "bottom" as const,
-    tooltipPosition: "right" as const,
+    emoji: "🌙",
   },
   {
     id: "learn",
@@ -21,10 +18,7 @@ const journeySteps = [
     title: "Learn",
     subtitle: "Mimi finds connections",
     description: "AI-powered pattern recognition surfaces insights you might miss.",
-    position: { x: 50, y: 12 },
-    starSize: "xl",
-    labelPosition: "bottom" as const,
-    tooltipPosition: "bottom" as const,
+    emoji: "🧠",
   },
   {
     id: "nudge",
@@ -32,10 +26,7 @@ const journeySteps = [
     title: "Nudge",
     subtitle: "Gentle reminders",
     description: "Soft notifications when Mimi notices something that might help.",
-    position: { x: 80, y: 25 },
-    starSize: "lg",
-    labelPosition: "bottom" as const,
-    tooltipPosition: "left" as const,
+    emoji: "⚡",
   },
   {
     id: "grow",
@@ -43,10 +34,7 @@ const journeySteps = [
     title: "Grow",
     subtitle: "Build understanding",
     description: "Over time, understand your body like never before.",
-    position: { x: 72, y: 65 },
-    starSize: "md",
-    labelPosition: "top" as const,
-    tooltipPosition: "left" as const,
+    emoji: "☀️",
   },
   {
     id: "thrive",
@@ -54,41 +42,19 @@ const journeySteps = [
     title: "Thrive",
     subtitle: "Live in harmony",
     description: "Make decisions aligned with your natural rhythms.",
-    position: { x: 28, y: 65 },
-    starSize: "md",
-    labelPosition: "top" as const,
-    tooltipPosition: "right" as const,
+    emoji: "💜",
   },
-];
-
-// Small twinkling stars for background ambiance
-const backgroundStars = [
-  { x: 8, y: 15, delay: 0 },
-  { x: 35, y: 8, delay: 0.5 },
-  { x: 65, y: 6, delay: 1 },
-  { x: 92, y: 18, delay: 1.5 },
-  { x: 12, y: 45, delay: 2 },
-  { x: 88, y: 48, delay: 2.5 },
-  { x: 5, y: 72, delay: 3 },
-  { x: 42, y: 78, delay: 3.5 },
-  { x: 58, y: 82, delay: 4 },
-  { x: 95, y: 70, delay: 4.5 },
 ];
 
 const JourneyMapSection = () => {
   const [activeStep, setActiveStep] = useState<string | null>(null);
 
-  const getNodeSize = (size: string) => {
-    switch (size) {
-      case "xl": return "w-20 h-20 md:w-24 md:h-24";
-      case "lg": return "w-16 h-16 md:w-20 md:h-20";
-      default: return "w-14 h-14 md:w-16 md:h-16";
-    }
-  };
-
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden">
+      {/* Soft background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -104,294 +70,97 @@ const JourneyMapSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
           >
             <Star className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Your Journey</span>
+            <span className="text-sm font-display font-semibold text-primary">Your Journey</span>
           </motion.div>
 
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             The <span className="text-gradient">Mimaura Constellation</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Navigate your wellness journey through interconnected stars — 
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Navigate your wellness journey through interconnected stars —
             each one a step toward understanding yourself better.
           </p>
         </motion.div>
 
-        {/* Constellation Map */}
-        <div className="relative h-[550px] md:h-[450px]">
-          {/* Background twinkling stars */}
-          {backgroundStars.map((star, i) => (
-            <motion.div
-              key={`bg-star-${i}`}
-              className="absolute w-1.5 h-1.5 bg-primary/40 rounded-full"
-              style={{ left: `${star.x}%`, top: `${star.y}%` }}
-              animate={{
-                opacity: [0.2, 0.8, 0.2],
-                scale: [0.8, 1.2, 0.8],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                delay: star.delay,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-
-          {/* SVG Constellation Lines */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-            <defs>
-              <linearGradient id="starLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-                <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.6" />
-              </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            
-            {/* Main constellation path - flowing star connections */}
-            <motion.path
-              d="M 20% 25% L 50% 12% L 80% 25%"
-              fill="none"
-              stroke="url(#starLineGradient)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              filter="url(#glow)"
-              initial={{ pathLength: 0, opacity: 0 }}
-              whileInView={{ pathLength: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-            />
-            <motion.path
-              d="M 80% 25% L 72% 65%"
-              fill="none"
-              stroke="url(#starLineGradient)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              filter="url(#glow)"
-              initial={{ pathLength: 0, opacity: 0 }}
-              whileInView={{ pathLength: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-            />
-            <motion.path
-              d="M 72% 65% L 50% 50% L 28% 65%"
-              fill="none"
-              stroke="url(#starLineGradient)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              filter="url(#glow)"
-              initial={{ pathLength: 0, opacity: 0 }}
-              whileInView={{ pathLength: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
-            />
-            <motion.path
-              d="M 28% 65% L 20% 25%"
-              fill="none"
-              stroke="url(#starLineGradient)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              filter="url(#glow)"
-              initial={{ pathLength: 0, opacity: 0 }}
-              whileInView={{ pathLength: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
-            />
-            
-            {/* Cross connections to center */}
-            <motion.path
-              d="M 20% 25% L 50% 50%"
-              fill="none"
-              stroke="hsl(var(--primary))"
-              strokeWidth="1"
-              strokeOpacity="0.3"
-              strokeDasharray="4 6"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 2.2 }}
-            />
-            <motion.path
-              d="M 80% 25% L 50% 50%"
-              fill="none"
-              stroke="hsl(var(--primary))"
-              strokeWidth="1"
-              strokeOpacity="0.3"
-              strokeDasharray="4 6"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 2.4 }}
-            />
-            <motion.path
-              d="M 50% 12% L 50% 50%"
-              fill="none"
-              stroke="hsl(var(--primary))"
-              strokeWidth="1"
-              strokeOpacity="0.3"
-              strokeDasharray="4 6"
-              initial={{ pathLength: 0 }}
-              whileInView={{ pathLength: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 2.6 }}
-            />
-          </svg>
-
-          {/* Journey star nodes */}
-          {journeySteps.map((step, index) => (
-            <motion.div
-              key={step.id}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 + index * 0.2, type: "spring", stiffness: 150 }}
-              className="absolute cursor-pointer z-10"
-              style={{
-                left: `${step.position.x}%`,
-                top: `${step.position.y}%`,
-                transform: "translate(-50%, -50%)",
-              }}
-              onMouseEnter={() => setActiveStep(step.id)}
-              onMouseLeave={() => setActiveStep(null)}
-            >
-              {/* Star glow effect */}
-              <motion.div
-                className="absolute rounded-full bg-primary/30"
-                style={{
-                  width: "150%",
-                  height: "150%",
-                  left: "-25%",
-                  top: "-25%",
-                  filter: "blur(20px)",
-                }}
-                animate={{
-                  opacity: activeStep === step.id ? [0.4, 0.7, 0.4] : 0.2,
-                  scale: activeStep === step.id ? [1, 1.2, 1] : 1,
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-
-              {/* Star node */}
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className={`relative ${getNodeSize(step.starSize)} rounded-full bg-card border-2 border-primary/40 flex items-center justify-center shadow-lg backdrop-blur-sm`}
-                style={{
-                  boxShadow: activeStep === step.id 
-                    ? "0 0 30px hsl(var(--primary) / 0.5), 0 0 60px hsl(var(--primary) / 0.2)" 
-                    : "0 4px 20px hsl(var(--primary) / 0.15)",
-                }}
-              >
-                <step.icon className={`${step.starSize === "xl" ? "w-9 h-9" : step.starSize === "lg" ? "w-7 h-7" : "w-6 h-6"} text-primary`} />
-                
-                {/* Orbiting sparkle */}
-                <motion.div
-                  className="absolute w-2 h-2 bg-accent rounded-full"
-                  animate={{ 
-                    rotate: 360,
-                  }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  style={{ 
-                    transformOrigin: "center",
-                    top: "-4px",
-                    left: "calc(50% - 4px)",
-                  }}
-                />
-              </motion.div>
-
-              {/* Label */}
-              <motion.div
-                className="absolute left-1/2 -translate-x-1/2 text-center whitespace-nowrap"
-                style={{
-                  top: step.labelPosition === "bottom" ? "calc(100% + 12px)" : "auto",
-                  bottom: step.labelPosition === "top" ? "calc(100% + 12px)" : "auto",
-                }}
-                animate={{ 
-                  y: activeStep === step.id ? [0, -3, 0] : 0,
-                }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <p className="font-display font-bold text-base md:text-lg">{step.title}</p>
-                <p className="text-xs text-muted-foreground">{step.subtitle}</p>
-              </motion.div>
-
-              {/* Info tooltip - positioned based on tooltipPosition */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{
-                  opacity: activeStep === step.id ? 1 : 0,
-                  scale: activeStep === step.id ? 1 : 0.9,
-                }}
-                className="absolute z-50 bg-card border border-border rounded-2xl p-4 w-56 shadow-lg"
-                style={{
-                  // Right positioning
-                  ...(step.tooltipPosition === "right" && {
-                    left: "calc(100% + 20px)",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                  }),
-                  // Left positioning
-                  ...(step.tooltipPosition === "left" && {
-                    right: "calc(100% + 20px)",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                  }),
-                  // Bottom positioning
-                  ...(step.tooltipPosition === "bottom" && {
-                    left: "50%",
-                    top: "calc(100% + 60px)",
-                    transform: "translateX(-50%)",
-                  }),
-                  pointerEvents: activeStep === step.id ? "auto" : "none",
-                }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <step.icon className="w-5 h-5 text-primary" />
-                  <span className="font-bold text-sm">{step.title}</span>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
-              </motion.div>
-            </motion.div>
-          ))}
-
-          {/* Center Mimi */}
+        {/* Constellation — responsive card-based layout */}
+        <div className="relative">
+          {/* Center Mimi mascot — visible on md+ */}
           <motion.div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
+            className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 items-center justify-center"
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 1.5, type: "spring", stiffness: 100 }}
+            transition={{ delay: 0.8, type: "spring", stiffness: 100 }}
           >
             <motion.div
-              className="relative"
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="relative"
             >
-              {/* Soft glow behind Mimi */}
-              <div 
+              <div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: "radial-gradient(circle, hsl(var(--primary) / 0.2) 0%, transparent 70%)",
-                  width: "150%",
-                  height: "150%",
-                  left: "-25%",
-                  top: "-25%",
+                  background: "radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)",
+                  width: "200%",
+                  height: "200%",
+                  left: "-50%",
+                  top: "-50%",
                 }}
               />
               <motion.img
                 src={mimiMagic}
                 alt="Mimi - Your wellness companion"
-                className="w-20 h-20 md:w-24 md:h-24 object-contain relative z-10 drop-shadow-lg"
+                className="w-20 h-20 object-contain relative z-10 drop-shadow-lg"
                 animate={{ rotate: [0, 5, 0, -5, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               />
             </motion.div>
+          </motion.div>
+
+          {/* Pentagon layout on desktop, vertical flow on mobile */}
+          {/* Top row: 3 items */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-6 md:mb-24">
+            {journeySteps.slice(0, 3).map((step, index) => (
+              <JourneyNode
+                key={step.id}
+                step={step}
+                index={index}
+                isActive={activeStep === step.id}
+                onHover={() => setActiveStep(step.id)}
+                onLeave={() => setActiveStep(null)}
+              />
+            ))}
+          </div>
+
+          {/* Bottom row: 2 items */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-20">
+            {journeySteps.slice(3).map((step, index) => (
+              <JourneyNode
+                key={step.id}
+                step={step}
+                index={index + 3}
+                isActive={activeStep === step.id}
+                onHover={() => setActiveStep(step.id)}
+                onLeave={() => setActiveStep(null)}
+              />
+            ))}
+          </div>
+
+          {/* Mobile Mimi — visible below md */}
+          <motion.div
+            className="flex md:hidden justify-center mt-10"
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, type: "spring" }}
+          >
+            <motion.img
+              src={mimiMagic}
+              alt="Mimi"
+              className="w-16 h-16 object-contain drop-shadow-lg"
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
           </motion.div>
         </div>
 
@@ -400,17 +169,90 @@ const JourneyMapSection = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 2 }}
-          className="text-center mt-8"
+          transition={{ delay: 1.2 }}
+          className="text-center mt-12"
         >
-          <p className="text-muted-foreground inline-flex items-center gap-2">
-            <Star className="w-4 h-4 text-accent" />
-            Tap each star to discover your path
-            <Star className="w-4 h-4 text-accent" />
+          <p className="text-sm text-muted-foreground inline-flex items-center gap-2">
+            <Star className="w-3.5 h-3.5 text-accent" />
+            Hover each star to discover your path
+            <Star className="w-3.5 h-3.5 text-accent" />
           </p>
         </motion.div>
       </div>
     </section>
+  );
+};
+
+/* ========== JOURNEY NODE ========== */
+interface JourneyNodeProps {
+  step: (typeof journeySteps)[number];
+  index: number;
+  isActive: boolean;
+  onHover: () => void;
+  onLeave: () => void;
+}
+
+const JourneyNode = ({ step, index, isActive, onHover, onLeave }: JourneyNodeProps) => {
+  const Icon = step.icon;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.15 * index, type: "spring", stiffness: 150 }}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      onClick={onHover}
+      className="relative w-full md:w-56 cursor-pointer group"
+    >
+      <motion.div
+        animate={isActive ? { scale: 1.03 } : { scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className="glass-card rounded-2xl p-5 sm:p-6 border border-border/50 hover:border-primary/30 transition-colors duration-300 text-center relative overflow-hidden"
+      >
+        {/* Hover glow */}
+        <motion.div
+          animate={isActive ? { opacity: 0.1 } : { opacity: 0 }}
+          className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-2xl pointer-events-none"
+        />
+
+        {/* Star icon */}
+        <div className="relative z-10">
+          <motion.div
+            className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-card border-2 border-primary/30 flex items-center justify-center shadow-md mb-4 relative"
+            animate={isActive ? { boxShadow: "0 0 25px hsl(var(--primary) / 0.4)" } : { boxShadow: "0 4px 15px hsl(var(--primary) / 0.1)" }}
+          >
+            <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
+
+            {/* Orbiting dot */}
+            <motion.div
+              className="absolute w-1.5 h-1.5 bg-accent rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              style={{ top: "-3px", left: "calc(50% - 3px)", transformOrigin: "3px 35px" }}
+            />
+          </motion.div>
+
+          <h3 className="font-display font-bold text-base sm:text-lg mb-0.5 group-hover:text-primary transition-colors">
+            {step.title}
+          </h3>
+          <p className="text-xs text-muted-foreground mb-2">{step.subtitle}</p>
+
+          {/* Expanded description on hover */}
+          <motion.div
+            initial={false}
+            animate={isActive ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed pt-2 border-t border-border/30">
+              {step.description}
+            </p>
+          </motion.div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
