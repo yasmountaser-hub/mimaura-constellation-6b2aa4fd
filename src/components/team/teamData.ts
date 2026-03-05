@@ -67,13 +67,13 @@ export const teamGroups: TeamGroup[] = [
     ],
   },
   {
-    label: "Science",
+    label: "Founders",
     emoji: "🧬",
     subtitle: "Evidence meets empathy",
     members: [
       {
         name: "Lexi",
-        role: "CNSO · Hormone Health",
+        role: "Co-Founder · Chief Nutrition & Science Officer",
         bio: "Translating research into real-life nourishment. 🧬",
         hoverText: "Translating research into real-life nourishment.",
         image: lexiBitmoji,

@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, RotateCcw, Heart, Moon, Sun, Zap, Flower2 } from "lucide-react";
+import { Sparkles, ArrowRight, RotateCcw, Heart, Moon, Sun, Zap, Flower2, Crown, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import mimiWizard from "@/assets/mimi-wizard.png";
-import mimiPersonalities from "@/assets/mimi-personalities.png";
-import mimiTypes from "@/assets/mimi-types.png";
-import mimiWarrior from "@/assets/mimi-warrior.png";
-import mimiFairy from "@/assets/mimi-fairy.png";
-import mimiAngel from "@/assets/mimi-angel.png";
-import mimiMystic from "@/assets/mimi-mystic.png";
+import mimiWarrior from "@/assets/mimi-warrior-new.png";
+import mimiFairy from "@/assets/mimi-fairy-new.png";
+import mimiAngel from "@/assets/mimi-angel-new.png";
+import mimiMystic from "@/assets/mimi-mystic-new.png";
+import mimiBoss from "@/assets/mimi-boss.png";
+import mimiGamer from "@/assets/mimi-gamer.png";
 
 interface Question {
   id: number;
@@ -21,7 +20,7 @@ interface Question {
   }[];
 }
 
-type MimiType = "warrior" | "fairy" | "angel" | "mystic" | "rebel";
+type MimiType = "warrior" | "fairy" | "angel" | "mystic" | "boss" | "gamer";
 
 interface MimiResult {
   type: MimiType;
@@ -52,10 +51,10 @@ const questions: Question[] = [
     question: "Your ideal way to spend a slow weekend? 🌸",
     subtitle: "Self-care Saturday vibes 💆‍♀️",
     options: [
-      { text: "Tackling my to-do list and feeling productive", emoji: "📋", type: "warrior" },
+      { text: "Tackling my to-do list and feeling productive", emoji: "📋", type: "boss" },
       { text: "Creating something—art, crafts, or recipes", emoji: "🎨", type: "fairy" },
       { text: "Cuddling with loved ones or pets", emoji: "💕", type: "angel" },
-      { text: "Solo time with books, music, or nature", emoji: "🌿", type: "mystic" },
+      { text: "Gaming, streaming, or exploring new worlds", emoji: "🎮", type: "gamer" },
     ],
   },
   {
@@ -76,8 +75,8 @@ const questions: Question[] = [
     options: [
       { text: "Goals, workouts, and peak performance days", emoji: "⚡", type: "warrior" },
       { text: "Mood patterns and creative energy flows", emoji: "🦋", type: "fairy" },
-      { text: "Self-compassion reminders and gentle check-ins", emoji: "💗", type: "angel" },
-      { text: "Deep insights and body-mind connections", emoji: "🌙", type: "mystic" },
+      { text: "Achievements, streaks, and leveling up", emoji: "🏆", type: "gamer" },
+      { text: "Scheduling, planning, and staying in control", emoji: "📊", type: "boss" },
     ],
   },
   {
@@ -89,6 +88,17 @@ const questions: Question[] = [
       { text: "Something sweet and a little indulgent", emoji: "🧁", type: "fairy" },
       { text: "Warm comfort food that feels like a hug", emoji: "🍜", type: "angel" },
       { text: "Whatever feels intuitively right", emoji: "🫖", type: "mystic" },
+    ],
+  },
+  {
+    id: 6,
+    question: "How do you handle a tough Monday? 🌀",
+    subtitle: "The start of the week energy 💫",
+    options: [
+      { text: "Power playlist and conquer the day", emoji: "👑", type: "boss" },
+      { text: "Take it slow with self-compassion", emoji: "💗", type: "angel" },
+      { text: "Deep insights and body-mind connections", emoji: "🌙", type: "mystic" },
+      { text: "Reward myself with something fun later", emoji: "🎮", type: "gamer" },
     ],
   },
 ];
@@ -138,16 +148,27 @@ const mimiResults: Record<MimiType, MimiResult> = {
     icon: <Moon className="w-5 h-5" />,
     image: mimiMystic,
   },
-  rebel: {
-    type: "rebel",
-    name: "Rebel Mimi",
-    title: "The Bold Trailblazer 🚀",
-    description: "You don't follow the rules—you make your own! You're learning to embrace your unique cycle journey and aren't afraid to try new approaches. Your authenticity is refreshing. 💥🌟",
-    cycleVibe: "Every phase is an adventure for you! Mimi will help you discover which approaches work best for YOUR unique body. 🎯",
-    color: "from-emerald-400 to-teal-500",
-    bgGradient: "bg-gradient-to-br from-emerald-500/20 to-teal-500/20",
-    icon: <Sun className="w-5 h-5" />,
-    image: mimiMystic, // fallback
+  boss: {
+    type: "boss",
+    name: "Boss Mimi",
+    title: "The Power Player 👑",
+    description: "You're a natural leader who takes charge of every situation—including your cycle! Strategic, organized, and always one step ahead. You turn challenges into opportunities and lead with confidence. 💼✨",
+    cycleVibe: "Your ovulation phase is when you're most persuasive and powerful. Use your luteal phase for strategic planning and big-picture thinking! 📈",
+    color: "from-slate-600 to-purple-600",
+    bgGradient: "bg-gradient-to-br from-slate-500/20 to-purple-500/20",
+    icon: <Crown className="w-5 h-5" />,
+    image: mimiBoss,
+  },
+  gamer: {
+    type: "gamer",
+    name: "Gamer Mimi",
+    title: "The Level-Up Legend 🎮",
+    description: "Life is your game and you're here to win! You approach your cycle like quests—each phase unlocks new abilities. You love tracking progress, earning streaks, and celebrating every achievement. 🕹️✨",
+    cycleVibe: "Your follicular phase is your power-up mode—max energy and focus! Your menstrual phase is your save point for rest and recovery. 🏆",
+    color: "from-cyan-400 to-pink-500",
+    bgGradient: "bg-gradient-to-br from-cyan-500/20 to-pink-500/20",
+    icon: <Gamepad2 className="w-5 h-5" />,
+    image: mimiGamer,
   },
 };
 
@@ -174,7 +195,8 @@ const MimiQuizSection = () => {
       fairy: 0,
       angel: 0,
       mystic: 0,
-      rebel: 0,
+      boss: 0,
+      gamer: 0,
     };
 
     answers.forEach((answer) => {
@@ -201,13 +223,21 @@ const MimiQuizSection = () => {
 
   const progress = ((currentQuestion + (showResult ? 1 : 0)) / questions.length) * 100;
 
+  const allTypes = [
+    { name: "Warrior", color: "from-rose-400 to-orange-400", image: mimiWarrior },
+    { name: "Fairy", color: "from-pink-400 to-purple-400", image: mimiFairy },
+    { name: "Angel", color: "from-amber-300 to-yellow-400", image: mimiAngel },
+    { name: "Mystic", color: "from-indigo-400 to-violet-500", image: mimiMystic },
+    { name: "Boss", color: "from-slate-600 to-purple-600", image: mimiBoss },
+    { name: "Gamer", color: "from-cyan-400 to-pink-500", image: mimiGamer },
+  ];
+
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatePresence mode="wait">
             {!quizStarted ? (
-              // Intro Screen
               <motion.div
                 key="intro"
                 initial={{ opacity: 0, y: 20 }}
@@ -228,42 +258,34 @@ const MimiQuizSection = () => {
                   What <span className="text-primary">Mimi</span> Are You?
                 </h2>
                 <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                  Discover which Mimi personality matches your cycle style! Answer 5 quick questions to find your perfect companion match.
+                  Discover which Mimi personality matches your cycle style! Answer 6 quick questions to find your perfect companion match.
                 </p>
 
-                {/* Preview of Mimi types */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                  {[
-                    { name: "Warrior", color: "from-rose-400 to-orange-400" },
-                    { name: "Fairy", color: "from-pink-400 to-purple-400" },
-                    { name: "Angel", color: "from-amber-300 to-yellow-400" },
-                    { name: "Mystic", color: "from-indigo-400 to-violet-500" },
-                  ].map((type, index) => (
+                {/* Preview of all 6 Mimi types */}
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mb-10">
+                  {allTypes.map((type, index) => (
                     <motion.div
                       key={type.name}
-                      className="p-4 rounded-2xl bg-card/50 border border-border/50"
+                      className="p-3 rounded-2xl bg-card/50 border border-border/50"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: index * 0.08 }}
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
-                      <div className={`w-12 h-12 mx-auto mb-2 rounded-full bg-gradient-to-r ${type.color} opacity-80`} />
-                      <p className="text-sm font-medium">{type.name} Mimi</p>
+                      <div className="w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden">
+                        <img src={type.image} alt={`${type.name} Mimi`} className="w-full h-full object-cover" />
+                      </div>
+                      <p className="text-xs font-medium">{type.name}</p>
                     </motion.div>
                   ))}
                 </div>
 
-                <Button
-                  size="lg"
-                  onClick={startQuiz}
-                  className="gap-2"
-                >
+                <Button size="lg" onClick={startQuiz} className="gap-2">
                   Start the Quiz
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </motion.div>
             ) : showResult ? (
-              // Result Screen
               <motion.div
                 key="result"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -281,12 +303,12 @@ const MimiQuizSection = () => {
                         transition={{ type: "spring", delay: 0.2 }}
                         className="mb-8"
                       >
-                        <div className={`w-40 h-40 mx-auto rounded-full bg-gradient-to-r ${result.color} p-1 mb-6`}>
+                        <div className={`w-44 h-44 mx-auto rounded-full bg-gradient-to-r ${result.color} p-1 mb-6`}>
                           <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
-                            <img 
-                              src={result.image} 
+                            <img
+                              src={result.image}
                               alt={result.name}
-                              className="w-36 h-36 object-contain"
+                              className="w-40 h-40 object-cover rounded-full"
                             />
                           </div>
                         </div>
@@ -297,7 +319,10 @@ const MimiQuizSection = () => {
                           transition={{ delay: 0.4 }}
                         >
                           <p className="text-sm text-muted-foreground mb-2">You are...</p>
-                          <h2 className={`text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r ${result.color} bg-clip-text text-transparent`}>
+                          <h2
+                            className={`text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r ${result.color} bg-clip-text`}
+                            style={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                          >
                             {result.name}
                           </h2>
                           <p className="text-lg text-primary font-medium mb-6">{result.title}</p>
@@ -323,11 +348,7 @@ const MimiQuizSection = () => {
                         transition={{ delay: 0.8 }}
                         className="flex flex-col sm:flex-row gap-4 justify-center"
                       >
-                        <Button
-                          variant="outline"
-                          onClick={resetQuiz}
-                          className="gap-2"
-                        >
+                        <Button variant="outline" onClick={resetQuiz} className="gap-2">
                           <RotateCcw className="w-4 h-4" />
                           Take Again
                         </Button>
@@ -341,7 +362,6 @@ const MimiQuizSection = () => {
                 })()}
               </motion.div>
             ) : (
-              // Question Screen
               <motion.div
                 key={`question-${currentQuestion}`}
                 initial={{ opacity: 0, x: 50 }}
