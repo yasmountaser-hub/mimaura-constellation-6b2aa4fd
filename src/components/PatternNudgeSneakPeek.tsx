@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Bell, TrendingUp, Lightbulb, Moon, Coffee, Heart, Sparkles, ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import patternPreview from "@/assets/pattern-nudge-preview.png";
+import appPhasesPreview from "@/assets/app-phases-preview.png";
 import mimiLightbulb from "@/assets/mimi-lightbulb.png";
 
 const nudgeExamples = [
@@ -55,7 +55,6 @@ const features = [
 const PatternNudgeSneakPeek = () => {
   const [activeNudge, setActiveNudge] = useState(0);
 
-  // Cycle through nudges
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveNudge((prev) => (prev + 1) % nudgeExamples.length);
@@ -85,107 +84,109 @@ const PatternNudgeSneakPeek = () => {
           </motion.div>
 
           <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
-            The <span className="text-gradient">Pattern Nudge</span> System
+            Learn Your <span className="text-gradient">Patterns</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             No alarms. No guilt. Just a soft tap when Mimi notices something that might help.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Interactive Demo */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            {/* Phone mockup */}
+        {/* App Preview Image */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-20"
+        >
+          <div className="relative max-w-5xl mx-auto">
             <motion.div
-              className="relative z-10 bg-card/80 backdrop-blur-xl rounded-[3rem] p-3 shadow-float border border-primary/20 max-w-sm mx-auto"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.3 }}
+              className="rounded-3xl overflow-hidden shadow-float border border-border/30"
             >
-              {/* Phone screen */}
-              <div className="bg-background rounded-[2.5rem] overflow-hidden">
-                {/* Status bar */}
-                <div className="flex justify-between items-center px-6 py-3 bg-primary/5">
-                  <span className="text-xs font-medium">9:41</span>
-                  <div className="flex gap-1">
-                    <div className="w-4 h-2 bg-foreground/80 rounded-sm" />
-                    <div className="w-4 h-4 border-2 border-foreground/80 rounded-full" />
-                  </div>
-                </div>
-
-                {/* App header */}
-                <div className="p-6 pb-4">
-                  <h3 className="font-display font-bold text-xl">Pattern Nudge</h3>
-                  <p className="text-sm text-muted-foreground">Gentle insights for you</p>
-                </div>
-
-                {/* Nudge cards - animated */}
-                <div className="px-4 pb-6 space-y-3 min-h-[280px]">
-                  <AnimatePresence mode="wait">
-                    {nudgeExamples.map((nudge, index) =>
-                      index === activeNudge ? (
-                        <motion.div
-                          key={nudge.title}
-                          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                          transition={{ duration: 0.4 }}
-                          className="glass-card rounded-2xl p-4 relative overflow-hidden"
-                        >
-                          <div className={`absolute inset-0 bg-gradient-to-r ${nudge.color} opacity-10`} />
-                          <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex items-center gap-2">
-                                <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${nudge.color} flex items-center justify-center`}>
-                                  <nudge.icon className="w-4 h-4 text-white" />
-                                </div>
-                                <span className="font-medium text-sm">{nudge.title}</span>
-                              </div>
-                              <span className="text-xs text-muted-foreground">{nudge.time}</span>
-                            </div>
-                            <p className="text-sm text-foreground leading-relaxed">{nudge.message}</p>
-                          </div>
-                        </motion.div>
-                      ) : null
-                    )}
-                  </AnimatePresence>
-
-                  {/* Nudge indicators */}
-                  <div className="flex justify-center gap-2 pt-2">
-                    {nudgeExamples.map((_, index) => (
-                      <motion.button
-                        key={index}
-                        onClick={() => setActiveNudge(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
-                          index === activeNudge ? "bg-primary" : "bg-primary/30"
-                        }`}
-                        whileHover={{ scale: 1.3 }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <img
+                src={appPhasesPreview}
+                alt="Mimaura app showing Follicular, Ovulation, Luteal, and Menstrual cycle phases with personalized insights and calendars"
+                className="w-full h-auto"
+              />
             </motion.div>
 
             {/* Floating Mimi */}
             <motion.img
               src={mimiLightbulb}
               alt="Mimi with lightbulb"
-              className="absolute -right-4 -bottom-4 w-28 h-28 object-contain z-20"
+              className="absolute -right-6 -bottom-6 w-24 h-24 object-contain z-20 hidden md:block"
               animate={{ y: [0, -10, 0], rotate: [-3, 3, -3] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Glow effect */}
-            <motion.div
-              className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-75 -z-10"
-              animate={{ scale: [0.7, 0.85, 0.7], opacity: [0.2, 0.4, 0.2] }}
-              transition={{ duration: 6, repeat: Infinity }}
-            />
+            {/* Glow */}
+            <div className="absolute inset-0 bg-primary/10 blur-3xl rounded-full scale-75 -z-10" />
+          </div>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left: Nudge Demo */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h3 className="font-display text-2xl font-bold mb-4">
+              The Pattern Nudge System
+            </h3>
+            <p className="text-muted-foreground leading-relaxed mb-8">
+              Mimi quietly observes your patterns over time. When she notices something helpful —
+              like a recurring energy dip or a mood pattern — she gently lets you know.
+              No judgment, no pressure, just awareness.
+            </p>
+
+            {/* Nudge cards */}
+            <div className="space-y-3">
+              <AnimatePresence mode="wait">
+                {nudgeExamples.map((nudge, index) =>
+                  index === activeNudge ? (
+                    <motion.div
+                      key={nudge.title}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{ duration: 0.4 }}
+                      className="glass-card rounded-2xl p-5 relative overflow-hidden"
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-r ${nudge.color} opacity-10`} />
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${nudge.color} flex items-center justify-center`}>
+                              <nudge.icon className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="font-medium text-sm">{nudge.title}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">{nudge.time}</span>
+                        </div>
+                        <p className="text-sm text-foreground leading-relaxed">{nudge.message}</p>
+                      </div>
+                    </motion.div>
+                  ) : null
+                )}
+              </AnimatePresence>
+
+              <div className="flex justify-center gap-2 pt-2">
+                {nudgeExamples.map((_, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => setActiveNudge(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === activeNudge ? "bg-primary" : "bg-primary/30"
+                    }`}
+                    whileHover={{ scale: 1.3 }}
+                  />
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           {/* Right: Features */}
@@ -194,50 +195,37 @@ const PatternNudgeSneakPeek = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
+            className="space-y-4"
           >
-            <div>
-              <h3 className="font-display text-2xl font-bold mb-4">
-                How Pattern Nudge Works
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Mimi quietly observes your patterns over time. When she notices something helpful — 
-                like a recurring energy dip or a mood pattern — she gently lets you know. 
-                No judgment, no pressure, just awareness.
-              </p>
-            </div>
-
-            {/* Feature list */}
-            <div className="space-y-4">
-              {features.map((feature, i) => (
+            {features.map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 + i * 0.1 }}
+                whileHover={{ x: 5 }}
+                className="flex items-start gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all cursor-default"
+              >
                 <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                  whileHover={{ x: 5 }}
-                  className="flex items-start gap-4 p-4 rounded-2xl hover:bg-primary/5 transition-all cursor-default"
+                  whileHover={{ rotate: 10, scale: 1.1 }}
+                  className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0"
                 >
-                  <motion.div
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                    className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0"
-                  >
-                    <feature.icon className="w-6 h-6 text-primary" />
-                  </motion.div>
-                  <div>
-                    <h4 className="font-display font-bold text-lg mb-1">{feature.title}</h4>
-                    <p className="text-muted-foreground text-sm">{feature.description}</p>
-                  </div>
+                  <feature.icon className="w-6 h-6 text-primary" />
                 </motion.div>
-              ))}
-            </div>
+                <div>
+                  <h4 className="font-display font-bold text-lg mb-1">{feature.title}</h4>
+                  <p className="text-muted-foreground text-sm">{feature.description}</p>
+                </div>
+              </motion.div>
+            ))}
 
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
+              className="pt-4"
             >
               <Button
                 variant="hero"
