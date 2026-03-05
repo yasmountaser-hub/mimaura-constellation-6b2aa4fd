@@ -141,6 +141,35 @@
     --sidebar-border: 270 20% 18%;
     --sidebar-ring: 270 55% 70%;
   }
+
+  .low-stim {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 20%;
+    --card: 0 0% 96%;
+    --card-foreground: 0 0% 20%;
+    --popover: 0 0% 96%;
+    --popover-foreground: 0 0% 20%;
+    --primary: 270 30% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 20% 94%;
+    --secondary-foreground: 40 20% 30%;
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 40 40% 60%;
+    --accent-foreground: 40 40% 15%;
+    --destructive: 0 50% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 88%;
+    --input: 0 0% 90%;
+    --ring: 270 30% 55%;
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 97%) 0%, hsl(0 0% 96%) 100%);
+    --gradient-celestial: linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 96%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 97% / 0.9) 0%, hsl(0 0% 95% / 0.7) 100%);
+    --shadow-soft: 0 2px 8px -2px hsl(0 0% 0% / 0.06);
+    --shadow-glow: none;
+    --shadow-card: 0 2px 12px -4px hsl(0 0% 0% / 0.06);
+    --shadow-float: 0 4px 16px -6px hsl(0 0% 0% / 0.08);
+  }
 }
 
 @layer base {

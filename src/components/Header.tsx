@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Download } from "lucide-react";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import logo from "@/assets/mimaura-logo.png";
 
 const Header = () => {
@@ -49,8 +50,9 @@ const Header = () => {
           ))}
         </div>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons + Theme */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeSwitcher />
           <Button variant="ghost" size="sm" className="gap-2">
             <Download className="w-4 h-4" />
             Get App
@@ -61,13 +63,16 @@ const Header = () => {
         </div>
 
         {/* Mobile menu button */}
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 rounded-xl hover:bg-primary/10 transition-colors"
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </motion.button>
+        <div className="flex md:hidden items-center gap-2">
+          <ThemeSwitcher />
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-xl hover:bg-primary/10 transition-colors"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </motion.button>
+        </div>
       </nav>
 
       {/* Mobile Nav */}
