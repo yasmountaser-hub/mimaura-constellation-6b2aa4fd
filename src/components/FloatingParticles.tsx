@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useMemo } from "react";
+import { useTheme } from "./ThemeProvider";
 
 interface Particle {
   id: number;
@@ -9,8 +10,19 @@ interface Particle {
   delay: number;
 }
 
+interface Star {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+  opacity: number;
+}
+
 const FloatingParticles = () => {
-  // Memoize particles so they don't re-create on every render
+  const { theme } = useTheme();
+  const isNight = theme === "night";
+
   const particles = useMemo<Particle[]>(
     () =>
       Array.from({ length: 8 }, (_, i) => ({
@@ -35,8 +47,23 @@ const FloatingParticles = () => {
     []
   );
 
+  // Stars for night mode
+  const stars = useMemo<Star[]>(
+    () =>
+      Array.from({ length: 30 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 2 + 1,
+        delay: Math.random() * 5,
+        opacity: Math.random() * 0.5 + 0.2,
+      })),
+    []
+  );
+
   return (
     <div className="particles" style={{ willChange: "auto" }}>
+      {/* Regular particles */}
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
@@ -64,6 +91,7 @@ const FloatingParticles = () => {
         />
       ))}
 
+      {/* Sparkles */}
       {sparkles.map((s) => (
         <motion.div
           key={`sparkle-${s.id}`}
@@ -87,6 +115,87 @@ const FloatingParticles = () => {
           ✦
         </motion.div>
       ))}
+
+      {/* Night mode: twinkling stars */}
+      {isNight &&
+        stars.map((star) => (
+          <motion.div
+            key={`star-${star.id}`}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              left: `${star.x}vw`,
+              top: `${star.y}vh`,
+              width: star.size,
+              height: star.size,
+              background: `hsl(var(--primary) / ${star.opacity})`,
+              boxShadow: `0 0 ${star.size * 3}px hsl(var(--primary) / ${star.opacity * 0.5})`,
+            }}
+            animate={{
+              opacity: [star.opacity, star.opacity * 2, star.opacity],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: star.delay,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+      {/* Night mode: nebula glow blobs */}
+      {isNight && (
+        <>
+          <motion.div
+            className="absolute pointer-events-none rounded-full"
+            style={{
+              width: "40vw",
+              height: "40vw",
+              left: "10%",
+              top: "20%",
+              background: "radial-gradient(circle, hsl(280 60% 50% / 0.06) 0%, transparent 70%)",
+              filter: "blur(60px)",
+            }}
+            animate={{
+              x: [0, 30, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute pointer-events-none rounded-full"
+            style={{
+              width: "35vw",
+              height: "35vw",
+              right: "5%",
+              top: "50%",
+              background: "radial-gradient(circle, hsl(220 60% 50% / 0.05) 0%, transparent 70%)",
+              filter: "blur(50px)",
+            }}
+            animate={{
+              x: [0, -20, 0],
+              y: [0, 15, 0],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute pointer-events-none rounded-full"
+            style={{
+              width: "30vw",
+              height: "30vw",
+              left: "50%",
+              bottom: "10%",
+              background: "radial-gradient(circle, hsl(340 50% 50% / 0.04) 0%, transparent 70%)",
+              filter: "blur(40px)",
+            }}
+            animate={{
+              x: [0, 15, 0],
+              y: [0, -25, 0],
+            }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </>
+      )}
     </div>
   );
 };

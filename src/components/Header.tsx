@@ -21,18 +21,18 @@ const Header = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
+      className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 py-2 sm:py-4"
     >
-      <nav className="max-w-7xl mx-auto glass-card rounded-2xl px-6 py-3 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto glass-card rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 shrink-0">
           <motion.img
             src={logo}
             alt="Mimaura"
             whileHover={{ scale: 1.05 }}
-            className="w-10 h-10 rounded-xl object-contain"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-contain"
           />
-          <span className="font-display text-xl font-bold">Mimaura</span>
+          <span className="font-display text-lg sm:text-xl font-bold">Mimaura</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -63,14 +63,14 @@ const Header = () => {
         </div>
 
         {/* Mobile menu button */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex md:hidden items-center gap-1.5">
           <ThemeSwitcher />
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl hover:bg-primary/10 transition-colors"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </motion.button>
         </div>
       </nav>
@@ -81,7 +81,7 @@ const Header = () => {
         animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
         className="md:hidden overflow-hidden"
       >
-        <div className="glass-card rounded-2xl mt-2 p-6 space-y-4">
+        <div className="glass-card rounded-2xl mt-2 p-5 space-y-3">
           {navItems.map((item, i) => (
             <motion.a
               key={item.label}
@@ -90,17 +90,17 @@ const Header = () => {
               animate={isOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ delay: i * 0.1 }}
               onClick={() => setIsOpen(false)}
-              className="block text-lg font-medium hover:text-primary transition-colors"
+              className="block text-base font-medium hover:text-primary transition-colors"
             >
               {item.label}
             </motion.a>
           ))}
-          <div className="pt-4 flex flex-col gap-3">
-            <Button variant="glass" className="w-full gap-2">
+          <div className="pt-3 flex flex-col gap-2.5">
+            <Button variant="glass" size="sm" className="w-full gap-2">
               <Download className="w-4 h-4" />
               Get the App
             </Button>
-            <Button variant="hero" className="w-full">
+            <Button variant="hero" size="sm" className="w-full">
               Join Waitlist
             </Button>
           </div>

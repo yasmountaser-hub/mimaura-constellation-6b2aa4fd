@@ -39,7 +39,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative py-16 px-6 overflow-hidden">
+    <footer className="relative py-12 sm:py-16 px-4 sm:px-6 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />

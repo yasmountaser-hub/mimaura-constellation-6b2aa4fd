@@ -5,7 +5,7 @@ import mimiMagic from "@/assets/mimi-magic.png";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden">
       {/* Subtle gradient background - no animated blobs */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
@@ -33,7 +33,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
           >
             Your Body Has{" "}
             <span className="text-gradient">Patterns.</span>
