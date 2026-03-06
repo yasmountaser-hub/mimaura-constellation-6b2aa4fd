@@ -25,7 +25,11 @@ const themeClasses: Record<Theme, string> = {
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("mimaura-theme");
-    return (stored as Theme) || "day";
+    // Migrate legacy values
+    if (stored === "light") return "day";
+    if (stored === "dark") return "night";
+    const valid: Theme[] = ["day", "night", "bloom", "golden-hour", "low-stim"];
+    return valid.includes(stored as Theme) ? (stored as Theme) : "day";
   });
 
   useEffect(() => {
