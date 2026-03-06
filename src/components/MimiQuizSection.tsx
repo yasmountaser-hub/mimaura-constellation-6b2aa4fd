@@ -234,7 +234,7 @@ const MimiQuizSection = () => {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatePresence mode="wait">
             {!quizStarted ? (
@@ -254,7 +254,7 @@ const MimiQuizSection = () => {
                   <span className="text-sm font-medium">Personality Quiz</span>
                 </motion.div>
 
-                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
                   What <span className="text-primary">Mimi</span> Are You?
                 </h2>
                 <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -262,7 +262,7 @@ const MimiQuizSection = () => {
                 </p>
 
                 {/* Preview of all 6 Mimi types */}
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 mb-10">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4 mb-10">
                   {allTypes.map((type, index) => (
                     <motion.div
                       key={type.name}

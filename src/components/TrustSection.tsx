@@ -27,7 +27,7 @@ const TrustSection = () => {
   ];
 
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Mimi with lock */}
@@ -94,7 +94,7 @@ const TrustSection = () => {
                 <span className="text-sm font-medium text-mint">Your Privacy Matters</span>
               </motion.div>
 
-              <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
                 Built on <span className="text-gradient">Trust</span>
               </h2>
 

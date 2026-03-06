@@ -4,7 +4,7 @@ import mimiPoses from "@/assets/mimi-poses.png";
 
 const MeetMimiSection = () => {
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}
@@ -25,7 +25,7 @@ const MeetMimiSection = () => {
               <span className="text-sm font-medium">Your Companion</span>
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
               Meet <span className="text-gradient">Mimi</span>
             </h2>
 

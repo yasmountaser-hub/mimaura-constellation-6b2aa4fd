@@ -54,7 +54,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 aurora-bg opacity-20" />
@@ -79,7 +79,7 @@ const TestimonialsSection = () => {
             <span className="text-sm font-medium">Early Believers</span>
           </motion.div>
 
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Why They're <span className="text-gradient">Excited</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

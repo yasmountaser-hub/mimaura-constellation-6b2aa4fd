@@ -27,7 +27,7 @@ const WaitlistSection = () => {
   };
 
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -60,7 +60,7 @@ const WaitlistSection = () => {
               <span className="text-sm font-medium text-primary">Coming Soon</span>
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
               Be the First to <span className="text-gradient">Meet Mimi</span>
             </h2>
 

@@ -36,7 +36,7 @@ const resources = [
 
 const EducationSection = () => {
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -57,7 +57,7 @@ const EducationSection = () => {
             <span className="text-sm font-medium">Education Hub</span>
           </motion.div>
 
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Learn Your <span className="text-gradient">Patterns</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
