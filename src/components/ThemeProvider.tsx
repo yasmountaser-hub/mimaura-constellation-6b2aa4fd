@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-type Theme = "light" | "dark" | "low-stim";
+export type Theme = "day" | "night" | "bloom" | "golden-hour" | "low-stim";
 
 interface ThemeContextType {
   theme: Theme;
@@ -8,28 +8,35 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
+  theme: "day",
   setTheme: () => {},
 });
 
 export const useTheme = () => useContext(ThemeContext);
 
+const themeClasses: Record<Theme, string> = {
+  "day": "",
+  "night": "dark",
+  "bloom": "bloom",
+  "golden-hour": "golden-hour",
+  "low-stim": "low-stim",
+};
+
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("mimaura-theme");
-    return (stored as Theme) || "light";
+    return (stored as Theme) || "day";
   });
 
   useEffect(() => {
     const root = document.documentElement;
     
     // Remove all theme classes
-    root.classList.remove("dark", "low-stim");
+    root.classList.remove("dark", "bloom", "golden-hour", "low-stim");
     
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else if (theme === "low-stim") {
-      root.classList.add("low-stim");
+    const cls = themeClasses[theme];
+    if (cls) {
+      root.classList.add(cls);
     }
     
     localStorage.setItem("mimaura-theme", theme);
