@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&family=Lexend:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -529,6 +529,8 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
   body {
@@ -537,11 +539,21 @@
     min-height: 100vh;
     text-rendering: optimizeLegibility;
     transition: background-color 0.5s ease, color 0.3s ease;
+    letter-spacing: 0.01em;
   }
 
   /* Smooth theme transitions on all elements */
   *, *::before, *::after {
     transition: background-color 0.4s ease, border-color 0.3s ease, box-shadow 0.4s ease;
+  }
+
+  p, li, span {
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.3;
+    letter-spacing: -0.01em;
   }
 
   img {
@@ -646,7 +658,75 @@
   .low-stim .particles {
     display: none;
   }
-}
+  }
+
+  /* ======== Accessibility overrides ======== */
+
+  /* 🔤 Dyslexia-friendly mode */
+  .dyslexia-font {
+    font-family: 'Lexend', 'Nunito', sans-serif !important;
+  }
+
+  .dyslexia-font * {
+    font-family: inherit !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.12em !important;
+  }
+
+  .dyslexia-font p,
+  .dyslexia-font li,
+  .dyslexia-font span,
+  .dyslexia-font div {
+    line-height: 1.9 !important;
+    text-align: left !important;
+  }
+
+  /* 🧘 Reduced motion */
+  .reduced-motion *,
+  .reduced-motion *::before,
+  .reduced-motion *::after {
+    animation: none !important;
+    animation-duration: 0s !important;
+    transition-duration: 0.01s !important;
+  }
+
+  .reduced-motion .aurora-bg {
+    background: hsl(var(--muted));
+  }
+
+  .reduced-motion .particles {
+    display: none;
+  }
+
+  /* 📖 Large text */
+  .large-text {
+    font-size: 18px !important;
+  }
+
+  .large-text p,
+  .large-text li,
+  .large-text span {
+    font-size: 1.1em !important;
+    line-height: 1.85 !important;
+  }
+
+  .large-text h1 { font-size: 2.8rem !important; }
+  .large-text h2 { font-size: 2.2rem !important; }
+  .large-text h3 { font-size: 1.6rem !important; }
+
+  /* 👁️ High contrast */
+  .high-contrast {
+    --foreground: 0 0% 5%;
+    --muted-foreground: 0 0% 25%;
+    --border: 0 0% 60%;
+  }
+
+  .high-contrast.dark,
+  .high-contrast.midnight-berry {
+    --foreground: 0 0% 98%;
+    --muted-foreground: 0 0% 78%;
+    --border: 0 0% 45%;
+  }
 
 @layer utilities {
   .focus-ring {

@@ -4,6 +4,8 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import SectionDivider from "@/components/SectionDivider";
+import SectionNav from "@/components/SectionNav";
+import AccessibilityPanel from "@/components/AccessibilityPanel";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import JourneyMapSection from "@/components/JourneyMapSection";
@@ -23,6 +25,8 @@ const Index = () => {
       <FloatingParticles />
       <CursorGlow />
       <Header />
+      <SectionNav />
+      <AccessibilityPanel />
       
       <motion.main
         initial={{ opacity: 0 }}
