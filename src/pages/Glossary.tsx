@@ -6,179 +6,14 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-
-interface Term {
-  term: string;
-  emoji: string;
-  category: string;
-  definition: string;
-  signs: string[];
-  whatToDo: string[];
-}
-
-const terms: Term[] = [
-  {
-    term: "Executive Dysfunction",
-    emoji: "🧊",
-    category: "ADHD",
-    definition: "Difficulty starting, organizing, or completing tasks — not due to laziness, but because the brain's 'manager' system isn't cooperating. Often worsens during hormonal shifts.",
-    signs: [
-      "Staring at a task for ages but can't start",
-      "Knowing what to do but feeling physically stuck",
-      "Forgetting steps mid-task",
-      "Feeling overwhelmed by simple decisions",
-    ],
-    whatToDo: [
-      "Break tasks into the smallest possible steps",
-      "Use body doubling (work alongside someone)",
-      "Set timers for 5-minute 'just start' sprints",
-      "Remove friction — prep everything before you need it",
-      "Be kind to yourself — this is neurological, not a character flaw",
-    ],
-  },
-  {
-    term: "Sensory Overload",
-    emoji: "🔊",
-    category: "Neurodiversity",
-    definition: "When your brain receives more sensory input than it can process, leading to distress, shutdown, or meltdown. Can be triggered by noise, light, textures, or social situations.",
-    signs: [
-      "Sudden irritability or anxiety in busy environments",
-      "Need to cover ears, close eyes, or escape",
-      "Difficulty concentrating when there's background noise",
-      "Feeling 'touched out' or skin-crawling sensation",
-    ],
-    whatToDo: [
-      "Identify your top triggers and plan around them",
-      "Keep noise-cancelling earbuds accessible",
-      "Create a sensory 'safe space' at home",
-      "Use Mimaura's low-stim mode during overload periods",
-      "Schedule recovery time after intense sensory experiences",
-    ],
-  },
-  {
-    term: "Rejection Sensitive Dysphoria (RSD)",
-    emoji: "💔",
-    category: "ADHD",
-    definition: "Intense emotional pain triggered by perceived rejection or criticism. It's not being 'too sensitive' — it's a neurological response common in ADHD that can intensify during the luteal phase.",
-    signs: [
-      "Extreme emotional reactions to mild criticism",
-      "Avoiding situations where rejection is possible",
-      "People-pleasing to prevent perceived rejection",
-      "Replaying conversations looking for signs of disapproval",
-    ],
-    whatToDo: [
-      "Name it — 'this is RSD, not reality'",
-      "Wait 24 hours before reacting to perceived rejection",
-      "Track if intensity correlates with your cycle phase",
-      "Practice self-compassion scripts",
-      "Talk to a neurodivergent-aware therapist",
-    ],
-  },
-  {
-    term: "Emotional Dysregulation",
-    emoji: "🌊",
-    category: "Mental Health",
-    definition: "Difficulty managing emotional responses — emotions feel bigger, last longer, and are harder to recover from than expected. Common in ADHD, autism, and can fluctuate with hormones.",
-    signs: [
-      "Crying or rage that feels disproportionate to the trigger",
-      "Difficulty calming down once upset",
-      "Emotional reactions that surprise even you",
-      "Mood shifts that feel uncontrollable",
-    ],
-    whatToDo: [
-      "Track emotional intensity alongside your cycle",
-      "Practice grounding techniques (5-4-3-2-1 senses)",
-      "Identify your 'window of tolerance' and respect it",
-      "Communicate needs to loved ones proactively",
-      "Consider if hormonal fluctuations are amplifying emotions",
-    ],
-  },
-  {
-    term: "Masking",
-    emoji: "🎭",
-    category: "Neurodiversity",
-    definition: "Consciously or unconsciously hiding neurodivergent traits to appear 'normal.' It's exhausting and can lead to burnout, identity confusion, and late diagnosis — especially in women.",
-    signs: [
-      "Feeling exhausted after social interactions",
-      "Acting differently in public vs. private",
-      "Suppressing stims, tics, or natural behaviors",
-      "Not knowing who you 'really are' underneath",
-    ],
-    whatToDo: [
-      "Start noticing when and where you mask most",
-      "Create safe spaces where you can unmask",
-      "Practice small acts of authenticity daily",
-      "Connect with neurodivergent communities",
-      "Remember: masking is a survival skill, not a flaw",
-    ],
-  },
-  {
-    term: "PMDD (Premenstrual Dysphoric Disorder)",
-    emoji: "🌑",
-    category: "Cycles",
-    definition: "A severe form of PMS that causes intense mood changes, depression, irritability, and anxiety in the 1-2 weeks before your period. It's not 'just PMS' — it's a recognized medical condition.",
-    signs: [
-      "Severe depression or hopelessness before your period",
-      "Intense anxiety or panic attacks cyclically",
-      "Rage or irritability that disrupts relationships",
-      "Feeling like a different person in your luteal phase",
-    ],
-    whatToDo: [
-      "Track symptoms for 2-3 cycles to confirm the pattern",
-      "Talk to a doctor who takes PMDD seriously",
-      "Join PMDD support communities (you're not alone)",
-      "Consider cycle-specific treatment options",
-      "Use Mimaura to document and share patterns with your provider",
-    ],
-  },
-  {
-    term: "Burnout",
-    emoji: "🔥",
-    category: "Mental Health",
-    definition: "Chronic physical and emotional exhaustion from prolonged stress. Neurodivergent people are especially vulnerable due to the extra energy spent on masking, executive function, and sensory management.",
-    signs: [
-      "Exhaustion that sleep doesn't fix",
-      "Cynicism or detachment from things you used to enjoy",
-      "Reduced ability to function in daily tasks",
-      "Increased sensitivity to everything",
-    ],
-    whatToDo: [
-      "This is not a productivity problem — reduce demands",
-      "Identify and eliminate unnecessary masking situations",
-      "Prioritize rest without guilt",
-      "Seek professional support early",
-      "Track energy patterns — some cycle phases are more vulnerable",
-    ],
-  },
-  {
-    term: "Dissociation",
-    emoji: "🫧",
-    category: "Mental Health",
-    definition: "Feeling disconnected from your body, thoughts, or surroundings. It's a spectrum — from mild 'zoning out' to feeling like you're watching yourself from outside your body.",
-    signs: [
-      "Feeling 'not real' or like you're in a dream",
-      "Time passing without awareness",
-      "Emotional numbness or feeling disconnected",
-      "Difficulty remembering parts of your day",
-    ],
-    whatToDo: [
-      "Grounding: hold ice, smell something strong, feel textures",
-      "Name 5 things you can see, 4 you can hear, 3 you can touch",
-      "Move your body — stomp, stretch, splash cold water",
-      "If frequent, talk to a trauma-informed therapist",
-      "Track occurrences — they may correlate with cycle phases",
-    ],
-  },
-];
-
-const categories = ["All", "ADHD", "Neurodiversity", "Mental Health", "Cycles"];
+import { glossaryTerms, glossaryCategories } from "@/data/glossaryTerms";
 
 const Glossary = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
 
-  const filtered = terms.filter((t) => {
+  const filtered = glossaryTerms.filter((t) => {
     const matchesSearch =
       t.term.toLowerCase().includes(search.toLowerCase()) ||
       t.definition.toLowerCase().includes(search.toLowerCase());
@@ -234,7 +69,7 @@ const Glossary = () => {
             transition={{ delay: 0.15 }}
             className="flex flex-wrap gap-2 mb-10"
           >
-            {categories.map((cat) => (
+            {glossaryCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
