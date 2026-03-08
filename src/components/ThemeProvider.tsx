@@ -32,7 +32,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     // Migrate legacy values
     if (stored === "light") return "day";
     if (stored === "dark") return "night";
-    const valid: Theme[] = ["day", "night", "bloom", "golden-hour", "low-stim"];
+    const valid: Theme[] = ["day", "night", "bloom", "golden-hour", "low-stim", "ocean", "midnight-berry", "forest", "unicorn"];
     return valid.includes(stored as Theme) ? (stored as Theme) : "day";
   });
 
