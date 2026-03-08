@@ -189,6 +189,9 @@ const Glossary = () => {
                               💜 This is educational content, not medical advice. If you're struggling, please reach out to a qualified professional. You deserve support.
                             </p>
                           </div>
+
+                          {/* Community experiences */}
+                          <TermCommunity termName={term.term} />
                         </div>
                       </motion.div>
                     )}
