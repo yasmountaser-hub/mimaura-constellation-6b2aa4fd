@@ -69,13 +69,24 @@ const Header = () => {
           {/* CTA Buttons + Theme */}
           <div className="hidden lg:flex items-center gap-2 xl:gap-3">
             <ThemeSwitcher />
-            <Button variant="ghost" size="sm" className="gap-2">
-              <Download className="w-4 h-4" />
-              Get App
-            </Button>
-            <Button variant="hero" size="sm">
-              Join Waitlist
-            </Button>
+            {user ? (
+              <Button variant="ghost" size="sm" className="gap-2" onClick={signOut}>
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
+            ) : (
+              <Link to="/auth">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <LogIn className="w-4 h-4" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
+            <Link to="/#waitlist">
+              <Button variant="hero" size="sm">
+                Join Waitlist
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile: theme + hamburger */}
