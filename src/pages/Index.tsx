@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
+import CursorGlow from "@/components/CursorGlow";
+import SectionDivider from "@/components/SectionDivider";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import JourneyMapSection from "@/components/JourneyMapSection";
@@ -18,80 +20,40 @@ import WaitlistSection from "@/components/WaitlistSection";
 const Index = () => {
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Floating particles background */}
       <FloatingParticles />
-      
-      {/* Header */}
+      <CursorGlow />
       <Header />
       
-      {/* Main content */}
       <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Hero */}
-        <section id="hero">
-          <HeroSection />
-        </section>
-
-        {/* Features */}
-        <section id="features">
-          <FeaturesSection />
-        </section>
-
-        {/* Journey Map */}
-        <section id="journey">
-          <JourneyMapSection />
-        </section>
-
-        {/* What Makes Us Different */}
-        <section id="difference">
-          <DifferenceSection />
-        </section>
-
-        {/* Pattern Nudge Sneak Peek */}
-        <section id="how-it-works">
-          <PatternNudgeSneakPeek />
-        </section>
-
-        {/* Testimonials */}
-        <section id="testimonials">
-          <TestimonialsSection />
-        </section>
-
-        {/* Meet Mimi */}
-        <section id="meet-mimi">
-          <MeetMimiSection />
-        </section>
-
-        {/* Mimi Personality Quiz */}
-        <section id="quiz">
-          <MimiQuizSection />
-        </section>
-
-        {/* Meet the Team */}
-        <section id="team">
-          <TeamSection />
-        </section>
-
-        {/* Education Hub */}
-        <section id="education">
-          <EducationSection />
-        </section>
-
-        {/* Trust & Privacy */}
-        <section id="privacy">
-          <TrustSection />
-        </section>
-
-        {/* Waitlist CTA */}
-        <section id="waitlist">
-          <WaitlistSection />
-        </section>
+        <section id="hero"><HeroSection /></section>
+        <SectionDivider />
+        <section id="features"><FeaturesSection /></section>
+        <SectionDivider />
+        <section id="journey"><JourneyMapSection /></section>
+        <SectionDivider />
+        <section id="difference"><DifferenceSection /></section>
+        <SectionDivider />
+        <section id="how-it-works"><PatternNudgeSneakPeek /></section>
+        <SectionDivider />
+        <section id="testimonials"><TestimonialsSection /></section>
+        <SectionDivider />
+        <section id="meet-mimi"><MeetMimiSection /></section>
+        <SectionDivider />
+        <section id="quiz"><MimiQuizSection /></section>
+        <SectionDivider />
+        <section id="team"><TeamSection /></section>
+        <SectionDivider />
+        <section id="education"><EducationSection /></section>
+        <SectionDivider />
+        <section id="privacy"><TrustSection /></section>
+        <SectionDivider />
+        <section id="waitlist"><WaitlistSection /></section>
       </motion.main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
