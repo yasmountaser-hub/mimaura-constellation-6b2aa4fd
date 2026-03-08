@@ -20,6 +20,10 @@ const themeClasses: Record<Theme, string> = {
   "bloom": "bloom",
   "golden-hour": "golden-hour",
   "low-stim": "low-stim",
+  "ocean": "ocean",
+  "midnight-berry": "midnight-berry",
+  "forest": "forest",
+  "unicorn": "unicorn",
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
