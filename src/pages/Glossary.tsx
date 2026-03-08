@@ -69,7 +69,7 @@ const Glossary = () => {
             transition={{ delay: 0.15 }}
             className="flex flex-wrap gap-2 mb-10"
           >
-            {categories.map((cat) => (
+            {glossaryCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
