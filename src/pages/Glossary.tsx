@@ -7,6 +7,7 @@ import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
 import { glossaryTerms, glossaryCategories } from "@/data/glossaryTerms";
+import TermCommunity from "@/components/TermCommunity";
 
 const Glossary = () => {
   const [search, setSearch] = useState("");
