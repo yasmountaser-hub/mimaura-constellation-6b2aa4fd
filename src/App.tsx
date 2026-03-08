@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AccessibilityProvider } from "@/components/AccessibilityProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import Index from "./pages/Index";
 import FAQ from "./pages/FAQ";
@@ -13,6 +14,7 @@ import Roadmap from "./pages/Roadmap";
 import Resources from "./pages/Resources";
 import Glossary from "./pages/Glossary";
 import Community from "./pages/Community";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +39,7 @@ const AnimatedRoutes = () => {
           <Route path="/resources" element={<Resources />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
@@ -48,13 +51,15 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <AccessibilityProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AnimatedRoutes />
-          </BrowserRouter>
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AnimatedRoutes />
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
       </AccessibilityProvider>
     </ThemeProvider>
   </QueryClientProvider>

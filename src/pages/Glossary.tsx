@@ -7,6 +7,7 @@ import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
 import { glossaryTerms, glossaryCategories } from "@/data/glossaryTerms";
+import TermCommunity from "@/components/TermCommunity";
 
 const Glossary = () => {
   const [search, setSearch] = useState("");
@@ -188,6 +189,9 @@ const Glossary = () => {
                               💜 This is educational content, not medical advice. If you're struggling, please reach out to a qualified professional. You deserve support.
                             </p>
                           </div>
+
+                          {/* Community experiences */}
+                          <TermCommunity termName={term.term} />
                         </div>
                       </motion.div>
                     )}

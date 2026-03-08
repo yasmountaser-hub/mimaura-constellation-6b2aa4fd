@@ -2,11 +2,13 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, LogIn, LogOut } from "lucide-react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { useAuth } from "@/components/AuthProvider";
 import logo from "@/assets/mimaura-logo.png";
 
 const Header = () => {
+  const { user, signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const headerBg = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
@@ -67,13 +69,24 @@ const Header = () => {
           {/* CTA Buttons + Theme */}
           <div className="hidden lg:flex items-center gap-2 xl:gap-3">
             <ThemeSwitcher />
-            <Button variant="ghost" size="sm" className="gap-2">
-              <Download className="w-4 h-4" />
-              Get App
-            </Button>
-            <Button variant="hero" size="sm">
-              Join Waitlist
-            </Button>
+            {user ? (
+              <Button variant="ghost" size="sm" className="gap-2" onClick={signOut}>
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
+            ) : (
+              <Link to="/auth">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <LogIn className="w-4 h-4" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
+            <Link to="/#waitlist">
+              <Button variant="hero" size="sm">
+                Join Waitlist
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile: theme + hamburger */}
