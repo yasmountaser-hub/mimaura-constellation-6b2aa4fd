@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Star, Heart, Sparkles } from "lucide-react";
-import mimiPoses from "@/assets/mimi-poses.png";
+import InteractiveMimi from "@/components/InteractiveMimi";
 
 const MeetMimiSection = () => {
   return (
@@ -81,45 +81,9 @@ const MeetMimiSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="order-1 lg:order-2 relative"
+            className="order-1 lg:order-2 relative flex items-center justify-center min-h-[400px]"
           >
-            {/* Glow */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-radial from-primary/20 to-transparent rounded-full scale-110"
-              animate={{ scale: [1.1, 1.2, 1.1] }}
-              transition={{ duration: 5, repeat: Infinity }}
-            />
-
-            {/* Sparkles */}
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute"
-                style={{
-                  top: `${15 + Math.random() * 70}%`,
-                  left: `${10 + Math.random() * 80}%`,
-                }}
-                animate={{
-                  scale: [0, 1, 0],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.4,
-                }}
-              >
-                <Sparkles className="w-4 h-4 text-accent" />
-              </motion.div>
-            ))}
-
-            <motion.img
-              src={mimiPoses}
-              alt="Mimi in various poses"
-              className="relative z-10 w-full max-w-lg mx-auto drop-shadow-2xl"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            />
+            <InteractiveMimi className="w-full max-w-sm" />
           </motion.div>
         </div>
       </div>

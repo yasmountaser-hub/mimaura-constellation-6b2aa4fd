@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Brain, Heart, Moon, Sparkles, Users, Shield } from "lucide-react";
+import TiltCard from "@/components/TiltCard";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import mimiSmart from "@/assets/mimi-smart.png";
 import mimiMeal from "@/assets/mimi-meal.png";
 import mimiMood from "@/assets/mimi-mood.png";
@@ -49,6 +51,13 @@ const features = [
   },
 ];
 
+const stats = [
+  { target: 10000, suffix: "+", label: "Waitlist sign-ups" },
+  { target: 95, suffix: "%", label: "Would recommend" },
+  { target: 30, suffix: "+", label: "Conditions tracked" },
+  { target: 5, suffix: "", label: "Theme modes" },
+];
+
 const FeaturesSection = () => {
   return (
     <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
@@ -86,38 +95,54 @@ const FeaturesSection = () => {
           </p>
         </motion.div>
 
-        {/* Features Grid */}
+        {/* Features Grid — now with 3D tilt! */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: feature.delay }}
-              whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              className="group relative"
             >
-              <div className="glass-card rounded-3xl p-8 h-full hover:shadow-float transition-all duration-300">
-                {/* Gradient blob */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                
-                <div className="relative z-10">
-                  {/* Icon */}
-                  <motion.div
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                    className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5"
-                  >
-                    <feature.icon className="w-7 h-7 text-primary" />
-                  </motion.div>
-
-                  <h3 className="font-display text-xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              <TiltCard className="h-full" tiltStrength={10}>
+                <div className="glass-card rounded-3xl p-8 h-full hover:shadow-float transition-all duration-300 group">
+                  {/* Gradient blob */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                  
+                  <div className="relative z-10">
+                    <motion.div
+                      whileHover={{ rotate: 10, scale: 1.1 }}
+                      className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5"
+                    >
+                      <feature.icon className="w-7 h-7 text-primary" />
+                    </motion.div>
+                    <h3 className="font-display text-xl font-bold mb-3">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                  </div>
                 </div>
-              </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
+
+        {/* Animated Counters — social proof */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 py-12 px-6 glass-card rounded-3xl"
+        >
+          {stats.map((stat) => (
+            <AnimatedCounter
+              key={stat.label}
+              target={stat.target}
+              suffix={stat.suffix}
+              label={stat.label}
+            />
+          ))}
+        </motion.div>
 
         {/* Floating Mimis */}
         <div className="relative h-32 flex justify-center items-center gap-8">
