@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-export type Theme = "day" | "night" | "bloom" | "golden-hour" | "low-stim";
+export type Theme = "day" | "night" | "bloom" | "golden-hour" | "low-stim" | "ocean" | "midnight-berry" | "forest" | "unicorn";
 
 interface ThemeContextType {
   theme: Theme;
