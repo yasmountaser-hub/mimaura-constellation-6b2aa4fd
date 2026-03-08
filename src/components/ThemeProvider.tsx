@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-export type Theme = "day" | "night" | "bloom" | "golden-hour" | "low-stim";
+export type Theme = "day" | "night" | "bloom" | "golden-hour" | "low-stim" | "ocean" | "midnight-berry" | "forest" | "unicorn";
 
 interface ThemeContextType {
   theme: Theme;
@@ -20,6 +20,10 @@ const themeClasses: Record<Theme, string> = {
   "bloom": "bloom",
   "golden-hour": "golden-hour",
   "low-stim": "low-stim",
+  "ocean": "ocean",
+  "midnight-berry": "midnight-berry",
+  "forest": "forest",
+  "unicorn": "unicorn",
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
@@ -28,7 +32,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     // Migrate legacy values
     if (stored === "light") return "day";
     if (stored === "dark") return "night";
-    const valid: Theme[] = ["day", "night", "bloom", "golden-hour", "low-stim"];
+    const valid: Theme[] = ["day", "night", "bloom", "golden-hour", "low-stim", "ocean", "midnight-berry", "forest", "unicorn"];
     return valid.includes(stored as Theme) ? (stored as Theme) : "day";
   });
 
@@ -36,7 +40,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const root = document.documentElement;
     
     // Remove all theme classes
-    root.classList.remove("dark", "bloom", "golden-hour", "low-stim");
+    root.classList.remove("dark", "bloom", "golden-hour", "low-stim", "ocean", "midnight-berry", "forest", "unicorn");
     
     const cls = themeClasses[theme];
     if (cls) {

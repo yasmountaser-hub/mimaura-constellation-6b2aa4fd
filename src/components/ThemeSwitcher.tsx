@@ -8,6 +8,10 @@ const themes: { id: Theme; label: string; emoji: string; vibe: string }[] = [
   { id: "night", label: "Night", emoji: "🌙", vibe: "Deep & dreamy" },
   { id: "bloom", label: "Bloom", emoji: "🌸", vibe: "Soft & rosy" },
   { id: "golden-hour", label: "Golden Hour", emoji: "🌅", vibe: "Warm & cozy" },
+  { id: "ocean", label: "Ocean", emoji: "🌊", vibe: "Cool & calming" },
+  { id: "midnight-berry", label: "Midnight Berry", emoji: "🍇", vibe: "Rich & sultry" },
+  { id: "forest", label: "Forest", emoji: "🌿", vibe: "Earthy & grounding" },
+  { id: "unicorn", label: "Unicorn", emoji: "🦄", vibe: "Magical & dreamy" },
   { id: "low-stim", label: "Low-stim", emoji: "🧘", vibe: "Calm & quiet" },
 ];
 
@@ -46,7 +50,7 @@ const ThemeSwitcher = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute right-0 top-full mt-2 z-50 w-48 rounded-2xl bg-card border border-border shadow-float p-1.5 backdrop-blur-xl"
+              className="absolute right-0 top-full mt-2 z-50 w-52 max-h-[70vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-float p-1.5 backdrop-blur-xl scrollbar-thin"
             >
               {themes.map((t) => (
                 <motion.button

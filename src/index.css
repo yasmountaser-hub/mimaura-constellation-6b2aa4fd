@@ -290,6 +290,234 @@
     --sidebar-border: 0 0% 88%;
     --sidebar-ring: 270 25% 55%;
   }
+
+  /* 🌊 Ocean — Deep sea blues & calming teals */
+  .ocean {
+    --background: 200 40% 97%;
+    --foreground: 210 50% 15%;
+    --card: 200 35% 96%;
+    --card-foreground: 210 50% 15%;
+    --popover: 200 35% 96%;
+    --popover-foreground: 210 50% 15%;
+    --primary: 195 80% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 180 50% 92%;
+    --secondary-foreground: 190 50% 25%;
+    --muted: 200 20% 93%;
+    --muted-foreground: 210 15% 42%;
+    --accent: 170 60% 45%;
+    --accent-foreground: 170 60% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 200 30% 88%;
+    --input: 200 25% 90%;
+    --ring: 195 80% 45%;
+
+    --lavender: 195 70% 50%;
+    --lavender-light: 195 55% 80%;
+    --lavender-dark: 200 65% 35%;
+    --cream: 190 25% 96%;
+    --cream-warm: 185 30% 93%;
+    --gold: 45 70% 55%;
+    --gold-soft: 45 50% 75%;
+    --rose: 340 45% 65%;
+    --rose-soft: 340 30% 90%;
+    --sky: 200 80% 65%;
+    --sky-soft: 200 50% 88%;
+    --mint: 170 55% 60%;
+    --mint-soft: 170 40% 90%;
+
+    --gradient-celestial: linear-gradient(180deg, hsl(200 40% 96%) 0%, hsl(195 35% 95%) 50%, hsl(185 40% 96%) 100%);
+    --gradient-aurora: linear-gradient(135deg, hsl(195 55% 85%) 0%, hsl(185 50% 88%) 25%, hsl(170 45% 88%) 50%, hsl(200 55% 86%) 75%, hsl(195 55% 85%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(200 45% 93%) 0%, hsl(195 40% 94%) 30%, hsl(180 40% 94%) 70%, hsl(200 40% 92%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.8) 0%, hsl(200 35% 96% / 0.6) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(195 80% 45%) 0%, hsl(170 60% 45%) 100%);
+
+    --shadow-soft: 0 4px 20px -2px hsl(195 80% 45% / 0.15);
+    --shadow-glow: 0 0 30px hsl(195 80% 45% / 0.2);
+    --shadow-card: 0 8px 32px -4px hsl(200 40% 35% / 0.1);
+    --shadow-float: 0 20px 40px -10px hsl(200 50% 35% / 0.15);
+
+    --sidebar-background: 200 35% 96%;
+    --sidebar-foreground: 210 50% 25%;
+    --sidebar-primary: 195 75% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 200 25% 92%;
+    --sidebar-accent-foreground: 210 50% 25%;
+    --sidebar-border: 200 30% 88%;
+    --sidebar-ring: 195 80% 45%;
+  }
+
+  /* 🍇 Midnight Berry — Rich plum & jewel tones */
+  .midnight-berry {
+    --background: 280 40% 6%;
+    --foreground: 290 20% 92%;
+    --card: 280 30% 10%;
+    --card-foreground: 290 20% 92%;
+    --popover: 280 30% 10%;
+    --popover-foreground: 290 20% 92%;
+    --primary: 310 65% 60%;
+    --primary-foreground: 280 40% 5%;
+    --secondary: 270 35% 18%;
+    --secondary-foreground: 280 30% 82%;
+    --muted: 280 20% 15%;
+    --muted-foreground: 290 15% 52%;
+    --accent: 340 70% 55%;
+    --accent-foreground: 340 70% 95%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 280 20% 16%;
+    --input: 280 20% 18%;
+    --ring: 310 65% 60%;
+
+    --lavender: 310 60% 62%;
+    --lavender-light: 300 40% 35%;
+    --lavender-dark: 310 65% 72%;
+    --cream: 280 12% 10%;
+    --cream-warm: 300 15% 12%;
+    --gold: 45 70% 55%;
+    --gold-soft: 40 45% 30%;
+    --rose: 340 65% 58%;
+    --rose-soft: 340 35% 18%;
+    --sky: 220 60% 58%;
+    --sky-soft: 220 40% 18%;
+    --mint: 170 45% 48%;
+    --mint-soft: 170 30% 15%;
+
+    --gradient-celestial: linear-gradient(180deg, hsl(280 40% 5%) 0%, hsl(290 35% 8%) 30%, hsl(310 25% 7%) 60%, hsl(280 40% 5%) 100%);
+    --gradient-aurora: linear-gradient(135deg, hsl(280 40% 12%) 0%, hsl(310 35% 15%) 25%, hsl(340 30% 12%) 50%, hsl(270 40% 12%) 75%, hsl(280 40% 12%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(280 35% 7%) 0%, hsl(300 30% 10%) 30%, hsl(320 25% 8%) 70%, hsl(280 35% 6%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(280 30% 12% / 0.9) 0%, hsl(290 25% 9% / 0.7) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(310 65% 55%) 0%, hsl(340 60% 50%) 50%, hsl(280 55% 55%) 100%);
+
+    --shadow-soft: 0 4px 20px -2px hsl(310 65% 60% / 0.15);
+    --shadow-glow: 0 0 40px hsl(310 65% 60% / 0.2), 0 0 80px hsl(310 65% 60% / 0.05);
+    --shadow-card: 0 8px 32px -4px hsl(0 0% 0% / 0.4), 0 0 20px hsl(310 65% 60% / 0.05);
+    --shadow-float: 0 20px 50px -10px hsl(0 0% 0% / 0.5), 0 0 30px hsl(310 65% 60% / 0.08);
+
+    --sidebar-background: 280 30% 8%;
+    --sidebar-foreground: 290 20% 88%;
+    --sidebar-primary: 310 60% 58%;
+    --sidebar-primary-foreground: 280 40% 5%;
+    --sidebar-accent: 280 20% 15%;
+    --sidebar-accent-foreground: 290 20% 88%;
+    --sidebar-border: 280 20% 15%;
+    --sidebar-ring: 310 65% 60%;
+  }
+
+  /* 🌿 Forest — Earthy greens & mossy vibes */
+  .forest {
+    --background: 140 25% 97%;
+    --foreground: 150 40% 15%;
+    --card: 140 20% 96%;
+    --card-foreground: 150 40% 15%;
+    --popover: 140 20% 96%;
+    --popover-foreground: 150 40% 15%;
+    --primary: 150 55% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 80 40% 92%;
+    --secondary-foreground: 100 35% 25%;
+    --muted: 140 15% 93%;
+    --muted-foreground: 150 12% 42%;
+    --accent: 35 65% 50%;
+    --accent-foreground: 35 65% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 140 20% 88%;
+    --input: 140 18% 90%;
+    --ring: 150 55% 38%;
+
+    --lavender: 150 50% 42%;
+    --lavender-light: 145 40% 78%;
+    --lavender-dark: 155 50% 30%;
+    --cream: 60 30% 96%;
+    --cream-warm: 50 35% 93%;
+    --gold: 42 75% 50%;
+    --gold-soft: 42 55% 72%;
+    --rose: 350 45% 62%;
+    --rose-soft: 350 30% 90%;
+    --sky: 200 55% 65%;
+    --sky-soft: 200 35% 90%;
+    --mint: 160 55% 55%;
+    --mint-soft: 160 40% 90%;
+
+    --gradient-celestial: linear-gradient(180deg, hsl(140 25% 96%) 0%, hsl(145 22% 95%) 50%, hsl(80 30% 96%) 100%);
+    --gradient-aurora: linear-gradient(135deg, hsl(150 40% 85%) 0%, hsl(140 35% 88%) 25%, hsl(80 40% 90%) 50%, hsl(160 35% 86%) 75%, hsl(150 40% 85%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(140 30% 93%) 0%, hsl(150 28% 94%) 30%, hsl(80 30% 94%) 70%, hsl(140 28% 92%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.8) 0%, hsl(140 20% 96% / 0.6) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(150 55% 38%) 0%, hsl(120 45% 40%) 100%);
+
+    --shadow-soft: 0 4px 20px -2px hsl(150 55% 38% / 0.15);
+    --shadow-glow: 0 0 30px hsl(150 55% 38% / 0.18);
+    --shadow-card: 0 8px 32px -4px hsl(150 35% 30% / 0.1);
+    --shadow-float: 0 20px 40px -10px hsl(150 45% 28% / 0.15);
+
+    --sidebar-background: 140 20% 96%;
+    --sidebar-foreground: 150 40% 25%;
+    --sidebar-primary: 150 50% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 140 18% 92%;
+    --sidebar-accent-foreground: 150 40% 25%;
+    --sidebar-border: 140 20% 88%;
+    --sidebar-ring: 150 55% 38%;
+  }
+
+  /* 🦄 Unicorn — Pastel rainbow gradient, magical */
+  .unicorn {
+    --background: 280 35% 98%;
+    --foreground: 280 40% 18%;
+    --card: 300 30% 97%;
+    --card-foreground: 280 40% 18%;
+    --popover: 300 30% 97%;
+    --popover-foreground: 280 40% 18%;
+    --primary: 290 60% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 190 55% 92%;
+    --secondary-foreground: 200 45% 28%;
+    --muted: 280 18% 94%;
+    --muted-foreground: 280 12% 45%;
+    --accent: 330 65% 62%;
+    --accent-foreground: 330 65% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 290 25% 90%;
+    --input: 290 22% 92%;
+    --ring: 290 60% 62%;
+
+    --lavender: 280 55% 65%;
+    --lavender-light: 290 45% 85%;
+    --lavender-dark: 280 50% 48%;
+    --cream: 50 40% 97%;
+    --cream-warm: 45 45% 94%;
+    --gold: 45 80% 58%;
+    --gold-soft: 45 60% 78%;
+    --rose: 340 60% 70%;
+    --rose-soft: 340 45% 92%;
+    --sky: 200 70% 72%;
+    --sky-soft: 200 50% 90%;
+    --mint: 165 55% 68%;
+    --mint-soft: 165 40% 92%;
+
+    --gradient-celestial: linear-gradient(180deg, hsl(280 35% 97%) 0%, hsl(320 30% 96%) 33%, hsl(200 35% 97%) 66%, hsl(280 35% 97%) 100%);
+    --gradient-aurora: linear-gradient(135deg, hsl(280 50% 88%) 0%, hsl(330 50% 88%) 20%, hsl(350 50% 90%) 40%, hsl(45 55% 90%) 60%, hsl(170 45% 88%) 80%, hsl(220 50% 88%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(280 40% 94%) 0%, hsl(330 38% 94%) 25%, hsl(200 40% 95%) 50%, hsl(160 35% 94%) 75%, hsl(280 38% 93%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.85) 0%, hsl(290 30% 97% / 0.6) 100%);
+    --gradient-button: linear-gradient(135deg, hsl(280 60% 62%) 0%, hsl(330 55% 60%) 33%, hsl(200 55% 58%) 66%, hsl(280 60% 62%) 100%);
+
+    --shadow-soft: 0 4px 20px -2px hsl(290 60% 62% / 0.15);
+    --shadow-glow: 0 0 25px hsl(290 60% 62% / 0.15), 0 0 25px hsl(330 55% 60% / 0.1);
+    --shadow-card: 0 8px 32px -4px hsl(290 40% 40% / 0.1);
+    --shadow-float: 0 20px 40px -10px hsl(290 50% 40% / 0.15);
+
+    --sidebar-background: 290 30% 97%;
+    --sidebar-foreground: 280 40% 25%;
+    --sidebar-primary: 290 55% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 290 22% 94%;
+    --sidebar-accent-foreground: 280 40% 25%;
+    --sidebar-border: 290 25% 90%;
+    --sidebar-ring: 290 60% 62%;
+  }
 }
 
 @layer base {
