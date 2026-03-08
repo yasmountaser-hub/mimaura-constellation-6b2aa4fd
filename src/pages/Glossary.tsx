@@ -13,7 +13,7 @@ const Glossary = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
 
-  const filtered = terms.filter((t) => {
+  const filtered = glossaryTerms.filter((t) => {
     const matchesSearch =
       t.term.toLowerCase().includes(search.toLowerCase()) ||
       t.definition.toLowerCase().includes(search.toLowerCase());
