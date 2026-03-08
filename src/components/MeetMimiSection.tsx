@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Star, Heart, Sparkles } from "lucide-react";
-import mimiPoses from "@/assets/mimi-poses.png";
+import InteractiveMimi from "@/components/InteractiveMimi";
 
 const MeetMimiSection = () => {
   return (
