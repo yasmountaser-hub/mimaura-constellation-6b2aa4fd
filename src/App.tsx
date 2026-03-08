@@ -10,6 +10,9 @@ import Index from "./pages/Index";
 import FAQ from "./pages/FAQ";
 import AppPreview from "./pages/AppPreview";
 import Roadmap from "./pages/Roadmap";
+import Resources from "./pages/Resources";
+import Glossary from "./pages/Glossary";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +34,9 @@ const AnimatedRoutes = () => {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/preview" element={<AppPreview />} />
           <Route path="/roadmap" element={<Roadmap />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/glossary" element={<Glossary />} />
+          <Route path="/community" element={<Community />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
