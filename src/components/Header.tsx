@@ -2,8 +2,9 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, LogIn, LogOut } from "lucide-react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { useAuth } from "@/components/AuthProvider";
 import logo from "@/assets/mimaura-logo.png";
 
 const Header = () => {
