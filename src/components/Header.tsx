@@ -8,6 +8,7 @@ import { useAuth } from "@/components/AuthProvider";
 import logo from "@/assets/mimaura-logo.png";
 
 const Header = () => {
+  const { user, signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const headerBg = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
