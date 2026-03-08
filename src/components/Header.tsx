@@ -12,10 +12,12 @@ const Header = () => {
   const headerBg = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
 
   const navItems = [
-    { label: "Features", href: "#features" },
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Meet Mimi", href: "#meet-mimi" },
-    { label: "Privacy", href: "#privacy" },
+    { label: "Features", href: "/#features" },
+    { label: "App Preview", href: "/preview" },
+    { label: "Meet Mimi", href: "/#meet-mimi" },
+    { label: "Roadmap", href: "/roadmap" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Privacy", href: "/#privacy" },
   ];
 
   return (
