@@ -21,7 +21,7 @@ interface Star {
 
 const FloatingParticles = () => {
   const { theme } = useTheme();
-  const isNight = theme === "night";
+  const isNight = theme === "night" || theme === "midnight-berry";
 
   const particles = useMemo<Particle[]>(
     () =>
