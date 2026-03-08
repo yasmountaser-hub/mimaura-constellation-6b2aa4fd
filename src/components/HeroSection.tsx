@@ -1,20 +1,38 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight, Download, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import MagneticButton from "@/components/MagneticButton";
 import mimiMagic from "@/assets/mimi-magic.png";
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const mimiY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const starsY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden">
-      {/* Subtle gradient background - no animated blobs */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden">
+      {/* Parallax gradient background */}
+      <motion.div
+        className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-accent/5"
+        style={{ scale: bgScale, opacity: bgOpacity }}
+      />
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left content */}
+        {/* Left content — moves faster (foreground parallax) */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{ y: textY }}
           className="text-center lg:text-left space-y-8"
         >
           {/* Badge */}
@@ -53,21 +71,25 @@ const HeroSection = () => {
             no pressure, no judgment. Just soft insights when you need them.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons — magnetic! */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            <Button variant="hero" size="xl" className="group">
-              Join the Waitlist
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button variant="glass" size="lg" className="gap-2">
-              <Download className="w-4 h-4" />
-              Get the App Soon
-            </Button>
+            <MagneticButton strength={0.35}>
+              <Button variant="hero" size="xl" className="group">
+                Join the Waitlist
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </MagneticButton>
+            <MagneticButton strength={0.25}>
+              <Button variant="glass" size="lg" className="gap-2">
+                <Download className="w-4 h-4" />
+                Get the App Soon
+              </Button>
+            </MagneticButton>
           </motion.div>
 
           {/* Social Links */}
@@ -80,58 +102,62 @@ const HeroSection = () => {
             <span className="text-sm text-muted-foreground">Follow Mimi:</span>
             <div className="flex gap-3">
               {[Instagram, Twitter, Linkedin, Youtube].map((Icon, i) => (
-                <motion.a
-                  key={i}
-                  href="#"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-                >
-                  <Icon className="w-4 h-4 text-primary" />
-                </motion.a>
+                <MagneticButton key={i} strength={0.5}>
+                  <motion.a
+                    href="#"
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors block"
+                  >
+                    <Icon className="w-4 h-4 text-primary" />
+                  </motion.a>
+                </MagneticButton>
               ))}
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Right: Mimi mascot */}
+        {/* Right: Mimi mascot — slower parallax (midground) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          style={{ y: mimiY }}
           className="relative flex justify-center items-center"
         >
-          {/* Outer ring - subtle border only */}
+          {/* Outer ring */}
           <motion.div
             className="absolute w-72 h-72 md:w-80 md:h-80 rounded-full border-2 border-primary/20"
             animate={{ rotate: 360 }}
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           />
           
-          {/* Floating stars around Mimi */}
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-accent text-2xl"
-              style={{
-                top: `${20 + i * 15}%`,
-                left: `${10 + i * 20}%`,
-              }}
-              animate={{ 
-                y: [0, -10, 0],
-                rotate: [0, 180, 360],
-                scale: [1, 1.2, 1]
-              }}
-              transition={{ 
-                duration: 3, 
-                repeat: Infinity, 
-                delay: i * 0.5,
-                ease: "easeInOut"
-              }}
-            >
-              ✦
-            </motion.div>
-          ))}
+          {/* Floating stars — background parallax (move opposite) */}
+          <motion.div style={{ y: starsY }} className="absolute inset-0">
+            {[...Array(5)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute text-accent text-2xl"
+                style={{
+                  top: `${20 + i * 15}%`,
+                  left: `${10 + i * 20}%`,
+                }}
+                animate={{ 
+                  y: [0, -10, 0],
+                  rotate: [0, 180, 360],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity, 
+                  delay: i * 0.5,
+                  ease: "easeInOut"
+                }}
+              >
+                ✦
+              </motion.div>
+            ))}
+          </motion.div>
 
           {/* Mimi image */}
           <motion.img
