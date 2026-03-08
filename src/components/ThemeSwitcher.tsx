@@ -8,6 +8,10 @@ const themes: { id: Theme; label: string; emoji: string; vibe: string }[] = [
   { id: "night", label: "Night", emoji: "🌙", vibe: "Deep & dreamy" },
   { id: "bloom", label: "Bloom", emoji: "🌸", vibe: "Soft & rosy" },
   { id: "golden-hour", label: "Golden Hour", emoji: "🌅", vibe: "Warm & cozy" },
+  { id: "ocean", label: "Ocean", emoji: "🌊", vibe: "Cool & calming" },
+  { id: "midnight-berry", label: "Midnight Berry", emoji: "🍇", vibe: "Rich & sultry" },
+  { id: "forest", label: "Forest", emoji: "🌿", vibe: "Earthy & grounding" },
+  { id: "unicorn", label: "Unicorn", emoji: "🦄", vibe: "Magical & dreamy" },
   { id: "low-stim", label: "Low-stim", emoji: "🧘", vibe: "Calm & quiet" },
 ];
 

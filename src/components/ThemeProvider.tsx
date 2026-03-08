@@ -40,7 +40,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const root = document.documentElement;
     
     // Remove all theme classes
-    root.classList.remove("dark", "bloom", "golden-hour", "low-stim");
+    root.classList.remove("dark", "bloom", "golden-hour", "low-stim", "ocean", "midnight-berry", "forest", "unicorn");
     
     const cls = themeClasses[theme];
     if (cls) {
