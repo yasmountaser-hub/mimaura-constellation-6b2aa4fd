@@ -1,11 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, lazy, Suspense } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight, Download, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import mimiMagic from "@/assets/mimi-magic.png";
-
-const HeroScene3D = lazy(() => import("@/components/HeroScene3D"));
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -21,11 +19,7 @@ const HeroSection = () => {
   const bgOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden" style={{ perspective: "1200px" }}>
-      {/* 3D Scene Background */}
-      <Suspense fallback={null}>
-        <HeroScene3D />
-      </Suspense>
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden">
 
       {/* Parallax gradient background */}
       <motion.div

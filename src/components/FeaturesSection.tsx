@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Brain, Heart, Moon, Sparkles, Users, Shield } from "lucide-react";
-import Floating3DCard from "@/components/Floating3DCard";
+import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import mimiSmart from "@/assets/mimi-smart.png";
 import mimiMeal from "@/assets/mimi-meal.png";
@@ -105,7 +105,7 @@ const FeaturesSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: feature.delay }}
             >
-              <Floating3DCard className="h-full" depth={12}>
+              <TiltCard className="h-full" tiltStrength={10}>
                 <div className="glass-card rounded-3xl p-8 h-full hover:shadow-float transition-all duration-300 group">
                   {/* Gradient blob */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
@@ -121,7 +121,7 @@ const FeaturesSection = () => {
                     <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
-              </Floating3DCard>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
