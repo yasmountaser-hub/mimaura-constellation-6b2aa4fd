@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
@@ -18,6 +19,7 @@ import TeamSection from "@/components/TeamSection";
 import EducationSection from "@/components/EducationSection";
 import TrustSection from "@/components/TrustSection";
 import WaitlistSection from "@/components/WaitlistSection";
+import DepthLayer from "@/components/DepthLayer";
 
 const Index = () => {
   return (
@@ -35,26 +37,57 @@ const Index = () => {
       >
         <section id="hero"><HeroSection /></section>
         <SectionDivider />
-        <section id="features"><FeaturesSection /></section>
+        
+        <DepthLayer speed={0.3} rotateOnScroll>
+          <section id="features"><FeaturesSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="journey"><JourneyMapSection /></section>
+        
+        <DepthLayer speed={-0.2} rotateOnScroll>
+          <section id="journey"><JourneyMapSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="difference"><DifferenceSection /></section>
+        
+        <DepthLayer speed={0.2} rotateOnScroll>
+          <section id="difference"><DifferenceSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="how-it-works"><PatternNudgeSneakPeek /></section>
+        
+        <DepthLayer speed={-0.15}>
+          <section id="how-it-works"><PatternNudgeSneakPeek /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="testimonials"><TestimonialsSection /></section>
+        
+        <DepthLayer speed={0.25} rotateOnScroll>
+          <section id="testimonials"><TestimonialsSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="meet-mimi"><MeetMimiSection /></section>
+        
+        <DepthLayer speed={-0.2}>
+          <section id="meet-mimi"><MeetMimiSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="quiz"><MimiQuizSection /></section>
+        
+        <DepthLayer speed={0.15} rotateOnScroll>
+          <section id="quiz"><MimiQuizSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="team"><TeamSection /></section>
+        
+        <DepthLayer speed={-0.1}>
+          <section id="team"><TeamSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="education"><EducationSection /></section>
+        
+        <DepthLayer speed={0.2} rotateOnScroll>
+          <section id="education"><EducationSection /></section>
+        </DepthLayer>
         <SectionDivider />
-        <section id="privacy"><TrustSection /></section>
+        
+        <DepthLayer speed={-0.15}>
+          <section id="privacy"><TrustSection /></section>
+        </DepthLayer>
         <SectionDivider />
+        
         <section id="waitlist"><WaitlistSection /></section>
       </motion.main>
 

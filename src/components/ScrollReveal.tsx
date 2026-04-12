@@ -4,7 +4,7 @@ import { useRef, type ReactNode } from "react";
 interface ScrollRevealProps {
   children: ReactNode;
   className?: string;
-  variant?: "fade" | "slide-left" | "slide-right" | "scale" | "blur";
+  variant?: "fade" | "slide-left" | "slide-right" | "scale" | "blur" | "depth";
   delay?: number;
 }
 
@@ -29,6 +29,10 @@ const variants = {
     hidden: { opacity: 0, filter: "blur(10px)", y: 20 },
     visible: { opacity: 1, filter: "blur(0px)", y: 0 },
   },
+  depth: {
+    hidden: { opacity: 0, y: 60, rotateX: 10, scale: 0.95 },
+    visible: { opacity: 1, y: 0, rotateX: 0, scale: 1 },
+  },
 };
 
 const ScrollReveal = ({ children, className = "", variant = "fade", delay = 0 }: ScrollRevealProps) => {
@@ -43,6 +47,7 @@ const ScrollReveal = ({ children, className = "", variant = "fade", delay = 0 }:
       variants={variants[variant]}
       transition={{ duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={className}
+      style={variant === "depth" ? { perspective: 1200 } : undefined}
     >
       {children}
     </motion.div>

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Brain, Heart, Moon, Sparkles, Users, Shield } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import GlassOrb from "@/components/GlassOrb";
 import mimiSmart from "@/assets/mimi-smart.png";
 import mimiMeal from "@/assets/mimi-meal.png";
 import mimiMood from "@/assets/mimi-mood.png";
@@ -60,19 +61,20 @@ const stats = [
 
 const FeaturesSection = () => {
   return (
-    <section className="relative py-24 px-4 sm:px-6 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
+    <section className="relative py-24 px-4 sm:px-6 overflow-hidden" style={{ perspective: "1200px" }}>
+      {/* Background depth orbs */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <GlassOrb size={300} color="hsl(var(--primary) / 0.06)" blur={70} className="top-[5%] right-[-5%]" delay={1} />
+        <GlassOrb size={200} color="hsl(var(--accent) / 0.08)" blur={50} className="bottom-[10%] left-[-3%]" delay={3} />
       </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30, rotateX: 5 }}
+          whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <motion.div
@@ -95,15 +97,15 @@ const FeaturesSection = () => {
           </p>
         </motion.div>
 
-        {/* Features Grid — now with 3D tilt! */}
+        {/* Features Grid — 3D tilt cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 50, rotateX: 8 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: feature.delay }}
+              transition={{ duration: 0.6, delay: feature.delay }}
             >
               <TiltCard className="h-full" tiltStrength={10}>
                 <div className="glass-card rounded-3xl p-8 h-full hover:shadow-float transition-all duration-300 group">
@@ -126,12 +128,12 @@ const FeaturesSection = () => {
           ))}
         </div>
 
-        {/* Animated Counters — social proof */}
+        {/* Animated Counters — social proof with 3D entrance */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, rotateX: 5 }}
+          whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 py-12 px-6 glass-card rounded-3xl"
         >
           {stats.map((stat) => (
