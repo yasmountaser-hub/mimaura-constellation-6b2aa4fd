@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Brain, Heart, Moon, Sparkles, Users, Shield } from "lucide-react";
-import Floating3DCard from "@/components/Floating3DCard";
+import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import mimiSmart from "@/assets/mimi-smart.png";
 import mimiMeal from "@/assets/mimi-meal.png";

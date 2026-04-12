@@ -19,11 +19,7 @@ const HeroSection = () => {
   const bgOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden" style={{ perspective: "1200px" }}>
-      {/* 3D Scene Background */}
-      <Suspense fallback={null}>
-        <HeroScene3D />
-      </Suspense>
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 py-20 pt-24 sm:pt-20 overflow-hidden">
 
       {/* Parallax gradient background */}
       <motion.div
