@@ -1,11 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, lazy, Suspense } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight, Download, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import mimiMagic from "@/assets/mimi-magic.png";
-
-const HeroScene3D = lazy(() => import("@/components/HeroScene3D"));
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
