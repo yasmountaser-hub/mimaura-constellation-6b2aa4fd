@@ -41,14 +41,23 @@ const Header = () => {
       >
         <nav className="max-w-7xl mx-auto glass-card rounded-2xl px-2.5 sm:px-4 md:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-2">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <motion.img
-              src={logo}
-              alt="Mimaura"
-              whileHover={{ scale: 1.05 }}
-              className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl object-contain"
-            />
-            <span className="font-display text-base sm:text-lg md:text-xl font-bold">Mimaura</span>
+          <Link to="/" className="group flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <motion.div
+              whileHover={{ scale: 1.06, rotate: -2 }}
+              transition={{ type: "spring", stiffness: 280, damping: 18 }}
+              className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-2xl bg-gradient-to-br from-primary/15 to-accent/15 ring-1 ring-primary/15 shadow-sm overflow-hidden flex items-center justify-center"
+            >
+              <img
+                src={logo}
+                alt="Mimaura"
+                className="w-full h-full object-contain p-0.5"
+                loading="eager"
+                decoding="async"
+              />
+            </motion.div>
+            <span className="font-display text-base sm:text-lg md:text-xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Mimaura
+            </span>
           </Link>
 
           {/* Desktop Nav */}
