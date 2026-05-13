@@ -369,12 +369,11 @@ const DifferenceSection = () => {
           />
           <div className="text-center sm:text-left">
             <h3 className="font-display text-xl sm:text-2xl font-bold mb-2">
-              Built by the women Flo & Clue forgot
+              Built for the women wellness tech often overlooks
             </h3>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Neurodivergent. Chronically ill. Culturally diverse. We built Mimaura because the
-              biggest apps in the world still weren't working for us. This is wellness tech,
-              rethought from the ground up.
+              Neurodivergent. Chronically ill. Culturally diverse. Mimaura was built by women who
+              needed something more — a calmer, kinder, more personal approach to wellbeing.
             </p>
           </div>
         </motion.div>
