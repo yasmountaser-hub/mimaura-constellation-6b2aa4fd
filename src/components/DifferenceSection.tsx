@@ -1,63 +1,113 @@
 import { motion } from "framer-motion";
-import { Check, X, Sparkles, Zap, Heart, Shield, Brain, Moon } from "lucide-react";
+import { Check, X, Sparkles, Zap, Heart, Shield, Brain, Moon, AlertCircle } from "lucide-react";
 import mimiMagic from "@/assets/mimi-magic.png";
 
-const comparisons = [
+type Mark = "yes" | "plus" | "partial" | "no";
+
+interface Comparison {
+  feature: string;
+  emoji: string;
+  detail: string;
+  mimaura: Mark;
+  flo: Mark;
+  clue: Mark;
+}
+
+const comparisons: Comparison[] = [
   {
-    feature: "Period & Cycle Tracking",
+    feature: "Cycle & Symptom Tracking",
     emoji: "🗓️",
+    detail: "The basics — done well by everyone, deepened by us.",
     mimaura: "plus",
-    others: true,
-    detail: "Basic tracking + AI-powered pattern insights",
+    flo: "yes",
+    clue: "yes",
   },
   {
-    feature: "Symptom Logging",
-    emoji: "📊",
-    mimaura: "plus",
-    others: true,
-    detail: "100+ symptoms + custom tracking tailored to you",
-  },
-  {
-    feature: "Reminders & Notifications",
-    emoji: "🔔",
-    mimaura: "plus",
-    others: true,
-    detail: "Gentle, trauma-informed nudges (never guilt trips!)",
-  },
-  {
-    feature: "Neurodivergent-Friendly Design",
-    emoji: "🧠",
-    mimaura: "plus",
-    others: false,
-    detail: "Low-stim mode, ADHD-friendly UI, no overwhelm",
-  },
-  {
-    feature: "AI Pattern Recognition",
+    feature: "Learns YOUR Pattern (not 28-day default)",
     emoji: "✨",
+    detail: "Mimaura adapts to irregular, PCOS, perimenopause & chronic cycles.",
     mimaura: "plus",
-    others: "partial",
-    detail: "Learns YOUR unique patterns, not generic 28-day cycles",
+    flo: "partial",
+    clue: "partial",
+  },
+  {
+    feature: "Mental Health × Hormone Insights",
+    emoji: "🧠",
+    detail: "Why anxiety spikes, motivation drops, mood shifts — explained.",
+    mimaura: "plus",
+    flo: "partial",
+    clue: "no",
+  },
+  {
+    feature: "Mood, Energy & Focus Forecasting",
+    emoji: "🌤️",
+    detail: "Not just 'period in 3 days' — your whole week, predicted.",
+    mimaura: "plus",
+    flo: "no",
+    clue: "no",
+  },
+  {
+    feature: "Neurodivergent-Friendly (ADHD, Autism)",
+    emoji: "💜",
+    detail: "Low-stim mode, dyslexia fonts, sensory-aware UI — built in.",
+    mimaura: "plus",
+    flo: "no",
+    clue: "no",
   },
   {
     feature: "Chronic Condition Support",
-    emoji: "💜",
+    emoji: "🩺",
+    detail: "PCOS, endo, fibro, thyroid — first-class, not an afterthought.",
     mimaura: "plus",
-    others: false,
-    detail: "Built for PCOS, endo, fibro & more from day one",
+    flo: "partial",
+    clue: "partial",
+  },
+  {
+    feature: "Privacy-First (no data selling, ever)",
+    emoji: "🔒",
+    detail: "Encrypted, anonymous mode, no third-party tracking.",
+    mimaura: "plus",
+    flo: "no",
+    clue: "yes",
+  },
+  {
+    feature: "Feels Like a Companion, Not a Tool",
+    emoji: "🤍",
+    detail: "Reassurance, context & emotional check-ins — not just charts.",
+    mimaura: "plus",
+    flo: "no",
+    clue: "no",
   },
   {
     feature: "Cultural & Faith Inclusivity",
     emoji: "🌍",
+    detail: "Respects all backgrounds without assumptions.",
     mimaura: "plus",
-    others: false,
-    detail: "Respects all backgrounds without assumptions",
+    flo: "no",
+    clue: "partial",
+  },
+];
+
+const gaps = [
+  {
+    icon: Brain,
+    title: "Their personalisation is shallow",
+    description: "Flo & Clue predict dates. They don't connect mood, hormones, lifestyle and chronic symptoms into one picture of YOU.",
   },
   {
-    feature: "100% Data Privacy",
-    emoji: "🔒",
-    mimaura: "plus",
-    others: "partial",
-    detail: "Never sold, never shared, always encrypted",
+    icon: Heart,
+    title: "They ignore mental health",
+    description: "Why you feel low, anxious, unmotivated — barely touched. Mimaura makes the hormone-mind link the centre of the experience.",
+  },
+  {
+    icon: Shield,
+    title: "Trust is fragile",
+    description: "Flo was caught sharing data with Facebook. Mimaura is privacy-first by design — encrypted, never sold, anonymous mode available.",
+  },
+  {
+    icon: Sparkles,
+    title: "They feel like tools",
+    description: "Clue is clinical. Flo is cluttered. Mimaura is the calm, intelligent companion that actually understands you.",
   },
 ];
 
@@ -65,28 +115,54 @@ const uniqueFeatures = [
   {
     icon: Brain,
     title: "Smart Pattern Learning",
-    description: "Our AI doesn't assume a 28-day cycle. It learns YOUR patterns over time.",
+    description: "Our AI doesn't assume a 28-day cycle. It learns YOUR rhythm — irregular, chronic, neurodivergent, all of it.",
     color: "from-primary to-lavender-light",
   },
   {
     icon: Zap,
     title: "Gentle Nudge System",
-    description: "Soft reminders that help without overwhelming. You're in control.",
+    description: "Soft, non-prescriptive reminders. No guilt-trips, no streaks, no shame. You stay in control.",
     color: "from-accent to-gold-soft",
   },
   {
     icon: Moon,
     title: "Low-Stim Mode",
-    description: "Reduce animations, simplify UI, gentle colors — designed for sensory needs.",
+    description: "Reduce animations, simplify UI, soften colors — designed for sensory needs and burnout days.",
     color: "from-sky to-mint",
   },
   {
     icon: Heart,
     title: "Chronic Care First",
-    description: "Built with chronic conditions in mind, not as an afterthought.",
+    description: "PCOS, endo, fibro, thyroid — built in from day one, not bolted on as a 'condition mode'.",
     color: "from-rose to-rose-soft",
   },
 ];
+
+const renderMark = (mark: Mark, highlight = false) => {
+  if (mark === "plus" || mark === "yes") {
+    return (
+      <div
+        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+          highlight ? "bg-mint/25" : "bg-mint/10"
+        }`}
+      >
+        <Check className={`w-5 h-5 ${highlight ? "text-mint" : "text-mint/60"}`} />
+      </div>
+    );
+  }
+  if (mark === "partial") {
+    return (
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-accent/10 flex items-center justify-center">
+        <span className="text-accent text-sm font-bold">~</span>
+      </div>
+    );
+  }
+  return (
+    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-muted flex items-center justify-center">
+      <X className="w-5 h-5 text-muted-foreground" />
+    </div>
+  );
+};
 
 const DifferenceSection = () => {
   return (
@@ -107,34 +183,34 @@ const DifferenceSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mint/10 border border-mint/20 mb-6"
           >
             <Shield className="w-4 h-4 text-mint" />
-            <span className="text-sm font-medium">Why We're Different</span>
+            <span className="text-sm font-medium">Mimaura vs Flo vs Clue</span>
           </motion.div>
 
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Not Just <span className="text-gradient">Another</span> Tracker
+            Why Mimaura, <span className="text-gradient">not Flo or Clue</span>
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            We built Mimaura because existing apps weren't working for us. 
-            Here's what makes the difference.
+            Flo and Clue built the first generation of cycle apps. Mimaura is the next one —
+            personalised, mental-health aware, neurodivergent-friendly and genuinely private.
           </p>
         </motion.div>
 
-        {/* Comparison — Card style on mobile, table on desktop */}
+        {/* Comparison */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="glass-card rounded-3xl p-4 sm:p-6 md:p-8 mb-16 overflow-hidden"
         >
-          {/* Table header — hidden on mobile */}
-          <div className="hidden sm:grid grid-cols-3 gap-4 mb-6 pb-4 border-b border-primary/10">
+          {/* Desktop header */}
+          <div className="hidden sm:grid grid-cols-[1.6fr_1fr_1fr_1fr] gap-3 mb-6 pb-4 border-b border-primary/10 items-center">
             <div className="text-left">
               <span className="font-display font-bold text-muted-foreground">Feature</span>
             </div>
             <div className="text-center">
               <motion.span
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 font-display font-bold text-primary"
-                animate={{ scale: [1, 1.02, 1] }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/15 font-display font-bold text-primary text-sm"
+                animate={{ scale: [1, 1.03, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
                 <Sparkles className="w-4 h-4" />
@@ -142,100 +218,109 @@ const DifferenceSection = () => {
               </motion.span>
             </div>
             <div className="text-center">
-              <span className="text-muted-foreground font-medium">Other Apps</span>
+              <span className="text-muted-foreground font-semibold text-sm">Flo</span>
+            </div>
+            <div className="text-center">
+              <span className="text-muted-foreground font-semibold text-sm">Clue</span>
             </div>
           </div>
 
-          {/* Comparison rows — stacked cards on mobile */}
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-3 sm:space-y-2">
             {comparisons.map((item, index) => (
               <motion.div
                 key={item.feature}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.1 * index }}
-                className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center py-3 sm:py-4 hover:bg-primary/5 rounded-xl px-3 transition-colors"
+                transition={{ delay: 0.06 * index }}
+                className="sm:grid sm:grid-cols-[1.6fr_1fr_1fr_1fr] sm:gap-3 sm:items-center py-3 sm:py-3 hover:bg-primary/5 rounded-xl px-3 transition-colors"
               >
-                {/* Feature name */}
-                <div className="mb-2 sm:mb-0">
+                {/* Feature */}
+                <div className="mb-3 sm:mb-0">
                   <p className="font-medium flex items-center gap-2">
                     <span className="text-lg">{item.emoji}</span>
                     <span className="text-sm sm:text-base">{item.feature}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground ml-8 sm:ml-0 mt-0.5">{item.detail}</p>
+                  <p className="text-xs text-muted-foreground ml-8 sm:ml-8 mt-0.5">{item.detail}</p>
                 </div>
 
-                {/* Mobile: side-by-side comparison */}
-                <div className="flex sm:hidden items-center gap-3 ml-8 mt-2">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-7 h-7 rounded-full bg-mint/20 flex items-center justify-center">
-                      <Check className="w-4 h-4 text-mint" />
-                    </div>
-                    <span className="text-xs font-bold text-primary">Mimaura</span>
-                    {item.mimaura === "plus" && (
-                      <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">+</span>
-                    )}
+                {/* Mobile: 3-up row */}
+                <div className="grid grid-cols-3 gap-2 sm:hidden ml-8">
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-[10px] font-bold text-primary">Mimaura</span>
+                    {renderMark(item.mimaura, true)}
                   </div>
-                  <span className="text-muted-foreground/40">vs</span>
-                  <div className="flex items-center gap-1.5">
-                    {item.others === true ? (
-                      <div className="w-7 h-7 rounded-full bg-mint/10 flex items-center justify-center">
-                        <Check className="w-4 h-4 text-mint/60" />
-                      </div>
-                    ) : item.others === "partial" ? (
-                      <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center">
-                        <span className="text-accent text-xs">~</span>
-                      </div>
-                    ) : (
-                      <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
-                        <X className="w-4 h-4 text-muted-foreground" />
-                      </div>
-                    )}
-                    <span className="text-xs text-muted-foreground">Others</span>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-[10px] text-muted-foreground">Flo</span>
+                    {renderMark(item.flo)}
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-[10px] text-muted-foreground">Clue</span>
+                    {renderMark(item.clue)}
                   </div>
                 </div>
 
-                {/* Desktop: Mimaura column */}
+                {/* Desktop columns */}
                 <div className="hidden sm:flex justify-center">
-                  <motion.div
-                    whileHover={{ scale: 1.2 }}
-                    className="flex items-center gap-1"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-mint/20 flex items-center justify-center">
-                      <Check className="w-5 h-5 text-mint" />
-                    </div>
+                  <motion.div whileHover={{ scale: 1.15 }} className="flex items-center gap-1">
+                    {renderMark(item.mimaura, true)}
                     {item.mimaura === "plus" && (
-                      <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">+MORE</span>
+                      <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">
+                        +MORE
+                      </span>
                     )}
                   </motion.div>
                 </div>
+                <div className="hidden sm:flex justify-center">{renderMark(item.flo)}</div>
+                <div className="hidden sm:flex justify-center">{renderMark(item.clue)}</div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
-                {/* Desktop: Others column */}
-                <div className="hidden sm:flex justify-center">
-                  {item.others === true ? (
-                    <div className="w-10 h-10 rounded-full bg-mint/10 flex items-center justify-center">
-                      <Check className="w-5 h-5 text-mint/60" />
-                    </div>
-                  ) : item.others === "partial" ? (
-                    <div className="flex items-center gap-1">
-                      <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                        <span className="text-accent text-sm">~</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">limited</span>
-                    </div>
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                      <X className="w-5 h-5 text-muted-foreground" />
-                    </div>
-                  )}
+        {/* Where Flo & Clue fall short */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16"
+        >
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose/10 border border-rose/20 mb-4">
+              <AlertCircle className="w-4 h-4 text-rose" />
+              <span className="text-sm font-medium">Where the giants fall short</span>
+            </div>
+            <h3 className="font-display text-2xl sm:text-3xl font-bold">
+              The gaps Mimaura was <span className="text-gradient">built to close</span>
+            </h3>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+            {gaps.map((gap, i) => (
+              <motion.div
+                key={gap.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 * i }}
+                whileHover={{ y: -4 }}
+                className="glass-card rounded-3xl p-5 sm:p-6 hover:shadow-float transition-all duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose/20 to-primary/20 flex items-center justify-center shrink-0">
+                    <gap.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-base sm:text-lg mb-1.5">{gap.title}</h4>
+                    <p className="text-sm text-muted-foreground">{gap.description}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Unique features grid */}
+        {/* Unique features */}
         <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-12">
           {uniqueFeatures.map((feature, index) => (
             <motion.div
@@ -284,12 +369,12 @@ const DifferenceSection = () => {
           />
           <div className="text-center sm:text-left">
             <h3 className="font-display text-xl sm:text-2xl font-bold mb-2">
-              Built Different, On Purpose
+              Built by the women Flo & Clue forgot
             </h3>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Every feature in Mimaura was designed by people who've struggled with traditional 
-              health apps. We're not just adding "accessibility features" — we're rethinking 
-              wellness tech from the ground up.
+              Neurodivergent. Chronically ill. Culturally diverse. We built Mimaura because the
+              biggest apps in the world still weren't working for us. This is wellness tech,
+              rethought from the ground up.
             </p>
           </div>
         </motion.div>
