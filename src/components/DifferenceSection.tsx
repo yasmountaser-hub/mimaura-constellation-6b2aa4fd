@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check, X, Sparkles, Zap, Heart, Shield, Brain, Moon, AlertCircle } from "lucide-react";
+import { Check, X, Sparkles, Zap, Heart, Shield, Brain, Moon } from "lucide-react";
 import mimiMagic from "@/assets/mimi-magic.png";
 
 type Mark = "yes" | "plus" | "partial" | "no";
