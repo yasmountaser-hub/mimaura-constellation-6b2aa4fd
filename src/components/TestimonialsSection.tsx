@@ -3,49 +3,60 @@ import { Quote, Star, Sparkles, Heart } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "Finally, an app that doesn't make me feel like a failure for missing a day of logging. Mimi just says 'welcome back!' and honestly? That changed everything for me.",
-    name: "Jamie K.",
-    context: "ADHD & Anxiety",
-    avatar: "🦋",
+    quote:
+      "Mimaura feels like the first app that actually understands me. No pressure, no guilt — just support. It’s the first time tracking my cycle hasn’t stressed me out.",
+    name: "Anujin",
+    context: "The Work Bestie Who Cheered Me Through Everything",
+    avatar: "🌷",
     rating: 5,
     color: "from-primary/20 to-lavender-light/30",
   },
+
   {
-    quote: "As someone with endometriosis, I've tried every tracker. They all felt clinical and cold. Mimaura actually understands that some days you just can't, and that's okay.",
-    name: "Priya M.",
-    context: "Endometriosis Warrior",
-    avatar: "🌸",
-    rating: 5,
-    color: "from-rose/20 to-rose-soft/30",
-  },
-  {
-    quote: "I can't wait for this to launch. The idea of an app that respects my sensory needs AND my cultural background? It's like they're building it just for me.",
-    name: "Fatima A.",
-    context: "Early Waitlist Member",
-    avatar: "✨",
-    rating: 5,
-    color: "from-accent/20 to-gold-soft/30",
-  },
-  {
-    quote: "My daughter has autism and struggles with traditional health apps. The low-stim mode preview alone made me sign up immediately. This is what inclusive design looks like.",
-    name: "Sarah T.",
-    context: "Mom & Advocate",
-    avatar: "💜",
-    rating: 5,
-    color: "from-sky/20 to-mint-soft/30",
-  },
-  {
-    quote: "Pattern recognition that actually learns MY patterns, not some generic 28-day cycle myth? Sign me up. PCOS brains need this.",
-    name: "Devon R.",
-    context: "PCOS Community",
+    quote:
+      "I love how Mimaura doesn’t assume everyone has a perfect 28‑day cycle. It actually adapts to me. Finally an app that doesn’t make me feel broken.",
+    name: "Maroua",
+    context: "A Quiet Anchor in My Life",
     avatar: "🌙",
     rating: 5,
     color: "from-mint/20 to-sky-soft/30",
   },
+
   {
-    quote: "The fact that the team actually has lived experience with chronic conditions gives me so much hope. They GET it in a way other apps don't.",
-    name: "Alex C.",
-    context: "Chronic Pain Advocate",
+    quote:
+      "I’ve tried Flo and Clue, but they always felt too clinical. Mimaura feels human. It feels like someone finally built an app for real women with real lives.",
+    name: "Laris",
+    context: "One of My Most Supportive Voices",
+    avatar: "🌼",
+    rating: 5,
+    color: "from-rose/20 to-rose-soft/30",
+  },
+
+  {
+    quote:
+      "The inclusivity alone made me sign up. The tone, the design, the softness — it’s everything I’ve been missing in other apps. I can’t wait for the full launch.",
+    name: "Hajar",
+    context: "A Gentle Constant in My Life",
+    avatar: "✨",
+    rating: 5,
+    color: "from-accent/20 to-gold-soft/30",
+  },
+
+  {
+    quote:
+      "As a student juggling stress, deadlines, and hormones, this app feels like a breath of fresh air. It’s gentle, calming, and actually helpful.",
+    name: "Sabrina",
+    context: "Student & Wellness Learner",
+    avatar: "📚",
+    rating: 5,
+    color: "from-sky/20 to-mint-soft/30",
+  },
+
+  {
+    quote:
+      "You can tell this app was built with real care. The tone is gentle, the design is calming, and the features feel genuinely helpful. This is the future of women’s health.",
+    name: "Laura",
+    context: "A Warm Light in Every Season",
     avatar: "🌻",
     rating: 5,
     color: "from-gold/20 to-accent/30",
