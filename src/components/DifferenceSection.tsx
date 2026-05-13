@@ -17,7 +17,7 @@ const comparisons: Comparison[] = [
   {
     feature: "Cycle & Symptom Tracking",
     emoji: "🗓️",
-    detail: "The basics — done well by everyone, deepened by us.",
+    detail: "The essentials — done well across the category, deepened by us.",
     mimaura: "plus",
     flo: "yes",
     clue: "yes",
