@@ -183,15 +183,15 @@ const DifferenceSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mint/10 border border-mint/20 mb-6"
           >
             <Shield className="w-4 h-4 text-mint" />
-            <span className="text-sm font-medium">Mimaura vs Flo vs Clue</span>
+            <span className="text-sm font-medium">What makes Mimaura different</span>
           </motion.div>
 
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Why Mimaura, <span className="text-gradient">not Flo or Clue</span>
+            A <span className="text-gradient">next-generation</span> wellness companion
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Flo and Clue built the first generation of cycle apps. Mimaura is the next one —
-            personalised, mental-health aware, neurodivergent-friendly and genuinely private.
+            Cycle apps have come a long way. Mimaura builds on what works and adds what's been missing —
+            deeper personalisation, mental-health insight, neurodivergent-friendly design and real privacy.
           </p>
         </motion.div>
 
