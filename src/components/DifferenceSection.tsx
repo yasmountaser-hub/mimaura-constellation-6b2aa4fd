@@ -88,26 +88,26 @@ const comparisons: Comparison[] = [
   },
 ];
 
-const gaps = [
+const additions = [
   {
     icon: Brain,
-    title: "Their personalisation is shallow",
-    description: "Flo & Clue predict dates. They don't connect mood, hormones, lifestyle and chronic symptoms into one picture of YOU.",
+    title: "Personalisation that goes deeper",
+    description: "We connect mood, hormones, lifestyle and chronic symptoms into one picture of YOU — not a generic 28-day average.",
   },
   {
     icon: Heart,
-    title: "They ignore mental health",
-    description: "Why you feel low, anxious, unmotivated — barely touched. Mimaura makes the hormone-mind link the centre of the experience.",
+    title: "Mental health at the centre",
+    description: "Why you feel low, anxious or unmotivated — explained in the context of your cycle, not treated as a side note.",
   },
   {
     icon: Shield,
-    title: "Trust is fragile",
-    description: "Flo was caught sharing data with Facebook. Mimaura is privacy-first by design — encrypted, never sold, anonymous mode available.",
+    title: "Privacy-first by design",
+    description: "Encrypted, never sold, anonymous mode available. Your data stays yours — that's the promise.",
   },
   {
     icon: Sparkles,
-    title: "They feel like tools",
-    description: "Clue is clinical. Flo is cluttered. Mimaura is the calm, intelligent companion that actually understands you.",
+    title: "A companion, not just a tracker",
+    description: "Calm, intelligent and supportive. Reassurance and context — not just charts and reminders.",
   },
 ];
 
