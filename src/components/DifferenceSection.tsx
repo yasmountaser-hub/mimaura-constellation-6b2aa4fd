@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check, X, Sparkles, Zap, Heart, Shield, Brain, Moon, AlertCircle } from "lucide-react";
+import { Check, X, Sparkles, Zap, Heart, Shield, Brain, Moon } from "lucide-react";
 import mimiMagic from "@/assets/mimi-magic.png";
 
 type Mark = "yes" | "plus" | "partial" | "no";
@@ -17,7 +17,7 @@ const comparisons: Comparison[] = [
   {
     feature: "Cycle & Symptom Tracking",
     emoji: "🗓️",
-    detail: "The basics — done well by everyone, deepened by us.",
+    detail: "The essentials — done well across the category, deepened by us.",
     mimaura: "plus",
     flo: "yes",
     clue: "yes",
@@ -88,26 +88,26 @@ const comparisons: Comparison[] = [
   },
 ];
 
-const gaps = [
+const additions = [
   {
     icon: Brain,
-    title: "Their personalisation is shallow",
-    description: "Flo & Clue predict dates. They don't connect mood, hormones, lifestyle and chronic symptoms into one picture of YOU.",
+    title: "Personalisation that goes deeper",
+    description: "We connect mood, hormones, lifestyle and chronic symptoms into one picture of YOU — not a generic 28-day average.",
   },
   {
     icon: Heart,
-    title: "They ignore mental health",
-    description: "Why you feel low, anxious, unmotivated — barely touched. Mimaura makes the hormone-mind link the centre of the experience.",
+    title: "Mental health at the centre",
+    description: "Why you feel low, anxious or unmotivated — explained in the context of your cycle, not treated as a side note.",
   },
   {
     icon: Shield,
-    title: "Trust is fragile",
-    description: "Flo was caught sharing data with Facebook. Mimaura is privacy-first by design — encrypted, never sold, anonymous mode available.",
+    title: "Privacy-first by design",
+    description: "Encrypted, never sold, anonymous mode available. Your data stays yours — that's the promise.",
   },
   {
     icon: Sparkles,
-    title: "They feel like tools",
-    description: "Clue is clinical. Flo is cluttered. Mimaura is the calm, intelligent companion that actually understands you.",
+    title: "A companion, not just a tracker",
+    description: "Calm, intelligent and supportive. Reassurance and context — not just charts and reminders.",
   },
 ];
 
@@ -183,15 +183,15 @@ const DifferenceSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mint/10 border border-mint/20 mb-6"
           >
             <Shield className="w-4 h-4 text-mint" />
-            <span className="text-sm font-medium">Mimaura vs Flo vs Clue</span>
+            <span className="text-sm font-medium">What makes Mimaura different</span>
           </motion.div>
 
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            Why Mimaura, <span className="text-gradient">not Flo or Clue</span>
+            A <span className="text-gradient">next-generation</span> wellness companion
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Flo and Clue built the first generation of cycle apps. Mimaura is the next one —
-            personalised, mental-health aware, neurodivergent-friendly and genuinely private.
+            Cycle apps have come a long way. Mimaura builds on what works and adds what's been missing —
+            deeper personalisation, mental-health insight, neurodivergent-friendly design and real privacy.
           </p>
         </motion.div>
 
@@ -278,7 +278,7 @@ const DifferenceSection = () => {
           </div>
         </motion.div>
 
-        {/* Where Flo & Clue fall short */}
+        {/* What Mimaura adds */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -286,19 +286,19 @@ const DifferenceSection = () => {
           className="mb-16"
         >
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose/10 border border-rose/20 mb-4">
-              <AlertCircle className="w-4 h-4 text-rose" />
-              <span className="text-sm font-medium">Where the giants fall short</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mint/10 border border-mint/20 mb-4">
+              <Sparkles className="w-4 h-4 text-mint" />
+              <span className="text-sm font-medium">What we add to the picture</span>
             </div>
             <h3 className="font-display text-2xl sm:text-3xl font-bold">
-              The gaps Mimaura was <span className="text-gradient">built to close</span>
+              The pieces we believe <span className="text-gradient">complete wellness</span>
             </h3>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-            {gaps.map((gap, i) => (
+            {additions.map((item, i) => (
               <motion.div
-                key={gap.title}
+                key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -307,12 +307,12 @@ const DifferenceSection = () => {
                 className="glass-card rounded-3xl p-5 sm:p-6 hover:shadow-float transition-all duration-300"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose/20 to-primary/20 flex items-center justify-center shrink-0">
-                    <gap.icon className="w-5 h-5 text-primary" />
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
+                    <item.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-display font-bold text-base sm:text-lg mb-1.5">{gap.title}</h4>
-                    <p className="text-sm text-muted-foreground">{gap.description}</p>
+                    <h4 className="font-display font-bold text-base sm:text-lg mb-1.5">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
                   </div>
                 </div>
               </motion.div>
@@ -369,12 +369,11 @@ const DifferenceSection = () => {
           />
           <div className="text-center sm:text-left">
             <h3 className="font-display text-xl sm:text-2xl font-bold mb-2">
-              Built by the women Flo & Clue forgot
+              Built for the women wellness tech often overlooks
             </h3>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Neurodivergent. Chronically ill. Culturally diverse. We built Mimaura because the
-              biggest apps in the world still weren't working for us. This is wellness tech,
-              rethought from the ground up.
+              Neurodivergent. Chronically ill. Culturally diverse. Mimaura was built by women who
+              needed something more — a calmer, kinder, more personal approach to wellbeing.
             </p>
           </div>
         </motion.div>
