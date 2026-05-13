@@ -278,7 +278,7 @@ const DifferenceSection = () => {
           </div>
         </motion.div>
 
-        {/* Where Flo & Clue fall short */}
+        {/* What Mimaura adds */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -286,19 +286,19 @@ const DifferenceSection = () => {
           className="mb-16"
         >
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose/10 border border-rose/20 mb-4">
-              <AlertCircle className="w-4 h-4 text-rose" />
-              <span className="text-sm font-medium">Where the giants fall short</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mint/10 border border-mint/20 mb-4">
+              <Sparkles className="w-4 h-4 text-mint" />
+              <span className="text-sm font-medium">What we add to the picture</span>
             </div>
             <h3 className="font-display text-2xl sm:text-3xl font-bold">
-              The gaps Mimaura was <span className="text-gradient">built to close</span>
+              The pieces we believe <span className="text-gradient">complete wellness</span>
             </h3>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-            {gaps.map((gap, i) => (
+            {additions.map((item, i) => (
               <motion.div
-                key={gap.title}
+                key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -307,12 +307,12 @@ const DifferenceSection = () => {
                 className="glass-card rounded-3xl p-5 sm:p-6 hover:shadow-float transition-all duration-300"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose/20 to-primary/20 flex items-center justify-center shrink-0">
-                    <gap.icon className="w-5 h-5 text-primary" />
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
+                    <item.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-display font-bold text-base sm:text-lg mb-1.5">{gap.title}</h4>
-                    <p className="text-sm text-muted-foreground">{gap.description}</p>
+                    <h4 className="font-display font-bold text-base sm:text-lg mb-1.5">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
                   </div>
                 </div>
               </motion.div>
