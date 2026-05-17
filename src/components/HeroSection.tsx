@@ -142,10 +142,17 @@ const HeroSection = () => {
           >
             <span className="text-sm text-muted-foreground">Follow Mimi:</span>
             <div className="flex gap-3">
-              {[Instagram, Twitter, Linkedin, Youtube].map((Icon, i) => (
-                <MagneticButton key={i} strength={0.5}>
+              {[
+                { Icon: Instagram, href: "https://www.instagram.com/mimaura_app/", label: "Instagram" },
+                { Icon: TikTokIcon, href: "https://www.tiktok.com/@mimaura_app", label: "TikTok" },
+                { Icon: Linkedin, href: "https://www.linkedin.com/company/mimaura", label: "LinkedIn" },
+              ].map(({ Icon, href, label }) => (
+                <MagneticButton key={label} strength={0.5}>
                   <motion.a
-                    href="#"
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Follow Mimaura on ${label}`}
                     whileHover={{ scale: 1.2, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
                     className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors block"
