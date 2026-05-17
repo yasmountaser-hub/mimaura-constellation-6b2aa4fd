@@ -91,11 +91,19 @@ const Header = () => {
                 </Button>
               </Link>
             )}
-            <Link to="/#waitlist">
-              <Button variant="hero" size="sm">
-                Join Waitlist
-              </Button>
-            </Link>
+            <Button
+              variant="hero"
+              size="sm"
+              onClick={() => {
+                if (window.location.pathname === "/") {
+                  document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  window.location.href = "/#waitlist";
+                }
+              }}
+            >
+              Join Waitlist
+            </Button>
           </div>
 
           {/* Mobile: theme + hamburger */}
