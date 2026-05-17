@@ -156,7 +156,7 @@ const FAQ = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: ci * 0.1 }}
               >
-                <h2 className="font-display text-xl font-bold mb-4 text-foreground">
+                <h2 className="font-display text-2xl font-bold mb-8 text-foreground">
                   {category.category}
                 </h2>
                 <div className="space-y-3">

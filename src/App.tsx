@@ -6,7 +6,9 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AccessibilityProvider } from "@/components/AccessibilityProvider";
 import { AuthProvider } from "@/components/AuthProvider";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { useEffect } from "react";
+import { useA11y } from "@/components/AccessibilityProvider";
 import Index from "./pages/Index";
 import FAQ from "./pages/FAQ";
 import AppPreview from "./pages/AppPreview";
@@ -25,6 +27,23 @@ const pageTransition = {
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
   transition: { duration: 0.3, ease: "easeInOut" as const },
+};
+
+const ScrollToHash = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      // wait for the new route to render
+      const t = setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+      return () => clearTimeout(t);
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    }
+  }, [location.pathname, location.hash]);
+  return null;
 };
 
 const AnimatedRoutes = () => {
@@ -49,18 +68,30 @@ const AnimatedRoutes = () => {
   );
 };
 
+const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { settings } = useA11y();
+  return (
+    <MotionConfig reducedMotion={settings.reducedMotion ? "always" : "user"}>
+      {children}
+    </MotionConfig>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <AccessibilityProvider>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AnimatedRoutes />
-            </BrowserRouter>
-          </TooltipProvider>
+          <MotionWrapper>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToHash />
+                <AnimatedRoutes />
+              </BrowserRouter>
+            </TooltipProvider>
+          </MotionWrapper>
         </AuthProvider>
       </AccessibilityProvider>
     </ThemeProvider>

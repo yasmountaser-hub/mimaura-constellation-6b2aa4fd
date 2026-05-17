@@ -63,15 +63,14 @@ const Header = () => {
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navItems.map((item) => (
-              <motion.a
+              <Link
                 key={item.label}
-                href={item.href}
+                to={item.href}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
-                whileHover={{ y: -2 }}
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
-              </motion.a>
+              </Link>
             ))}
           </div>
 
