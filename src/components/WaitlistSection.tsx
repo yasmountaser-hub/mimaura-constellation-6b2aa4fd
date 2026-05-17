@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Sparkles, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import mimiThumbsup from "@/assets/mimi-thumbsup.png";
+
+const STORAGE_KEY = "mimaura_waitlist_joined";
 
 const WaitlistSection = () => {
   const [email, setEmail] = useState("");
@@ -12,16 +15,35 @@ const WaitlistSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  useEffect(() => {
+    if (localStorage.getItem(STORAGE_KEY)) setIsSubmitted(true);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
     setIsSubmitting(true);
-    
-    // Simulate API call (replace with actual backend integration)
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
+    const cleanEmail = email.trim().toLowerCase();
+    const { error } = await supabase
+      .from("waitlist")
+      .insert({ email: cleanEmail, name: name.trim() || null, source: "website" });
+
     setIsSubmitting(false);
+
+    if (error) {
+      if (error.code === "23505") {
+        localStorage.setItem(STORAGE_KEY, cleanEmail);
+        setIsSubmitted(true);
+        toast.success("You're already on the list! ✨");
+        return;
+      }
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
+
+    localStorage.setItem(STORAGE_KEY, cleanEmail);
     setIsSubmitted(true);
     toast.success("You're on the list! Mimi can't wait to meet you ✨");
   };

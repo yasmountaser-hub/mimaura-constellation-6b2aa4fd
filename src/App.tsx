@@ -15,6 +15,7 @@ import Resources from "./pages/Resources";
 import Glossary from "./pages/Glossary";
 import Community from "./pages/Community";
 import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const AnimatedRoutes = () => {
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/community" element={<Community />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
