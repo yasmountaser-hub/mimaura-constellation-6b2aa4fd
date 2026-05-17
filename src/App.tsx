@@ -29,6 +29,23 @@ const pageTransition = {
   transition: { duration: 0.3, ease: "easeInOut" as const },
 };
 
+const ScrollToHash = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      // wait for the new route to render
+      const t = setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+      return () => clearTimeout(t);
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    }
+  }, [location.pathname, location.hash]);
+  return null;
+};
+
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
@@ -48,6 +65,15 @@ const AnimatedRoutes = () => {
         </Routes>
       </motion.div>
     </AnimatePresence>
+  );
+};
+
+const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { settings } = useA11y();
+  return (
+    <MotionConfig reducedMotion={settings.reducedMotion ? "always" : "user"}>
+      {children}
+    </MotionConfig>
   );
 };
 
