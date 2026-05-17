@@ -82,13 +82,16 @@ const App = () => (
     <ThemeProvider>
       <AccessibilityProvider>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AnimatedRoutes />
-            </BrowserRouter>
-          </TooltipProvider>
+          <MotionWrapper>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <ScrollToHash />
+                <AnimatedRoutes />
+              </BrowserRouter>
+            </TooltipProvider>
+          </MotionWrapper>
         </AuthProvider>
       </AccessibilityProvider>
     </ThemeProvider>
