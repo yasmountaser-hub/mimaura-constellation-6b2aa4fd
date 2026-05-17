@@ -15,6 +15,7 @@ import Resources from "./pages/Resources";
 import Glossary from "./pages/Glossary";
 import Community from "./pages/Community";
 import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
