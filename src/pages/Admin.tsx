@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/components/AuthProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Lock } from "lucide-react";
 
 type WaitlistEntry = {
   id: string;
@@ -14,28 +14,45 @@ type WaitlistEntry = {
   created_at: string;
 };
 
-const Admin = () => {
-  const { user, loading: authLoading } = useAuth();
-  const [entries, setEntries] = useState<WaitlistEntry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const STORAGE_KEY = "mimaura_admin_pw";
 
-  useEffect(() => {
-    if (authLoading) return;
-    if (!user) {
-      setLoading(false);
+const Admin = () => {
+  const [password, setPassword] = useState("");
+  const [entries, setEntries] = useState<WaitlistEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [authed, setAuthed] = useState(false);
+
+  const fetchEntries = async (pw: string) => {
+    setLoading(true);
+    setError(null);
+    const { data, error } = await supabase.functions.invoke("admin-waitlist", {
+      headers: { "x-admin-password": pw },
+    });
+    setLoading(false);
+    if (error || (data && (data as any).error)) {
+      setError((data as any)?.error ?? error?.message ?? "Failed to load");
+      sessionStorage.removeItem(STORAGE_KEY);
+      setAuthed(false);
       return;
     }
-    (async () => {
-      const { data, error } = await supabase
-        .from("waitlist")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) setError(error.message);
-      else setEntries(data ?? []);
-      setLoading(false);
-    })();
-  }, [user, authLoading]);
+    setEntries((data as any).entries ?? []);
+    setAuthed(true);
+    sessionStorage.setItem(STORAGE_KEY, pw);
+  };
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setPassword(stored);
+      fetchEntries(stored);
+    }
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password.trim()) fetchEntries(password.trim());
+  };
 
   const exportCsv = () => {
     const header = "email,name,source,created_at\n";
@@ -54,6 +71,13 @@ const Admin = () => {
     URL.revokeObjectURL(url);
   };
 
+  const signOut = () => {
+    sessionStorage.removeItem(STORAGE_KEY);
+    setAuthed(false);
+    setPassword("");
+    setEntries([]);
+  };
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -67,30 +91,37 @@ const Admin = () => {
               People who signed up to meet Mimi 💜
             </p>
           </div>
-          {entries.length > 0 && (
-            <Button variant="hero" size="sm" onClick={exportCsv}>
-              Export CSV
-            </Button>
+          {authed && entries.length > 0 && (
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={signOut}>
+                Sign Out
+              </Button>
+              <Button variant="hero" size="sm" onClick={exportCsv}>
+                Export CSV
+              </Button>
+            </div>
           )}
         </div>
 
-        {authLoading || loading ? (
+        {!authed ? (
+          <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-8 max-w-md mx-auto space-y-4">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Lock className="w-4 h-4" /> Enter admin password
+            </div>
+            <Input
+              type="password"
+              placeholder="Admin password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+            />
+            {error && <p className="text-destructive text-sm">{error}</p>}
+            <Button type="submit" variant="hero" className="w-full" disabled={loading}>
+              {loading ? "Checking..." : "Unlock"}
+            </Button>
+          </form>
+        ) : loading ? (
           <p className="text-muted-foreground">Loading...</p>
-        ) : !user ? (
-          <div className="glass-card rounded-2xl p-8 text-center">
-            <p className="mb-4">You need to sign in to view the waitlist.</p>
-            <Link to="/auth">
-              <Button variant="hero">Sign In</Button>
-            </Link>
-          </div>
-        ) : error ? (
-          <div className="glass-card rounded-2xl p-8">
-            <p className="text-destructive mb-2">{error}</p>
-            <p className="text-sm text-muted-foreground">
-              Only admins can view this page. Ask your team to grant you the
-              admin role.
-            </p>
-          </div>
         ) : entries.length === 0 ? (
           <p className="text-muted-foreground">No signups yet.</p>
         ) : (

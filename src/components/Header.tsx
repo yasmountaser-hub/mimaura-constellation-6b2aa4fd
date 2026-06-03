@@ -126,24 +126,39 @@ const Header = () => {
         >
           <div className="glass-card rounded-2xl mt-2 p-4 sm:p-5 space-y-3">
             {navItems.map((item, i) => (
-              <motion.a
+              <motion.div
                 key={item.label}
-                href={item.href}
                 initial={{ opacity: 0, x: -20 }}
                 animate={isOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                 transition={{ delay: i * 0.1 }}
-                onClick={() => setIsOpen(false)}
-                className="block text-base font-medium hover:text-primary transition-colors"
               >
-                {item.label}
-              </motion.a>
+                <Link
+                  to={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block text-base font-medium hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </Link>
+              </motion.div>
             ))}
             <div className="pt-3 flex flex-col gap-2.5">
               <Button variant="glass" size="sm" className="w-full gap-2">
                 <Download className="w-4 h-4" />
                 Get the App
               </Button>
-              <Button variant="hero" size="sm" className="w-full">
+              <Button
+                variant="hero"
+                size="sm"
+                className="w-full"
+                onClick={() => {
+                  setIsOpen(false);
+                  if (window.location.pathname === "/") {
+                    document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    window.location.href = "/#waitlist";
+                  }
+                }}
+              >
                 Join Waitlist
               </Button>
             </div>

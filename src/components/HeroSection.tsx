@@ -120,7 +120,14 @@ const HeroSection = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
             <MagneticButton strength={0.35}>
-              <Button variant="hero" size="xl" className="group">
+              <Button
+                variant="hero"
+                size="xl"
+                className="group"
+                onClick={() =>
+                  document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
                 Join the Waitlist
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
