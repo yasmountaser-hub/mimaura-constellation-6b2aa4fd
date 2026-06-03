@@ -167,7 +167,19 @@ const WaitlistSection = () => {
                   Check your inbox for a welcome note from Mimi. 
                   We'll keep you posted on launch updates!
                 </p>
+                <Button
+                  variant="glass"
+                  size="sm"
+                  onClick={() => {
+                    setEmail("");
+                    setName("");
+                    setIsSubmitted(false);
+                  }}
+                >
+                  Add another person
+                </Button>
               </motion.div>
+
             )}
 
             {/* Stats */}
