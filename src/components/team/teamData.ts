@@ -205,7 +205,7 @@ export const teamGroups: TeamGroup[] = [
         hoverEmojis: ["💌", "💗", "🌍"],
         hoverText: "Making every person feel seen before they even download the app.",
         ctaText: "Join the community →",
-        ctaLink: "#waitlist",
+        ctaLink: "/#waitlist",
         tier: "core",
         socials: { linkedin: "#", instagram: "#" },
       },
