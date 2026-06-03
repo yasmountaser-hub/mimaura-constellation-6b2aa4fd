@@ -1,15 +1,24 @@
 import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import lutealPreview from "@/assets/luteal-preview.png";
+import LutealPhaseMockup from "@/components/mockups/LutealPhaseMockup";
 import phasesPreview from "@/assets/app-phases-preview.png";
 import patternNudge from "@/assets/pattern-nudge-preview.png";
 import mimiTypes from "@/assets/mimi-types.png";
 
-const screens = [
+type Screen = {
+  title: string;
+  description: string;
+  image?: string;
+  component?: ReactNode;
+  color: string;
+};
+
+const screens: Screen[] = [
   {
     title: "Cycle Phase Dashboard",
     description: "See where you are in your cycle at a glance — with color-coded phases, energy forecasts, and gentle daily tips from Mimi.",
@@ -19,7 +28,7 @@ const screens = [
   {
     title: "Luteal Phase Insights",
     description: "Deep-dive into each phase. Understand why you feel the way you do, with symptom correlations and personalized recommendations.",
-    image: lutealPreview,
+    component: <LutealPhaseMockup />,
     color: "accent",
   },
   {
