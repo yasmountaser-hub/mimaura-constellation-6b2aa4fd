@@ -89,22 +89,27 @@ const AppPreview = () => {
                   i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                 } items-center gap-10 lg:gap-16`}
               >
-                {/* Image */}
-                <div className="flex-1 w-full max-w-lg">
-                  <motion.div
-                    className="relative rounded-3xl overflow-hidden border border-border/50 shadow-float bg-card/30 backdrop-blur-sm"
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <img
-                      src={screen.image}
-                      alt={screen.title}
-                      className="w-full h-auto"
-                      loading="lazy"
-                    />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
-                  </motion.div>
+                {/* Visual */}
+                <div className="flex-1 w-full max-w-lg flex justify-center">
+                  {screen.component ? (
+                    <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.3 }}>
+                      {screen.component}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      className="relative rounded-3xl overflow-hidden border border-border/50 shadow-float bg-card/30 backdrop-blur-sm"
+                      whileHover={{ scale: 1.02, y: -4 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <img
+                        src={screen.image}
+                        alt={screen.title}
+                        className="w-full h-auto"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Text */}
