@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Sparkles, Mail } from "lucide-react";
@@ -15,9 +15,6 @@ const WaitlistSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  useEffect(() => {
-    if (localStorage.getItem(STORAGE_KEY)) setIsSubmitted(true);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,7 +167,19 @@ const WaitlistSection = () => {
                   Check your inbox for a welcome note from Mimi. 
                   We'll keep you posted on launch updates!
                 </p>
+                <Button
+                  variant="glass"
+                  size="sm"
+                  onClick={() => {
+                    setEmail("");
+                    setName("");
+                    setIsSubmitted(false);
+                  }}
+                >
+                  Add another person
+                </Button>
               </motion.div>
+
             )}
 
             {/* Stats */}
