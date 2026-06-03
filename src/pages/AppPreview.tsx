@@ -1,15 +1,24 @@
 import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import lutealPreview from "@/assets/luteal-preview.png";
+import LutealPhaseMockup from "@/components/mockups/LutealPhaseMockup";
 import phasesPreview from "@/assets/app-phases-preview.png";
 import patternNudge from "@/assets/pattern-nudge-preview.png";
 import mimiTypes from "@/assets/mimi-types.png";
 
-const screens = [
+type Screen = {
+  title: string;
+  description: string;
+  image?: string;
+  component?: ReactNode;
+  color: string;
+};
+
+const screens: Screen[] = [
   {
     title: "Cycle Phase Dashboard",
     description: "See where you are in your cycle at a glance — with color-coded phases, energy forecasts, and gentle daily tips from Mimi.",
@@ -19,7 +28,7 @@ const screens = [
   {
     title: "Luteal Phase Insights",
     description: "Deep-dive into each phase. Understand why you feel the way you do, with symptom correlations and personalized recommendations.",
-    image: lutealPreview,
+    component: <LutealPhaseMockup />,
     color: "accent",
   },
   {
@@ -80,22 +89,27 @@ const AppPreview = () => {
                   i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                 } items-center gap-10 lg:gap-16`}
               >
-                {/* Image */}
-                <div className="flex-1 w-full max-w-lg">
-                  <motion.div
-                    className="relative rounded-3xl overflow-hidden border border-border/50 shadow-float bg-card/30 backdrop-blur-sm"
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <img
-                      src={screen.image}
-                      alt={screen.title}
-                      className="w-full h-auto"
-                      loading="lazy"
-                    />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
-                  </motion.div>
+                {/* Visual */}
+                <div className="flex-1 w-full max-w-lg flex justify-center">
+                  {screen.component ? (
+                    <motion.div whileHover={{ scale: 1.02, y: -4 }} transition={{ duration: 0.3 }}>
+                      {screen.component}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      className="relative rounded-3xl overflow-hidden border border-border/50 shadow-float bg-card/30 backdrop-blur-sm"
+                      whileHover={{ scale: 1.02, y: -4 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <img
+                        src={screen.image}
+                        alt={screen.title}
+                        className="w-full h-auto"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Text */}
