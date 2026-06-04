@@ -1,112 +1,275 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { MessageCircle, Heart, ArrowUp, Clock, Users, Filter, TrendingUp, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import {
+  MessageCircle,
+  Heart,
+  Send,
+  Loader2,
+  Sparkles,
+  TrendingUp,
+  Clock,
+  Users,
+  Tag,
+  X,
+} from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
+import { toast } from "sonner";
 
+interface Profile {
+  display_name: string;
+  avatar_emoji: string;
+}
 interface Post {
-  id: number;
-  author: string;
-  avatar: string;
-  flair: string;
-  flairColor: string;
-  title: string;
+  id: string;
+  user_id: string;
   body: string;
-  upvotes: number;
-  comments: number;
-  timeAgo: string;
   tags: string[];
+  likes: number;
+  replies: number;
+  created_at: string;
+  profile: Profile;
+  liked: boolean;
+}
+interface Reply {
+  id: string;
+  user_id: string;
+  body: string;
+  created_at: string;
+  profile: Profile;
 }
 
-const posts: Post[] = [
-  {
-    id: 1,
-    author: "luna_moth",
-    avatar: "🦋",
-    flair: "ADHD + PMDD warrior",
-    flairColor: "primary",
-    title: "Anyone else's ADHD meds feel less effective in their luteal phase?",
-    body: "I've been tracking with Mimaura for 3 months and I can clearly see my focus drops about 5 days before my period. My psychiatrist said it's because estrogen affects how Adderall is metabolized. Has anyone found strategies that help during this time?",
-    upvotes: 247,
-    comments: 63,
-    timeAgo: "4h ago",
-    tags: ["ADHD", "Medication", "Luteal Phase"],
-  },
-  {
-    id: 2,
-    author: "gentle_storm",
-    avatar: "🌿",
-    flair: "Autistic + cyclist",
-    flairColor: "accent",
-    title: "My sensory overload survival kit (updated for each cycle phase)",
-    body: "I made a phase-specific sensory kit and it's been a game changer! Follicular: I can handle more, so I tackle noisy errands. Luteal: noise-cancelling earbuds are NON-NEGOTIABLE. Period: weighted blanket, dim lights, no plans. Sharing in case it helps anyone else 💜",
-    upvotes: 389,
-    comments: 91,
-    timeAgo: "7h ago",
-    tags: ["Sensory", "Self-care", "Tips"],
-  },
-  {
-    id: 3,
-    author: "brain_fog_queen",
-    avatar: "☁️",
-    flair: "Late-diagnosed ADHDer",
-    flairColor: "lavender",
-    title: "I cried when Mimi told me my pattern",
-    body: "Mimi showed me that my 'random' crying days happen exactly 3 days before my period EVERY month. I genuinely thought I was just emotional for no reason. Seeing the pattern laid out so gently... I don't feel broken anymore. I feel understood.",
-    upvotes: 512,
-    comments: 127,
-    timeAgo: "12h ago",
-    tags: ["Patterns", "Emotional", "Mimi"],
-  },
-  {
-    id: 4,
-    author: "cycle_syncer",
-    avatar: "🌙",
-    flair: "Menstrual health advocate",
-    flairColor: "rose",
-    title: "Phase-aligned work schedule: how I pitched it to my boss",
-    body: "I used 6 months of Mimaura data to show my manager that my productivity naturally peaks in my follicular phase. I now schedule creative work then and admin tasks during luteal. My output actually improved. Happy to share my template if anyone wants it!",
-    upvotes: 198,
-    comments: 45,
-    timeAgo: "1d ago",
-    tags: ["Work", "Productivity", "Cycle Syncing"],
-  },
-  {
-    id: 5,
-    author: "dopamine_detective",
-    avatar: "🔎",
-    flair: "ADHD researcher",
-    flairColor: "primary",
-    title: "PSA: Iron deficiency can mimic/worsen ADHD symptoms during your period",
-    body: "Heavy periods = lower iron = worse brain fog, fatigue, and focus. I started supplementing iron (with my doctor's approval) and the difference during my period is significant. Get your ferritin checked, not just hemoglobin!",
-    upvotes: 431,
-    comments: 78,
-    timeAgo: "1d ago",
-    tags: ["ADHD", "Health", "PSA"],
-  },
-];
+const SORTS = [
+  { key: "trending", label: "Trending", icon: TrendingUp },
+  { key: "new", label: "New", icon: Sparkles },
+  { key: "top", label: "Top", icon: Heart },
+] as const;
 
-const sortOptions = [
-  { label: "Trending", icon: TrendingUp },
-  { label: "New", icon: Sparkles },
-  { label: "Top", icon: ArrowUp },
-];
+type SortKey = (typeof SORTS)[number]["key"];
+
+const timeAgo = (iso: string) => {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return `${Math.floor(s / 60)}m`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h`;
+  if (s < 604800) return `${Math.floor(s / 86400)}d`;
+  return new Date(iso).toLocaleDateString();
+};
+
+const parseTags = (raw: string): string[] =>
+  Array.from(
+    new Set(
+      (raw.match(/#[\p{L}\p{N}_-]+/gu) || []).map((t) =>
+        t.slice(1).toLowerCase(),
+      ),
+    ),
+  ).slice(0, 5);
 
 const Community = () => {
-  const [activeSort, setActiveSort] = useState("Trending");
-  const [votedPosts, setVotedPosts] = useState<Set<number>>(new Set());
+  const { user } = useAuth();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [sort, setSort] = useState<SortKey>("trending");
+  const [tagFilter, setTagFilter] = useState<string | null>(null);
+  const [composer, setComposer] = useState("");
+  const [posting, setPosting] = useState(false);
+  const [openReplies, setOpenReplies] = useState<Record<string, Reply[] | null>>(
+    {},
+  );
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
+  const [replying, setReplying] = useState<string | null>(null);
 
-  const handleVote = (postId: number) => {
-    setVotedPosts((prev) => {
-      const next = new Set(prev);
-      if (next.has(postId)) next.delete(postId);
-      else next.add(postId);
-      return next;
-    });
+  const fetchPosts = useCallback(async () => {
+    let query = supabase
+      .from("circle_posts")
+      .select(
+        "id,user_id,body,tags,likes,replies,created_at, profiles:profiles!circle_posts_user_id_fkey(display_name, avatar_emoji)",
+      )
+      .limit(100);
+
+    if (sort === "new") query = query.order("created_at", { ascending: false });
+    else if (sort === "top") query = query.order("likes", { ascending: false });
+    else
+      query = query
+        .order("likes", { ascending: false })
+        .order("created_at", { ascending: false });
+
+    const { data, error } = await query;
+    if (error) {
+      console.error(error);
+      setLoading(false);
+      return;
+    }
+
+    let likedIds = new Set<string>();
+    if (user) {
+      const { data: likes } = await supabase
+        .from("circle_post_likes")
+        .select("post_id")
+        .eq("user_id", user.id);
+      likedIds = new Set((likes || []).map((l: { post_id: string }) => l.post_id));
+    }
+
+    const mapped: Post[] = (data || []).map((p: any) => ({
+      id: p.id,
+      user_id: p.user_id,
+      body: p.body,
+      tags: p.tags || [],
+      likes: p.likes,
+      replies: p.replies,
+      created_at: p.created_at,
+      profile: {
+        display_name: p.profiles?.display_name || "Anonymous",
+        avatar_emoji: p.profiles?.avatar_emoji || "🌸",
+      },
+      liked: likedIds.has(p.id),
+    }));
+
+    setPosts(mapped);
+    setLoading(false);
+  }, [sort, user]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchPosts();
+  }, [fetchPosts]);
+
+  // Realtime
+  useEffect(() => {
+    const ch = supabase
+      .channel("circle-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "circle_posts" },
+        () => fetchPosts(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "circle_post_likes" },
+        () => fetchPosts(),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(ch);
+    };
+  }, [fetchPosts]);
+
+  const handlePost = async () => {
+    if (!user) {
+      toast.error("Sign in to share with The Circle");
+      return;
+    }
+    const body = composer.trim();
+    if (!body || posting) return;
+    setPosting(true);
+    const tags = parseTags(body);
+    const { error } = await supabase
+      .from("circle_posts")
+      .insert({ user_id: user.id, body, tags });
+    setPosting(false);
+    if (error) {
+      toast.error("Couldn't post — try again");
+      return;
+    }
+    setComposer("");
+    toast.success("Shared with The Circle 💜");
+    fetchPosts();
   };
+
+  const handleLike = async (post: Post) => {
+    if (!user) {
+      toast.error("Sign in to like posts");
+      return;
+    }
+    // optimistic
+    setPosts((ps) =>
+      ps.map((p) =>
+        p.id === post.id
+          ? { ...p, liked: !p.liked, likes: p.likes + (p.liked ? -1 : 1) }
+          : p,
+      ),
+    );
+    if (post.liked) {
+      await supabase
+        .from("circle_post_likes")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("post_id", post.id);
+    } else {
+      await supabase
+        .from("circle_post_likes")
+        .insert({ user_id: user.id, post_id: post.id });
+    }
+  };
+
+  const loadReplies = async (postId: string) => {
+    if (openReplies[postId] !== undefined) {
+      // toggle close
+      setOpenReplies((r) => {
+        const next = { ...r };
+        delete next[postId];
+        return next;
+      });
+      return;
+    }
+    setOpenReplies((r) => ({ ...r, [postId]: null }));
+    const { data } = await supabase
+      .from("circle_replies")
+      .select(
+        "id,user_id,body,created_at, profiles:profiles!circle_replies_user_id_fkey(display_name, avatar_emoji)",
+      )
+      .eq("post_id", postId)
+      .order("created_at", { ascending: true });
+
+    const mapped: Reply[] = (data || []).map((r: any) => ({
+      id: r.id,
+      user_id: r.user_id,
+      body: r.body,
+      created_at: r.created_at,
+      profile: {
+        display_name: r.profiles?.display_name || "Anonymous",
+        avatar_emoji: r.profiles?.avatar_emoji || "🌸",
+      },
+    }));
+    setOpenReplies((r) => ({ ...r, [postId]: mapped }));
+  };
+
+  const submitReply = async (postId: string) => {
+    if (!user) {
+      toast.error("Sign in to reply");
+      return;
+    }
+    const body = (replyDrafts[postId] || "").trim();
+    if (!body) return;
+    setReplying(postId);
+    const { error } = await supabase
+      .from("circle_replies")
+      .insert({ post_id: postId, user_id: user.id, body });
+    setReplying(null);
+    if (error) {
+      toast.error("Couldn't reply");
+      return;
+    }
+    setReplyDrafts((d) => ({ ...d, [postId]: "" }));
+    // refresh replies and post counts
+    setOpenReplies((r) => ({ ...r, [postId]: undefined as any }));
+    await loadReplies(postId);
+    fetchPosts();
+  };
+
+  const allTags = Array.from(
+    new Set(posts.flatMap((p) => p.tags)),
+  ).slice(0, 12);
+
+  const visible = tagFilter
+    ? posts.filter((p) => p.tags.includes(tagFilter))
+    : posts;
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -116,168 +279,320 @@ const Community = () => {
       <AccessibilityPanel />
 
       <main className="pt-28 pb-20 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
-          {/* Header */}
+        <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-10 space-y-4"
+            className="text-center mb-8 space-y-3"
           >
             <span className="text-5xl">💬</span>
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold">
               The <span className="text-gradient">Circle</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              A safe, anonymous space to share experiences, swap strategies, and remind each other: you're not alone.
+            <p className="text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
+              A safe, anonymous space to share experiences and remind each other: you're not alone.
             </p>
           </motion.div>
 
-          {/* Community stats */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="grid grid-cols-3 gap-3 mb-8"
+            className="grid grid-cols-3 gap-3 mb-6"
           >
             {[
-              { label: "Members", value: "2.4k", icon: Users },
-              { label: "Posts today", value: "47", icon: MessageCircle },
-              { label: "Upvotes given", value: "12k", icon: Heart },
+              { label: "Posts", value: posts.length, icon: MessageCircle },
+              {
+                label: "Likes given",
+                value: posts.reduce((s, p) => s + p.likes, 0),
+                icon: Heart,
+              },
+              {
+                label: "Replies",
+                value: posts.reduce((s, p) => s + p.replies, 0),
+                icon: Users,
+              },
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="glass-card rounded-xl p-4 text-center"
+                className="glass-card rounded-xl p-3 text-center"
               >
                 <stat.icon className="w-4 h-4 text-primary mx-auto mb-1" />
-                <p className="font-display text-xl font-bold text-foreground">{stat.value}</p>
+                <p className="font-display text-lg font-bold text-foreground">
+                  {stat.value}
+                </p>
                 <p className="text-[10px] text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </motion.div>
 
-          {/* Sort + Filter bar */}
+          {/* Composer */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="flex items-center gap-2 mb-6 overflow-x-auto pb-1"
+            className="glass-card rounded-2xl p-4 mb-6"
           >
-            {sortOptions.map((opt) => (
+            <textarea
+              value={composer}
+              onChange={(e) => setComposer(e.target.value)}
+              placeholder={
+                user
+                  ? "What's on your mind? Use #tags to help others find your post."
+                  : "Sign in to share with The Circle…"
+              }
+              disabled={!user}
+              maxLength={1000}
+              rows={3}
+              className="w-full bg-transparent text-foreground placeholder:text-muted-foreground text-sm leading-relaxed focus:outline-none resize-none disabled:opacity-60"
+            />
+            <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/30">
+              <span className="text-[11px] text-muted-foreground">
+                {composer.length}/1000 · #tags supported
+              </span>
+              {user ? (
+                <button
+                  onClick={handlePost}
+                  disabled={!composer.trim() || posting}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-primary-foreground disabled:opacity-40 transition-all"
+                  style={{ background: "var(--gradient-button)" }}
+                >
+                  {posting ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Send className="w-3.5 h-3.5" />
+                  )}
+                  Post
+                </button>
+              ) : (
+                <Link
+                  to="/auth"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-primary-foreground"
+                  style={{ background: "var(--gradient-button)" }}
+                >
+                  Sign in to post
+                </Link>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Sort + tag filter */}
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+            {SORTS.map((opt) => (
               <button
-                key={opt.label}
-                onClick={() => setActiveSort(opt.label)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                  activeSort === opt.label
+                key={opt.key}
+                onClick={() => setSort(opt.key)}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+                  sort === opt.key
                     ? "bg-primary text-primary-foreground shadow-soft"
                     : "bg-card border border-border/50 text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <opt.icon className="w-3.5 h-3.5" />
+                <opt.icon className="w-3 h-3" />
                 {opt.label}
               </button>
             ))}
-            <div className="flex-1" />
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-card border border-border/50 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <Filter className="w-3.5 h-3.5" />
-              Filter
-            </button>
-          </motion.div>
-
-          {/* Posts */}
-          <div className="space-y-4">
-            {posts.map((post, i) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i }}
-                className="glass-card rounded-2xl p-5 hover:shadow-card transition-all"
-              >
-                {/* Author line */}
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl">{post.avatar}</span>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-bold text-foreground">
-                        {post.author}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-bold uppercase tracking-wider">
-                        {post.flair}
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-2.5 h-2.5" />
-                      {post.timeAgo}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-display text-base sm:text-lg font-bold text-foreground mb-2 leading-snug cursor-pointer hover:text-primary transition-colors">
-                  {post.title}
-                </h3>
-
-                {/* Body preview */}
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-                  {post.body}
-                </p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2.5 py-1 rounded-full bg-muted/50 text-[10px] font-medium text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => handleVote(post.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                      votedPosts.has(post.id)
-                        ? "bg-primary/15 text-primary"
-                        : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                    }`}
-                  >
-                    <ArrowUp className="w-4 h-4" />
-                    {post.upvotes + (votedPosts.has(post.id) ? 1 : 0)}
-                  </button>
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-muted/30 text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all">
-                    <MessageCircle className="w-4 h-4" />
-                    {post.comments}
-                  </button>
-                </div>
-              </motion.div>
-            ))}
           </div>
 
-          {/* Coming soon banner */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-12 glass-card rounded-3xl p-8 sm:p-10 text-center"
-          >
-            <span className="text-4xl mb-3 block">🚀</span>
-            <p className="text-2xl font-display font-bold mb-2">
-              The Circle is launching soon
-            </p>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
-              This is a preview of what our community will look like. Join the waitlist to be among the first members — and help set the culture.
-            </p>
-            <a
-              href="/#waitlist"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-primary-foreground"
-              style={{ background: "var(--gradient-button)" }}
-            >
-              Join The Circle ✨
-            </a>
-          </motion.div>
+          {allTags.length > 0 && (
+            <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
+              <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+              {tagFilter && (
+                <button
+                  onClick={() => setTagFilter(null)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/15 text-primary text-[11px] font-medium"
+                >
+                  #{tagFilter}
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+              {!tagFilter &&
+                allTags.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTagFilter(t)}
+                    className="px-2.5 py-1 rounded-full bg-muted/40 text-muted-foreground text-[11px] font-medium hover:bg-primary/10 hover:text-primary transition-colors whitespace-nowrap"
+                  >
+                    #{t}
+                  </button>
+                ))}
+            </div>
+          )}
+
+          {/* Feed */}
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="w-6 h-6 text-primary animate-spin" />
+            </div>
+          ) : visible.length === 0 ? (
+            <div className="glass-card rounded-2xl p-10 text-center">
+              <span className="text-4xl block mb-3">🌸</span>
+              <p className="font-display text-lg font-bold text-foreground mb-1">
+                The Circle is quiet right now
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Be the first to share — every story makes someone feel less alone.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <AnimatePresence initial={false}>
+                {visible.map((post) => {
+                  const replies = openReplies[post.id];
+                  const open = post.id in openReplies;
+                  return (
+                    <motion.article
+                      key={post.id}
+                      layout
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="glass-card rounded-2xl p-5"
+                    >
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-2xl">{post.profile.avatar_emoji}</span>
+                        <div className="min-w-0">
+                          <span className="text-sm font-bold text-foreground">
+                            {post.profile.display_name}
+                          </span>
+                          <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                            <Clock className="w-2.5 h-2.5" />
+                            {timeAgo(post.created_at)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <p className="text-[15px] text-foreground leading-relaxed whitespace-pre-wrap mb-3">
+                        {post.body}
+                      </p>
+
+                      {post.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {post.tags.map((t) => (
+                            <button
+                              key={t}
+                              onClick={() => setTagFilter(t)}
+                              className="px-2 py-0.5 rounded-full bg-muted/40 text-[10px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                            >
+                              #{t}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-2 pt-2 border-t border-border/20">
+                        <button
+                          onClick={() => handleLike(post)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                            post.liked
+                              ? "bg-primary/15 text-primary"
+                              : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                          }`}
+                        >
+                          <Heart
+                            className={`w-3.5 h-3.5 ${post.liked ? "fill-current" : ""}`}
+                          />
+                          {post.likes}
+                        </button>
+                        <button
+                          onClick={() => loadReplies(post.id)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                            open
+                              ? "bg-primary/15 text-primary"
+                              : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                          }`}
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          {post.replies}
+                        </button>
+                      </div>
+
+                      <AnimatePresence>
+                        {open && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="mt-4 pt-4 border-t border-border/20 space-y-3">
+                              {replies === null && (
+                                <div className="flex justify-center py-2">
+                                  <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                                </div>
+                              )}
+                              {Array.isArray(replies) &&
+                                replies.map((r) => (
+                                  <div
+                                    key={r.id}
+                                    className="bg-muted/20 rounded-xl px-3 py-2.5"
+                                  >
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <span className="text-sm">
+                                        {r.profile.avatar_emoji}
+                                      </span>
+                                      <span className="text-xs font-semibold text-foreground">
+                                        {r.profile.display_name}
+                                      </span>
+                                      <span className="text-[10px] text-muted-foreground">
+                                        {timeAgo(r.created_at)}
+                                      </span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                                      {r.body}
+                                    </p>
+                                  </div>
+                                ))}
+
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  value={replyDrafts[post.id] || ""}
+                                  onChange={(e) =>
+                                    setReplyDrafts((d) => ({
+                                      ...d,
+                                      [post.id]: e.target.value,
+                                    }))
+                                  }
+                                  onKeyDown={(e) =>
+                                    e.key === "Enter" && submitReply(post.id)
+                                  }
+                                  placeholder={
+                                    user
+                                      ? "Reply with kindness…"
+                                      : "Sign in to reply…"
+                                  }
+                                  disabled={!user}
+                                  maxLength={500}
+                                  className="flex-1 px-3 py-2 rounded-xl bg-background/50 border border-border/30 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+                                />
+                                <button
+                                  onClick={() => submitReply(post.id)}
+                                  disabled={
+                                    !user ||
+                                    !replyDrafts[post.id]?.trim() ||
+                                    replying === post.id
+                                  }
+                                  className="px-3 py-2 rounded-xl bg-primary text-primary-foreground disabled:opacity-40"
+                                >
+                                  {replying === post.id ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                  ) : (
+                                    <Send className="w-4 h-4" />
+                                  )}
+                                </button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.article>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
       </main>
 
