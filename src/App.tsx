@@ -14,6 +14,7 @@ import FAQ from "./pages/FAQ";
 import AppPreview from "./pages/AppPreview";
 import Roadmap from "./pages/Roadmap";
 import Resources from "./pages/Resources";
+import Article from "./pages/Article";
 import Glossary from "./pages/Glossary";
 import Community from "./pages/Community";
 import Auth from "./pages/Auth";
@@ -57,6 +58,7 @@ const AnimatedRoutes = () => {
           <Route path="/preview" element={<AppPreview />} />
           <Route path="/roadmap" element={<Roadmap />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/:slug" element={<Article />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/community" element={<Community />} />
           <Route path="/auth" element={<Auth />} />
