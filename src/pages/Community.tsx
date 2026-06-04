@@ -140,25 +140,8 @@ const Community = () => {
     fetchPosts();
   }, [fetchPosts]);
 
-  // Realtime
-  useEffect(() => {
-    const ch = supabase
-      .channel("circle-realtime")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "circle_posts" },
-        () => fetchPosts(),
-      )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "circle_post_likes" },
-        () => fetchPosts(),
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [fetchPosts]);
+
+
 
   const handlePost = async () => {
     if (!user) {
