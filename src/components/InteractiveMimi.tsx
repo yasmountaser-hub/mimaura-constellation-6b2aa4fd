@@ -1,10 +1,10 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useRef, useState, useEffect, useCallback } from "react";
 
-import mimiMagic from "@/assets/mimi-magic.png";
-import mimiThumbsup from "@/assets/mimi-thumbsup.png";
-import mimiLightbulb from "@/assets/mimi-lightbulb.png";
-import mimiWizard from "@/assets/mimi-wizard.png";
+import mimiMagic from "@/assets/mimi-magic.webp";
+import mimiThumbsup from "@/assets/mimi-thumbsup.webp";
+import mimiLightbulb from "@/assets/mimi-lightbulb.webp";
+import mimiWizard from "@/assets/mimi-wizard.webp";
 
 const poses = [
   { src: mimiMagic, alt: "Magic Mimi" },
@@ -80,7 +80,7 @@ const InteractiveMimi = ({ className = "" }: InteractiveMimiProps) => {
       />
 
       {/* Mimi image with tilt following cursor */}
-      <motion.img
+      <motion.img loading="lazy" decoding="async"
         key={poseIndex}
         src={currentPose.src}
         alt={currentPose.alt}

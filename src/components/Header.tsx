@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Download, LogIn, LogOut } from "lucide-react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useAuth } from "@/components/AuthProvider";
-import logo from "@/assets/mimaura-logo.png";
+import logo from "@/assets/mimaura-logo.webp";
 
 const Header = () => {
   const { user, signOut } = useAuth();
@@ -111,6 +111,8 @@ const Header = () => {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
               className="p-1.5 sm:p-2 rounded-xl hover:bg-primary/10 transition-colors"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

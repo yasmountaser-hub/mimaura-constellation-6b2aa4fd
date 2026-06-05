@@ -3,9 +3,9 @@ import { Brain, Heart, Moon, Sparkles, Users, Shield } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import GlassOrb from "@/components/GlassOrb";
-import mimiSmart from "@/assets/mimi-smart.png";
-import mimiMeal from "@/assets/mimi-meal.png";
-import mimiMood from "@/assets/mimi-mood.png";
+import mimiSmart from "@/assets/mimi-smart.webp";
+import mimiMeal from "@/assets/mimi-meal.webp";
+import mimiMood from "@/assets/mimi-mood.webp";
 
 const features = [
   {
@@ -148,21 +148,21 @@ const FeaturesSection = () => {
 
         {/* Floating Mimis */}
         <div className="relative h-32 flex justify-center items-center gap-8">
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiSmart}
             alt="Smart Mimi"
             className="w-24 h-24 object-contain"
             animate={{ y: [0, -10, 0], rotate: [-5, 5, -5] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiMeal}
             alt="Meal Mimi"
             className="w-28 h-28 object-contain"
             animate={{ y: [-5, 5, -5] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           />
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiMood}
             alt="Mood Mimi"
             className="w-24 h-24 object-contain"

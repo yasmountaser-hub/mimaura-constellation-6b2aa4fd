@@ -1,0 +1,19 @@
+# Mimaura
+
+> Mimaura is a calm, emotionally intelligent wellness companion that helps women and neurodivergent minds learn their body's patterns through gentle, non-prescriptive nudges.
+
+Mimaura tracks cycles, moods, energy, and symptoms — then surfaces patterns and soft insights via Mimi, an AI companion designed to be ADHD-friendly, low-stim, and inclusive of chronic conditions.
+
+## Pages
+
+- [Home](/): Overview, mission, and waitlist sign-up.
+- [App Preview](/preview): Sneak peek of phases, mood tracking, and pattern nudges.
+- [FAQ](/faq): Common questions about Mimaura, neurodiversity, privacy, and launch.
+- [Roadmap](/roadmap): What we're building and when.
+- [Resources](/resources): Articles on cycles, neurodivergence, and wellbeing.
+- [Glossary](/glossary): Plain-language definitions of cycle, hormone, and neurodivergent terms.
+- [Community (The Circle)](/community): Anonymous, threads-style community for members.
+
+## Optional
+
+- [Sign in](/auth): Account access for members.

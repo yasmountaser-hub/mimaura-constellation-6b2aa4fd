@@ -66,8 +66,18 @@ const Article = () => {
 
   if (!article) return <Navigate to="/resources" replace />;
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.category,
+    author: { "@type": "Organization", name: "Mimaura" },
+    publisher: { "@type": "Organization", name: "Mimaura" },
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <FloatingParticles />
       <CursorGlow />
       <Header />

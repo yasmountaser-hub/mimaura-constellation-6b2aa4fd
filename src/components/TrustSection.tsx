@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye, Heart } from "lucide-react";
-import mimiPrivacy from "@/assets/mimi-privacy.png";
+import mimiPrivacy from "@/assets/mimi-privacy.webp";
 
 const TrustSection = () => {
   const trustItems = [
@@ -43,7 +43,7 @@ const TrustSection = () => {
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ duration: 5, repeat: Infinity }}
             />
-            <motion.img
+            <motion.img loading="lazy" decoding="async"
               src={mimiPrivacy}
               alt="Mimi holding a lock - Privacy first"
               className="relative z-10 w-64 h-64 object-contain"

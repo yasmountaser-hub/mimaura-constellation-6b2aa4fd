@@ -10,7 +10,7 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 import MagneticButton from "@/components/MagneticButton";
 import GlassOrb from "@/components/GlassOrb";
-import mimiMagic from "@/assets/mimi-magic.png";
+import mimiMagic from "@/assets/mimi-magic.webp";
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);

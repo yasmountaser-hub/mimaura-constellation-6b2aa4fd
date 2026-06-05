@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mimaura.com/sitemap.xml
+Sitemap: https://starry-memory-map.lovable.app/sitemap.xml

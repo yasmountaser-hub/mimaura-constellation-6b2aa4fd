@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import mimiLightbulb from "@/assets/mimi-lightbulb.png";
+import mimiLightbulb from "@/assets/mimi-lightbulb.webp";
 
 const phases = [
   {
@@ -89,7 +89,7 @@ const Roadmap = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16 space-y-4"
           >
-            <motion.img
+            <motion.img loading="lazy" decoding="async"
               src={mimiLightbulb}
               alt="Mimi with lightbulb"
               className="w-20 h-20 object-contain mx-auto mb-4"

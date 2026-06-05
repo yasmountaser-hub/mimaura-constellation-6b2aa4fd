@@ -2,8 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Bell, TrendingUp, Lightbulb, Moon, Coffee, Heart, Sparkles, ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import appPhasesPreview from "@/assets/app-phases-preview.png";
-import mimiLightbulb from "@/assets/mimi-lightbulb.png";
+import appPhasesPreview from "@/assets/app-phases-preview.webp";
+import mimiLightbulb from "@/assets/mimi-lightbulb.webp";
 
 const nudgeExamples = [
   {
@@ -105,7 +105,7 @@ const PatternNudgeSneakPeek = () => {
               transition={{ duration: 0.3 }}
               className="rounded-3xl overflow-hidden shadow-float border border-border/30"
             >
-              <img
+              <img loading="lazy" decoding="async"
                 src={appPhasesPreview}
                 alt="Mimaura app showing Follicular, Ovulation, Luteal, and Menstrual cycle phases with personalized insights and calendars"
                 className="w-full h-auto"
@@ -113,7 +113,7 @@ const PatternNudgeSneakPeek = () => {
             </motion.div>
 
             {/* Floating Mimi */}
-            <motion.img
+            <motion.img loading="lazy" decoding="async"
               src={mimiLightbulb}
               alt="Mimi with lightbulb"
               className="absolute -right-6 -bottom-6 w-24 h-24 object-contain z-20 hidden md:block"

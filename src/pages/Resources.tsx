@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import mimiSmart from "@/assets/mimi-smart.png";
+import mimiSmart from "@/assets/mimi-smart.webp";
 import { articles } from "@/data/articles";
 
 const categories = [
@@ -31,7 +31,7 @@ const Resources = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12 space-y-4"
           >
-            <motion.img
+            <motion.img loading="lazy" decoding="async"
               src={mimiSmart}
               alt="Smart Mimi"
               className="w-20 h-20 object-contain mx-auto mb-4"

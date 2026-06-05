@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Sparkles, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import mimiThumbsup from "@/assets/mimi-thumbsup.png";
+import mimiThumbsup from "@/assets/mimi-thumbsup.webp";
 
 const STORAGE_KEY = "mimaura_waitlist_joined";
 
@@ -58,7 +58,7 @@ const WaitlistSection = () => {
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
 
           {/* Mimi floating */}
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiThumbsup}
             alt="Mimi giving thumbs up"
             className="absolute -right-4 top-4 w-24 h-24 md:w-32 md:h-32 object-contain z-10"

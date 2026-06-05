@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import mimiSmart from "@/assets/mimi-smart.png";
+import mimiSmart from "@/assets/mimi-smart.webp";
 
 const faqs = [
   {
@@ -115,8 +115,20 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
 };
 
 const FAQ = () => {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.flatMap((c) =>
+      c.questions.map((q) => ({
+        "@type": "Question",
+        name: q.q,
+        acceptedAnswer: { "@type": "Answer", text: q.a },
+      })),
+    ),
+  };
   return (
     <div className="min-h-screen relative overflow-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <FloatingParticles />
       <CursorGlow />
       <Header />
@@ -131,7 +143,7 @@ const FAQ = () => {
             className="text-center mb-16 space-y-4"
           >
             <div className="flex justify-center mb-6">
-              <motion.img
+              <motion.img loading="lazy" decoding="async"
                 src={mimiSmart}
                 alt="Smart Mimi"
                 className="w-24 h-24 object-contain"
