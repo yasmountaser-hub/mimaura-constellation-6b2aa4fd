@@ -2,8 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Bell, TrendingUp, Lightbulb, Moon, Coffee, Heart, Sparkles, ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import appPhasesPreview from "@/assets/app-phases-preview.png";
-import mimiLightbulb from "@/assets/mimi-lightbulb.png";
+import appPhasesPreview from "@/assets/app-phases-preview.webp";
+import mimiLightbulb from "@/assets/mimi-lightbulb.webp";
 
 const nudgeExamples = [
   {

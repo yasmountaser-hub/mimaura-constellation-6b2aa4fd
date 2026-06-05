@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Sparkles, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import mimiThumbsup from "@/assets/mimi-thumbsup.png";
+import mimiThumbsup from "@/assets/mimi-thumbsup.webp";
 
 const STORAGE_KEY = "mimaura_waitlist_joined";
 

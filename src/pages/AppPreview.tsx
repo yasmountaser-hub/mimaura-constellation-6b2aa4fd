@@ -4,10 +4,10 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import lutealPreview from "@/assets/luteal-preview.png";
-import phasesPreview from "@/assets/app-phases-preview.png";
-import patternNudge from "@/assets/pattern-nudge-preview.png";
-import mimiTypes from "@/assets/mimi-types.png";
+import lutealPreview from "@/assets/luteal-preview.webp";
+import phasesPreview from "@/assets/app-phases-preview.webp";
+import patternNudge from "@/assets/pattern-nudge-preview.webp";
+import mimiTypes from "@/assets/mimi-types.webp";
 
 const screens = [
   {

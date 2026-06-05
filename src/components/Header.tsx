@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Download, LogIn, LogOut } from "lucide-react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useAuth } from "@/components/AuthProvider";
-import logo from "@/assets/mimaura-logo.png";
+import logo from "@/assets/mimaura-logo.webp";
 
 const Header = () => {
   const { user, signOut } = useAuth();

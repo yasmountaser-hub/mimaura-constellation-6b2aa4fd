@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { GraduationCap, BookOpen, Video, FileText, Brain, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import lutealPreview from "@/assets/luteal-preview.png";
+import lutealPreview from "@/assets/luteal-preview.webp";
 
 const resources = [
   {

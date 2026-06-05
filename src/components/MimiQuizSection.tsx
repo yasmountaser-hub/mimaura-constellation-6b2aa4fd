@@ -2,12 +2,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, RotateCcw, Heart, Moon, Sun, Zap, Flower2, Crown, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import mimiWarrior from "@/assets/mimi-warrior-new.png";
-import mimiFairy from "@/assets/mimi-fairy-new.png";
-import mimiAngel from "@/assets/mimi-angel-new.png";
-import mimiMystic from "@/assets/mimi-mystic-new.png";
-import mimiBoss from "@/assets/mimi-boss.png";
-import mimiGamer from "@/assets/mimi-gamer.png";
+import mimiWarrior from "@/assets/mimi-warrior-new.webp";
+import mimiFairy from "@/assets/mimi-fairy-new.webp";
+import mimiAngel from "@/assets/mimi-angel-new.webp";
+import mimiMystic from "@/assets/mimi-mystic-new.webp";
+import mimiBoss from "@/assets/mimi-boss.webp";
+import mimiGamer from "@/assets/mimi-gamer.webp";
 
 interface Question {
   id: number;

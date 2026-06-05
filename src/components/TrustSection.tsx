@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye, Heart } from "lucide-react";
-import mimiPrivacy from "@/assets/mimi-privacy.png";
+import mimiPrivacy from "@/assets/mimi-privacy.webp";
 
 const TrustSection = () => {
   const trustItems = [

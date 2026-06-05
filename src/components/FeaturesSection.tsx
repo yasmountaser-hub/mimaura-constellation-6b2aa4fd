@@ -3,9 +3,9 @@ import { Brain, Heart, Moon, Sparkles, Users, Shield } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import GlassOrb from "@/components/GlassOrb";
-import mimiSmart from "@/assets/mimi-smart.png";
-import mimiMeal from "@/assets/mimi-meal.png";
-import mimiMood from "@/assets/mimi-mood.png";
+import mimiSmart from "@/assets/mimi-smart.webp";
+import mimiMeal from "@/assets/mimi-meal.webp";
+import mimiMood from "@/assets/mimi-mood.webp";
 
 const features = [
   {

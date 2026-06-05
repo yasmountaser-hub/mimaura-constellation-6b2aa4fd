@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import mimiLightbulb from "@/assets/mimi-lightbulb.png";
+import mimiLightbulb from "@/assets/mimi-lightbulb.webp";
 
 const phases = [
   {

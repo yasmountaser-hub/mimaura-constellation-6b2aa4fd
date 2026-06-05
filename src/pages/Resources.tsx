@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingParticles from "@/components/FloatingParticles";
 import CursorGlow from "@/components/CursorGlow";
 import AccessibilityPanel from "@/components/AccessibilityPanel";
-import mimiSmart from "@/assets/mimi-smart.png";
+import mimiSmart from "@/assets/mimi-smart.webp";
 import { articles } from "@/data/articles";
 
 const categories = [

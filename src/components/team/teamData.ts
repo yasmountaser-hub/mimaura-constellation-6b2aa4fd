@@ -1,11 +1,11 @@
-import yasmineBitmoji from "@/assets/yasmine-bitmoji.jpeg";
-import vivianaBitmoji from "@/assets/viviana-bitmoji.jpeg";
-import lexiBitmoji from "@/assets/lexi-bitmoji.jpeg";
-import ayaBitmoji from "@/assets/aya-bitmoji.jpeg";
-import cjBitmoji from "@/assets/cj-bitmoji.jpeg";
-import jordanBitmoji from "@/assets/jordan-bitmoji.jpeg";
-import almazBitmoji from "@/assets/almaz-bitmoji.jpeg";
-import soundoussBitmoji from "@/assets/soundouss-bitmoji.jpeg";
+import yasmineBitmoji from "@/assets/yasmine-bitmoji.webp";
+import vivianaBitmoji from "@/assets/viviana-bitmoji.webp";
+import lexiBitmoji from "@/assets/lexi-bitmoji.webp";
+import ayaBitmoji from "@/assets/aya-bitmoji.webp";
+import cjBitmoji from "@/assets/cj-bitmoji.webp";
+import jordanBitmoji from "@/assets/jordan-bitmoji.webp";
+import almazBitmoji from "@/assets/almaz-bitmoji.webp";
+import soundoussBitmoji from "@/assets/soundouss-bitmoji.webp";
 
 export interface TeamMember {
   name: string;

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Moon, Sun, Brain, Heart, Zap, Star, ChevronRight } from "lucide-react";
-import mimiMagic from "@/assets/mimi-magic.png";
+import mimiMagic from "@/assets/mimi-magic.webp";
 
 const journeySteps = [
   {
