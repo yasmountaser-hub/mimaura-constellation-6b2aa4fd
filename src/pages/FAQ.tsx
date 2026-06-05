@@ -131,7 +131,7 @@ const FAQ = () => {
             className="text-center mb-16 space-y-4"
           >
             <div className="flex justify-center mb-6">
-              <motion.img
+              <motion.img loading="lazy" decoding="async"
                 src={mimiSmart}
                 alt="Smart Mimi"
                 className="w-24 h-24 object-contain"

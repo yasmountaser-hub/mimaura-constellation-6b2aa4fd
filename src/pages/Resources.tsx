@@ -31,7 +31,7 @@ const Resources = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12 space-y-4"
           >
-            <motion.img
+            <motion.img loading="lazy" decoding="async"
               src={mimiSmart}
               alt="Smart Mimi"
               className="w-20 h-20 object-contain mx-auto mb-4"

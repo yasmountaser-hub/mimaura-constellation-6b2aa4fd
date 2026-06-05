@@ -80,7 +80,7 @@ const InteractiveMimi = ({ className = "" }: InteractiveMimiProps) => {
       />
 
       {/* Mimi image with tilt following cursor */}
-      <motion.img
+      <motion.img loading="lazy" decoding="async"
         key={poseIndex}
         src={currentPose.src}
         alt={currentPose.alt}

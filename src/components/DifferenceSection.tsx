@@ -360,7 +360,7 @@ const DifferenceSection = () => {
           viewport={{ once: true }}
           className="relative glass-card rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6 sm:gap-8"
         >
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiMagic}
             alt="Magic Mimi"
             className="w-24 h-24 sm:w-32 sm:h-32 object-contain"

@@ -107,7 +107,7 @@ const JourneyMapSection = () => {
                   top: "-50%",
                 }}
               />
-              <motion.img
+              <motion.img loading="lazy" decoding="async"
                 src={mimiMagic}
                 alt="Mimi - Your wellness companion"
                 className="w-20 h-20 object-contain relative z-10 drop-shadow-lg"
@@ -154,7 +154,7 @@ const JourneyMapSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.5, type: "spring" }}
           >
-            <motion.img
+            <motion.img loading="lazy" decoding="async"
               src={mimiMagic}
               alt="Mimi"
               className="w-16 h-16 object-contain drop-shadow-lg"

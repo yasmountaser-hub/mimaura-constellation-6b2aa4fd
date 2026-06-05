@@ -148,21 +148,21 @@ const FeaturesSection = () => {
 
         {/* Floating Mimis */}
         <div className="relative h-32 flex justify-center items-center gap-8">
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiSmart}
             alt="Smart Mimi"
             className="w-24 h-24 object-contain"
             animate={{ y: [0, -10, 0], rotate: [-5, 5, -5] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiMeal}
             alt="Meal Mimi"
             className="w-28 h-28 object-contain"
             animate={{ y: [-5, 5, -5] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           />
-          <motion.img
+          <motion.img loading="lazy" decoding="async"
             src={mimiMood}
             alt="Mood Mimi"
             className="w-24 h-24 object-contain"

@@ -79,7 +79,7 @@ const EducationSection = () => {
               className="relative z-10 rounded-3xl overflow-hidden shadow-float border border-accent/20"
               whileHover={{ scale: 1.02 }}
             >
-              <img
+              <img loading="lazy" decoding="async"
                 src={lutealPreview}
                 alt="Luteal phase education preview"
                 className="w-full h-auto"

@@ -273,7 +273,7 @@ const MimiQuizSection = () => {
                       whileHover={{ scale: 1.05, y: -5 }}
                     >
                       <div className="w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden">
-                        <img src={type.image} alt={`${type.name} Mimi`} className="w-full h-full object-cover" />
+                        <img loading="lazy" decoding="async" src={type.image} alt={`${type.name} Mimi`} className="w-full h-full object-cover" />
                       </div>
                       <p className="text-xs font-medium">{type.name}</p>
                     </motion.div>
@@ -305,7 +305,7 @@ const MimiQuizSection = () => {
                       >
                         <div className={`w-44 h-44 mx-auto rounded-full bg-gradient-to-r ${result.color} p-1 mb-6`}>
                           <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
-                            <img
+                            <img loading="lazy" decoding="async"
                               src={result.image}
                               alt={result.name}
                               className="w-40 h-40 object-cover rounded-full"
