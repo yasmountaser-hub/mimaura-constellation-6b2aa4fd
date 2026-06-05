@@ -1,4 +1,4 @@
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
+import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRef, useEffect } from "react";
 
 interface AnimatedCounterProps {
@@ -20,16 +20,21 @@ const AnimatedCounter = ({
 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const springValue = useSpring(0, { duration: duration * 1000 });
-  const display = useTransform(springValue, (v) => `${prefix}${Math.round(v).toLocaleString()}${suffix}`);
+  const count = useMotionValue(0);
+  const display = useTransform(count, (v) => `${prefix}${Math.round(v).toLocaleString()}${suffix}`);
 
   useEffect(() => {
-    if (isInView) springValue.set(target);
-  }, [isInView, target, springValue]);
+    if (!isInView) return;
+    const controls = animate(count, target, {
+      duration,
+      ease: "easeOut",
+    });
+    return () => controls.stop();
+  }, [isInView, target, duration, count]);
 
   return (
     <div ref={ref} className={`text-center ${className}`}>
-      <motion.span className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-gradient block">
+      <motion.span className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-gradient block tabular-nums">
         {display}
       </motion.span>
       <span className="text-sm sm:text-base text-muted-foreground mt-2 block">{label}</span>
