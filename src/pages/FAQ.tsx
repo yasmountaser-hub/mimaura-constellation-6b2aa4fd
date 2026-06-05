@@ -115,8 +115,20 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
 };
 
 const FAQ = () => {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.flatMap((c) =>
+      c.questions.map((q) => ({
+        "@type": "Question",
+        name: q.q,
+        acceptedAnswer: { "@type": "Answer", text: q.a },
+      })),
+    ),
+  };
   return (
     <div className="min-h-screen relative overflow-hidden">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <FloatingParticles />
       <CursorGlow />
       <Header />
