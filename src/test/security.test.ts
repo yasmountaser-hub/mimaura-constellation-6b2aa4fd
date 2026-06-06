@@ -195,14 +195,17 @@ describe("profiles", () => {
     expect(error).not.toBeNull();
   });
 
-  it("anon CANNOT update someone else's profile", async () => {
-    const { error } = await anon
+  it("anon UPDATE on profiles affects 0 rows", async () => {
+    const { data, error } = await anon
       .from("profiles")
       .update({ display_name: "Hacked" })
-      .neq("id", "00000000-0000-0000-0000-000000000000");
-    expect(error).not.toBeNull();
+      .neq("id", "00000000-0000-0000-0000-000000000000")
+      .select();
+    expect(error).toBeNull();
+    expect(data ?? []).toEqual([]);
   });
 });
+
 
 // ---------------------------------------------------------------------------
 // Admin edge function — must reject calls without the admin password
