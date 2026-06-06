@@ -159,22 +159,29 @@ describe("community tables — writes require auth", () => {
     expect(error).not.toBeNull();
   });
 
-  it("anon CANNOT delete circle_posts", async () => {
-    const { error } = await anon
+  // For RLS-protected DELETE/UPDATE, PostgREST returns 200 with 0 rows when
+  // the USING clause excludes everything. We assert that NO rows were touched.
+  it("anon DELETE on circle_posts affects 0 rows", async () => {
+    const { data, error } = await anon
       .from("circle_posts")
       .delete()
-      .neq("id", "00000000-0000-0000-0000-000000000000");
-    expect(error).not.toBeNull();
+      .neq("id", "00000000-0000-0000-0000-000000000000")
+      .select();
+    expect(error).toBeNull();
+    expect(data ?? []).toEqual([]);
   });
 
-  it("anon CANNOT update circle_posts", async () => {
-    const { error } = await anon
+  it("anon UPDATE on circle_posts affects 0 rows", async () => {
+    const { data, error } = await anon
       .from("circle_posts")
       .update({ body: "hacked" })
-      .neq("id", "00000000-0000-0000-0000-000000000000");
-    expect(error).not.toBeNull();
+      .neq("id", "00000000-0000-0000-0000-000000000000")
+      .select();
+    expect(error).toBeNull();
+    expect(data ?? []).toEqual([]);
   });
 });
+
 
 // ---------------------------------------------------------------------------
 // profiles — public READ by design, but only owner can mutate
