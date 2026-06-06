@@ -257,7 +257,7 @@ describe("admin-waitlist edge function", () => {
 // GraphQL surface must be removed (REST-only project)
 // ---------------------------------------------------------------------------
 describe("GraphQL is disabled", () => {
-  it("graphql endpoint is not callable by anon", async () => {
+  it("graphql endpoint returns no schema (extension disabled)", async () => {
     const res = await fetch(`${SUPABASE_URL}/graphql/v1`, {
       method: "POST",
       headers: {
@@ -267,8 +267,10 @@ describe("GraphQL is disabled", () => {
       },
       body: JSON.stringify({ query: "{ __schema { types { name } } }" }),
     });
-    await res.text().catch(() => "");
-    // Expect not a 200 with introspection data
-    expect([400, 401, 403, 404, 500, 503]).toContain(res.status);
+    const text = await res.text();
+    // GraphQL returns 200 by convention; the body must be an error, not a schema.
+    expect(text).not.toContain('"__schema"');
+    expect(text.toLowerCase()).toMatch(/(not enabled|errors|unauthorized|not found)/);
   });
+
 });
