@@ -55,11 +55,18 @@ const Admin = () => {
   };
 
   const exportCsv = () => {
+    // Sanitize against CSV formula injection: prefix risky values with a single
+    // quote, then quote-wrap and escape embedded quotes so spreadsheet apps
+    // (Excel/LibreOffice/Sheets) treat every cell as plain text.
+    const csvCell = (val: string | null | undefined) => {
+      let v = (val ?? "").toString();
+      if (/^[=+\-@\t\r]/.test(v)) v = `'${v}`;
+      return `"${v.replace(/"/g, '""')}"`;
+    };
     const header = "email,name,source,created_at\n";
     const rows = entries
-      .map(
-        (e) =>
-          `${e.email},${(e.name ?? "").replace(/,/g, " ")},${e.source ?? ""},${e.created_at}`,
+      .map((e) =>
+        [e.email, e.name, e.source, e.created_at].map(csvCell).join(","),
       )
       .join("\n");
     const blob = new Blob([header + rows], { type: "text/csv" });
