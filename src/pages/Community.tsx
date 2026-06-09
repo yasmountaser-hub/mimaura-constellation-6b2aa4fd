@@ -1,9 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   MessageCircle,
-  Heart,
   Send,
   Loader2,
   Sparkles,
@@ -12,6 +11,11 @@ import {
   Users,
   Tag,
   X,
+  ChevronUp,
+  Trash2,
+  ShieldCheck,
+  Hourglass,
+  CornerDownRight,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -34,6 +38,7 @@ interface Post {
   likes: number;
   replies: number;
   created_at: string;
+  status: "pending" | "approved" | "rejected";
   profile: Profile;
   liked: boolean;
 }
@@ -46,9 +51,9 @@ interface Reply {
 }
 
 const SORTS = [
-  { key: "trending", label: "Trending", icon: TrendingUp },
+  { key: "trending", label: "Hot", icon: TrendingUp },
   { key: "new", label: "New", icon: Sparkles },
-  { key: "top", label: "Top", icon: Heart },
+  { key: "top", label: "Top", icon: ChevronUp },
 ] as const;
 
 type SortKey = (typeof SORTS)[number]["key"];
@@ -79,17 +84,16 @@ const Community = () => {
   const [tagFilter, setTagFilter] = useState<string | null>(null);
   const [composer, setComposer] = useState("");
   const [posting, setPosting] = useState(false);
-  const [openReplies, setOpenReplies] = useState<Record<string, Reply[] | null>>(
-    {},
-  );
+  const [openReplies, setOpenReplies] = useState<Record<string, Reply[] | null>>({});
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const [replying, setReplying] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchPosts = useCallback(async () => {
     let query = supabase
       .from("circle_posts")
       .select(
-        "id,user_id,body,tags,likes,replies,created_at, profiles:profiles!circle_posts_user_id_fkey(display_name, avatar_emoji)",
+        "id,user_id,body,tags,likes,replies,created_at,status, profiles:profiles!circle_posts_user_id_fkey(display_name, avatar_emoji)",
       )
       .limit(100);
 
@@ -124,6 +128,7 @@ const Community = () => {
       likes: p.likes,
       replies: p.replies,
       created_at: p.created_at,
+      status: (p.status as Post["status"]) ?? "approved",
       profile: {
         display_name: p.profiles?.display_name || "Anonymous",
         avatar_emoji: p.profiles?.avatar_emoji || "🌸",
@@ -139,9 +144,6 @@ const Community = () => {
     setLoading(true);
     fetchPosts();
   }, [fetchPosts]);
-
-
-
 
   const handlePost = async () => {
     if (!user) {
@@ -161,16 +163,15 @@ const Community = () => {
       return;
     }
     setComposer("");
-    toast.success("Shared with The Circle 💜");
+    toast.success("Sent for review 💜 An admin will approve it shortly.");
     fetchPosts();
   };
 
   const handleLike = async (post: Post) => {
     if (!user) {
-      toast.error("Sign in to like posts");
+      toast.error("Sign in to upvote");
       return;
     }
-    // optimistic
     setPosts((ps) =>
       ps.map((p) =>
         p.id === post.id
@@ -191,9 +192,44 @@ const Community = () => {
     }
   };
 
+  const handleDeletePost = async (post: Post) => {
+    if (!user || user.id !== post.user_id) return;
+    if (!confirm("Delete this thread? This can't be undone.")) return;
+    setDeletingId(post.id);
+    const { error } = await supabase.from("circle_posts").delete().eq("id", post.id);
+    setDeletingId(null);
+    if (error) {
+      toast.error("Couldn't delete");
+      return;
+    }
+    setPosts((ps) => ps.filter((p) => p.id !== post.id));
+    toast.success("Thread deleted");
+  };
+
+  const handleDeleteReply = async (postId: string, reply: Reply) => {
+    if (!user || user.id !== reply.user_id) return;
+    if (!confirm("Delete this reply?")) return;
+    const { error } = await supabase
+      .from("circle_replies")
+      .delete()
+      .eq("id", reply.id);
+    if (error) {
+      toast.error("Couldn't delete");
+      return;
+    }
+    setOpenReplies((r) => ({
+      ...r,
+      [postId]: (r[postId] || []).filter((x) => x.id !== reply.id),
+    }));
+    setPosts((ps) =>
+      ps.map((p) =>
+        p.id === postId ? { ...p, replies: Math.max(0, p.replies - 1) } : p,
+      ),
+    );
+  };
+
   const loadReplies = async (postId: string) => {
     if (openReplies[postId] !== undefined) {
-      // toggle close
       setOpenReplies((r) => {
         const next = { ...r };
         delete next[postId];
@@ -240,15 +276,15 @@ const Community = () => {
       return;
     }
     setReplyDrafts((d) => ({ ...d, [postId]: "" }));
-    // refresh replies and post counts
     setOpenReplies((r) => ({ ...r, [postId]: undefined as any }));
     await loadReplies(postId);
     fetchPosts();
   };
 
-  const allTags = Array.from(
-    new Set(posts.flatMap((p) => p.tags)),
-  ).slice(0, 12);
+  const allTags = useMemo(
+    () => Array.from(new Set(posts.flatMap((p) => p.tags))).slice(0, 12),
+    [posts],
+  );
 
   const visible = tagFilter
     ? posts.filter((p) => p.tags.includes(tagFilter))
@@ -261,19 +297,30 @@ const Community = () => {
       <Header />
       <AccessibilityPanel />
 
+      {/* Soft glow backdrop */}
+      <div className="absolute inset-0 -z-10 pointer-events-none">
+        <div className="absolute top-32 left-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-20 right-1/4 w-80 h-80 rounded-full bg-accent/10 blur-3xl" />
+      </div>
+
       <main className="pt-28 pb-20 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-3xl mx-auto">
+          {/* Hero */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8 space-y-3"
           >
-            <span className="text-5xl">💬</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-medium text-primary">
+              <ShieldCheck className="w-3 h-3" />
+              Moderated for kindness — every thread reviewed
+            </div>
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold">
               The <span className="text-gradient">Circle</span>
             </h1>
             <p className="text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              A safe, anonymous space to share experiences and remind each other: you're not alone.
+              A safe, threaded space to share, ask, and feel seen. Upvote what
+              resonates, reply with care.
             </p>
           </motion.div>
 
@@ -285,11 +332,11 @@ const Community = () => {
             className="grid grid-cols-3 gap-3 mb-6"
           >
             {[
-              { label: "Posts", value: posts.length, icon: MessageCircle },
+              { label: "Threads", value: posts.length, icon: MessageCircle },
               {
-                label: "Likes given",
+                label: "Upvotes",
                 value: posts.reduce((s, p) => s + p.likes, 0),
-                icon: Heart,
+                icon: ChevronUp,
               },
               {
                 label: "Replies",
@@ -315,14 +362,22 @@ const Community = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="glass-card rounded-2xl p-4 mb-6"
+            className="glass-card rounded-2xl p-4 mb-6 relative overflow-hidden"
           >
+            <div
+              className="absolute inset-0 -z-10 opacity-40"
+              style={{ background: "var(--gradient-mesh, transparent)" }}
+            />
+            <div className="flex items-center gap-2 mb-2 text-[11px] text-muted-foreground">
+              <Sparkles className="w-3 h-3 text-primary" />
+              Start a new thread — admins approve before it goes live
+            </div>
             <textarea
               value={composer}
               onChange={(e) => setComposer(e.target.value)}
               placeholder={
                 user
-                  ? "What's on your mind? Use #tags to help others find your post."
+                  ? "What's on your mind? Use #tags so others can find you…"
                   : "Sign in to share with The Circle…"
               }
               disabled={!user}
@@ -346,7 +401,7 @@ const Community = () => {
                   ) : (
                     <Send className="w-3.5 h-3.5" />
                   )}
-                  Post
+                  Submit thread
                 </button>
               ) : (
                 <Link
@@ -360,7 +415,7 @@ const Community = () => {
             </div>
           </motion.div>
 
-          {/* Sort + tag filter */}
+          {/* Sort */}
           <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
             {SORTS.map((opt) => (
               <button
@@ -378,6 +433,7 @@ const Community = () => {
             ))}
           </div>
 
+          {/* Tags */}
           {allTags.length > 0 && (
             <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
               <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
@@ -415,120 +471,204 @@ const Community = () => {
                 The Circle is quiet right now
               </p>
               <p className="text-sm text-muted-foreground">
-                Be the first to share — every story makes someone feel less alone.
+                Be the first to start a thread — every story makes someone feel
+                less alone.
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <AnimatePresence initial={false}>
                 {visible.map((post) => {
                   const replies = openReplies[post.id];
                   const open = post.id in openReplies;
+                  const isOwner = user?.id === post.user_id;
+                  const isPending = post.status === "pending";
+                  const isRejected = post.status === "rejected";
+
                   return (
                     <motion.article
                       key={post.id}
                       layout
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="glass-card rounded-2xl p-5"
+                      exit={{ opacity: 0, scale: 0.97 }}
+                      className={`glass-card rounded-2xl overflow-hidden transition-all hover:shadow-soft ${
+                        isPending
+                          ? "ring-1 ring-yellow-400/40"
+                          : isRejected
+                            ? "ring-1 ring-destructive/40 opacity-70"
+                            : ""
+                      }`}
                     >
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-2xl">{post.profile.avatar_emoji}</span>
-                        <div className="min-w-0">
-                          <span className="text-sm font-bold text-foreground">
-                            {post.profile.display_name}
+                      <div className="flex">
+                        {/* Vote rail */}
+                        <div className="flex flex-col items-center gap-1 px-3 py-4 bg-gradient-to-b from-primary/5 to-transparent border-r border-border/20 min-w-[56px]">
+                          <button
+                            onClick={() => handleLike(post)}
+                            aria-label="Upvote"
+                            className={`p-1.5 rounded-lg transition-all ${
+                              post.liked
+                                ? "bg-primary text-primary-foreground shadow-soft"
+                                : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                            }`}
+                          >
+                            <ChevronUp
+                              className={`w-5 h-5 ${post.liked ? "fill-current" : ""}`}
+                            />
+                          </button>
+                          <span
+                            className={`font-display text-sm font-bold ${
+                              post.liked ? "text-primary" : "text-foreground"
+                            }`}
+                          >
+                            {post.likes}
                           </span>
-                          <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-                            <Clock className="w-2.5 h-2.5" />
-                            {timeAgo(post.created_at)}
+                          <span className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                            karma
                           </span>
                         </div>
-                      </div>
 
-                      <p className="text-[15px] text-foreground leading-relaxed whitespace-pre-wrap mb-3">
-                        {post.body}
-                      </p>
+                        {/* Body */}
+                        <div className="flex-1 p-4 min-w-0">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap">
+                            <span className="text-xl">{post.profile.avatar_emoji}</span>
+                            <span className="text-sm font-bold text-foreground">
+                              {post.profile.display_name}
+                            </span>
+                            <span className="text-muted-foreground text-xs">·</span>
+                            <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                              <Clock className="w-2.5 h-2.5" />
+                              {timeAgo(post.created_at)}
+                            </span>
+                            {isPending && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-400/15 text-yellow-600 dark:text-yellow-300 text-[10px] font-semibold">
+                                <Hourglass className="w-2.5 h-2.5" />
+                                Pending review
+                              </span>
+                            )}
+                            {isRejected && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-destructive/15 text-destructive text-[10px] font-semibold">
+                                Not approved
+                              </span>
+                            )}
+                          </div>
 
-                      {post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mb-3">
-                          {post.tags.map((t) => (
+                          <p className="text-[15px] text-foreground leading-relaxed whitespace-pre-wrap mb-3">
+                            {post.body}
+                          </p>
+
+                          {post.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {post.tags.map((t) => (
+                                <button
+                                  key={t}
+                                  onClick={() => setTagFilter(t)}
+                                  className="px-2 py-0.5 rounded-full bg-muted/40 text-[10px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                                >
+                                  #{t}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="flex items-center gap-1.5 pt-2 border-t border-border/20">
                             <button
-                              key={t}
-                              onClick={() => setTagFilter(t)}
-                              className="px-2 py-0.5 rounded-full bg-muted/40 text-[10px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                              onClick={() => loadReplies(post.id)}
+                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                                open
+                                  ? "bg-primary/15 text-primary"
+                                  : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                              }`}
                             >
-                              #{t}
+                              <MessageCircle className="w-3.5 h-3.5" />
+                              {post.replies}{" "}
+                              {post.replies === 1 ? "reply" : "replies"}
                             </button>
-                          ))}
+                            {isOwner && (
+                              <button
+                                onClick={() => handleDeletePost(post)}
+                                disabled={deletingId === post.id}
+                                className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all disabled:opacity-40"
+                                aria-label="Delete thread"
+                              >
+                                {deletingId === post.id ? (
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                )}
+                                Delete
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      )}
-
-                      <div className="flex items-center gap-2 pt-2 border-t border-border/20">
-                        <button
-                          onClick={() => handleLike(post)}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                            post.liked
-                              ? "bg-primary/15 text-primary"
-                              : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                          }`}
-                        >
-                          <Heart
-                            className={`w-3.5 h-3.5 ${post.liked ? "fill-current" : ""}`}
-                          />
-                          {post.likes}
-                        </button>
-                        <button
-                          onClick={() => loadReplies(post.id)}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                            open
-                              ? "bg-primary/15 text-primary"
-                              : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                          }`}
-                        >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          {post.replies}
-                        </button>
                       </div>
 
+                      {/* Threaded replies */}
                       <AnimatePresence>
-                        {open && (
+                        {open && !isPending && !isRejected && (
                           <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
                             className="overflow-hidden"
                           >
-                            <div className="mt-4 pt-4 border-t border-border/20 space-y-3">
+                            <div className="pl-6 pr-4 pb-4 pt-1 border-t border-border/20 bg-muted/10">
                               {replies === null && (
-                                <div className="flex justify-center py-2">
+                                <div className="flex justify-center py-4">
                                   <Loader2 className="w-4 h-4 text-primary animate-spin" />
                                 </div>
                               )}
-                              {Array.isArray(replies) &&
-                                replies.map((r) => (
-                                  <div
-                                    key={r.id}
-                                    className="bg-muted/20 rounded-xl px-3 py-2.5"
-                                  >
-                                    <div className="flex items-center gap-2 mb-1">
-                                      <span className="text-sm">
-                                        {r.profile.avatar_emoji}
-                                      </span>
-                                      <span className="text-xs font-semibold text-foreground">
-                                        {r.profile.display_name}
-                                      </span>
-                                      <span className="text-[10px] text-muted-foreground">
-                                        {timeAgo(r.created_at)}
-                                      </span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                                      {r.body}
-                                    </p>
-                                  </div>
-                                ))}
+                              {Array.isArray(replies) && replies.length > 0 && (
+                                <div className="space-y-2 mt-3">
+                                  {replies.map((r) => {
+                                    const isReplyOwner = user?.id === r.user_id;
+                                    return (
+                                      <div
+                                        key={r.id}
+                                        className="relative pl-5 group"
+                                      >
+                                        <span
+                                          className="absolute left-0 top-0 bottom-0 w-px bg-border/40"
+                                          aria-hidden
+                                        />
+                                        <CornerDownRight
+                                          className="absolute -left-0.5 top-2 w-3 h-3 text-border"
+                                          aria-hidden
+                                        />
+                                        <div className="rounded-xl bg-background/60 border border-border/30 px-3 py-2.5">
+                                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                            <span className="text-sm">
+                                              {r.profile.avatar_emoji}
+                                            </span>
+                                            <span className="text-xs font-semibold text-foreground">
+                                              {r.profile.display_name}
+                                            </span>
+                                            <span className="text-[10px] text-muted-foreground">
+                                              {timeAgo(r.created_at)}
+                                            </span>
+                                            {isReplyOwner && (
+                                              <button
+                                                onClick={() =>
+                                                  handleDeleteReply(post.id, r)
+                                                }
+                                                className="ml-auto text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                                                aria-label="Delete reply"
+                                              >
+                                                <Trash2 className="w-3 h-3" />
+                                              </button>
+                                            )}
+                                          </div>
+                                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                                            {r.body}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
 
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 mt-3 pl-5">
                                 <input
                                   type="text"
                                   value={replyDrafts[post.id] || ""}
@@ -548,7 +688,7 @@ const Community = () => {
                                   }
                                   disabled={!user}
                                   maxLength={500}
-                                  className="flex-1 px-3 py-2 rounded-xl bg-background/50 border border-border/30 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+                                  className="flex-1 px-3 py-2 rounded-xl bg-background/70 border border-border/40 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
                                 />
                                 <button
                                   onClick={() => submitReply(post.id)}
@@ -558,6 +698,7 @@ const Community = () => {
                                     replying === post.id
                                   }
                                   className="px-3 py-2 rounded-xl bg-primary text-primary-foreground disabled:opacity-40"
+                                  aria-label="Send reply"
                                 >
                                   {replying === post.id ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -566,6 +707,18 @@ const Community = () => {
                                   )}
                                 </button>
                               </div>
+                            </div>
+                          </motion.div>
+                        )}
+                        {open && (isPending || isRejected) && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-5 py-3 border-t border-border/20 text-xs text-muted-foreground">
+                              Replies open once an admin approves this thread.
                             </div>
                           </motion.div>
                         )}
