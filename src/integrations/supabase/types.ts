@@ -50,6 +50,7 @@ export type Database = {
           id: string
           likes: number
           replies: number
+          status: string
           tags: string[]
           user_id: string
         }
@@ -59,6 +60,7 @@ export type Database = {
           id?: string
           likes?: number
           replies?: number
+          status?: string
           tags?: string[]
           user_id: string
         }
@@ -68,6 +70,7 @@ export type Database = {
           id?: string
           likes?: number
           replies?: number
+          status?: string
           tags?: string[]
           user_id?: string
         }
