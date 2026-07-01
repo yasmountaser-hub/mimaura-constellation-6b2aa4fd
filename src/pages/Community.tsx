@@ -16,6 +16,8 @@ import {
   ShieldCheck,
   Hourglass,
   CornerDownRight,
+  Heart,
+  Flower2,
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -25,6 +27,16 @@ import AccessibilityPanel from "@/components/AccessibilityPanel";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Profile {
   display_name: string;
@@ -76,6 +88,14 @@ const parseTags = (raw: string): string[] =>
     ),
   ).slice(0, 5);
 
+// Deterministic pastel accent per post so cards feel alive but stable.
+const ACCENTS = ["primary", "rose", "gold", "sky", "mint", "lavender"] as const;
+const accentFor = (id: string) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return ACCENTS[h % ACCENTS.length];
+};
+
 const Community = () => {
   const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
@@ -88,6 +108,11 @@ const Community = () => {
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const [replying, setReplying] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<
+    | { type: "post"; post: Post }
+    | { type: "reply"; postId: string; reply: Reply }
+    | null
+  >(null);
 
   const fetchPosts = useCallback(async () => {
     let query = supabase
@@ -192,9 +217,8 @@ const Community = () => {
     }
   };
 
-  const handleDeletePost = async (post: Post) => {
+  const performDeletePost = async (post: Post) => {
     if (!user || user.id !== post.user_id) return;
-    if (!confirm("Delete this thread? This can't be undone.")) return;
     setDeletingId(post.id);
     const { error } = await supabase.from("circle_posts").delete().eq("id", post.id);
     setDeletingId(null);
@@ -203,12 +227,11 @@ const Community = () => {
       return;
     }
     setPosts((ps) => ps.filter((p) => p.id !== post.id));
-    toast.success("Thread deleted");
+    toast.success("Thread deleted 🌙");
   };
 
-  const handleDeleteReply = async (postId: string, reply: Reply) => {
+  const performDeleteReply = async (postId: string, reply: Reply) => {
     if (!user || user.id !== reply.user_id) return;
-    if (!confirm("Delete this reply?")) return;
     const { error } = await supabase
       .from("circle_replies")
       .delete()
@@ -297,102 +320,57 @@ const Community = () => {
       <Header />
       <AccessibilityPanel />
 
-      {/* Soft glow backdrop */}
+      {/* Ambient aurora backdrop */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-32 left-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute bottom-20 right-1/4 w-80 h-80 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute top-24 left-[10%] w-[520px] h-[520px] rounded-full bg-primary/15 blur-[120px]" />
+        <div className="absolute top-[40%] right-[5%] w-[420px] h-[420px] rounded-full bg-rose/15 blur-[120px]" />
+        <div className="absolute bottom-10 left-[30%] w-[480px] h-[480px] rounded-full bg-gold/10 blur-[120px]" />
       </div>
 
       <main className="pt-28 pb-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto">
-          {/* Hero — Y2K chrome + sparkle */}
+          {/* Hero */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative text-center mb-8 space-y-4 pt-6"
+            className="relative text-center mb-10 space-y-4 pt-6"
           >
-            {/* Sticker: ur fav circle (glossy pill with hard offset shadow) */}
-            <motion.div
-              aria-hidden
-              animate={{ rotate: [-14, -10, -14] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="hidden sm:flex absolute -top-2 -left-2 md:-left-6 items-center gap-2 px-3 py-1 rounded-full bg-background border-2 border-background select-none"
-              style={{
-                boxShadow: "4px 4px 0 0 hsl(var(--rose) / 0.45)",
-              }}
-            >
-              <span
-                className="w-3 h-3 rounded-full bg-gradient-to-br from-rose to-primary"
-                style={{ boxShadow: "inset -1px -1px 2px hsl(var(--background))" }}
-              />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-rose">
-                ur fav circle
-              </span>
-            </motion.div>
-
-            {/* Sticker: NEW NEW NEW price-tag */}
-            <motion.div
-              aria-hidden
-              animate={{ rotate: [12, 16, 12], y: [0, -3, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="hidden sm:block absolute top-0 -right-2 md:-right-6 bg-gold/30 border-2 border-background px-3 py-2 rounded-xl select-none"
-              style={{ boxShadow: "4px 4px 0 0 hsl(var(--gold) / 0.35)" }}
-            >
-              <span className="text-[10px] font-black text-gold-foreground uppercase tracking-tight">
-                new new new
-              </span>
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-background rotate-45 border border-background" />
-            </motion.div>
-
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-medium text-primary">
               <ShieldCheck className="w-3 h-3" />
               Moderated for kindness — every thread reviewed
             </div>
 
-            {/* Chrome/liquid italic title with sparkle bursts */}
             <div className="relative inline-block">
+              <motion.span
+                aria-hidden
+                animate={{ rotate: 360 }}
+                transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+                className="absolute -top-6 -left-8 text-2xl text-primary/50"
+              >
+                ✿
+              </motion.span>
+              <motion.span
+                aria-hidden
+                animate={{ scale: [0.9, 1.15, 0.9], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute -top-3 -right-6 text-xl text-gold"
+              >
+                ✦
+              </motion.span>
               <h1
-                className="font-display italic font-black tracking-tighter text-5xl sm:text-6xl md:text-7xl leading-none"
+                className="font-display font-black tracking-tight text-5xl sm:text-6xl md:text-7xl leading-none italic"
                 style={{
                   backgroundImage:
-                    "linear-gradient(to bottom, hsl(var(--primary)) 0%, hsl(var(--rose) / 0.7) 45%, hsl(var(--background)) 55%, hsl(var(--primary)) 100%)",
+                    "linear-gradient(120deg, hsl(var(--primary)) 0%, hsl(var(--rose)) 40%, hsl(var(--gold)) 75%, hsl(var(--primary)) 100%)",
+                  backgroundSize: "200% 100%",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  filter: "drop-shadow(0 3px 0 hsl(var(--primary) / 0.22)) drop-shadow(0 1px 0 hsl(var(--background)))",
+                  filter: "drop-shadow(0 2px 8px hsl(var(--primary) / 0.25))",
                 }}
               >
                 The Circle
               </h1>
-              {/* Sparkle bursts */}
-              <motion.span
-                aria-hidden
-                animate={{ scale: [0.6, 1.1, 0.6], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-3 -right-5 w-7 h-7 rounded-full pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(circle, hsl(var(--background)) 15%, hsl(var(--gold) / 0.4) 40%, transparent 70%)",
-                }}
-              />
-              <motion.span
-                aria-hidden
-                animate={{ scale: [0.5, 1, 0.5], opacity: [0.4, 0.9, 0.4] }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-                className="absolute bottom-1 -left-5 w-5 h-5 rounded-full pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(circle, hsl(var(--background)) 15%, hsl(var(--rose) / 0.4) 45%, transparent 70%)",
-                }}
-              />
-              <motion.span
-                aria-hidden
-                animate={{ rotate: 360 }}
-                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                className="absolute -top-4 left-1/2 -translate-x-1/2 text-lg text-primary/60 pointer-events-none"
-              >
-                ✦
-              </motion.span>
             </div>
 
             <p className="text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
@@ -408,7 +386,7 @@ const Community = () => {
             </div>
           </motion.div>
 
-          {/* Stats — glossy holo cards */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -416,33 +394,33 @@ const Community = () => {
             className="grid grid-cols-3 gap-3 mb-6"
           >
             {[
-              { label: "Threads", value: posts.length, icon: MessageCircle },
+              { label: "Threads", value: posts.length, icon: MessageCircle, tint: "primary" },
               {
                 label: "Upvotes",
                 value: posts.reduce((s, p) => s + p.likes, 0),
-                icon: ChevronUp,
+                icon: Heart,
+                tint: "rose",
               },
               {
                 label: "Replies",
                 value: posts.reduce((s, p) => s + p.replies, 0),
                 icon: Users,
+                tint: "gold",
               },
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="relative glass-card rounded-2xl p-3 text-center overflow-hidden border border-background/60"
+                className="relative rounded-2xl p-4 text-center overflow-hidden border border-border/40"
+                style={{
+                  background: `linear-gradient(155deg, hsl(var(--${stat.tint}) / 0.14), hsl(var(--card) / 0.7) 60%)`,
+                  backdropFilter: "blur(12px)",
+                }}
               >
-                {/* diagonal chrome sheen */}
-                <div
-                  aria-hidden
-                  className="absolute inset-0 pointer-events-none opacity-70"
-                  style={{
-                    background:
-                      "linear-gradient(115deg, transparent 40%, hsl(var(--background) / 0.45) 50%, transparent 60%)",
-                  }}
+                <stat.icon
+                  className="relative w-4 h-4 mx-auto mb-1"
+                  style={{ color: `hsl(var(--${stat.tint}))` }}
                 />
-                <stat.icon className="relative w-4 h-4 text-primary mx-auto mb-1" />
-                <p className="relative font-display text-lg font-black text-foreground tracking-tight">
+                <p className="relative font-display text-2xl font-black text-foreground tracking-tight">
                   {stat.value}
                 </p>
                 <p className="relative text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
@@ -452,62 +430,70 @@ const Community = () => {
             ))}
           </motion.div>
 
-
           {/* Composer */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="glass-card rounded-2xl p-4 mb-6 relative overflow-hidden"
+            className="relative rounded-3xl mb-6 overflow-hidden"
+            style={{
+              padding: "1px",
+              background:
+                "linear-gradient(135deg, hsl(var(--primary) / 0.5), hsl(var(--rose) / 0.35), hsl(var(--gold) / 0.4))",
+            }}
           >
-            <div
-              className="absolute inset-0 -z-10 opacity-40"
-              style={{ background: "var(--gradient-mesh, transparent)" }}
-            />
-            <div className="flex items-center gap-2 mb-2 text-[11px] text-muted-foreground">
-              <Sparkles className="w-3 h-3 text-primary" />
-              Start a new thread — admins approve before it goes live
-            </div>
-            <textarea
-              value={composer}
-              onChange={(e) => setComposer(e.target.value)}
-              placeholder={
-                user
-                  ? "What's on your mind? Use #tags so others can find you…"
-                  : "Sign in to share with The Circle…"
-              }
-              disabled={!user}
-              maxLength={1000}
-              rows={3}
-              className="w-full bg-transparent text-foreground placeholder:text-muted-foreground text-sm leading-relaxed focus:outline-none resize-none disabled:opacity-60"
-            />
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-border/30">
-              <span className="text-[11px] text-muted-foreground">
-                {composer.length}/1000 · #tags supported
-              </span>
-              {user ? (
-                <button
-                  onClick={handlePost}
-                  disabled={!composer.trim() || posting}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-primary-foreground disabled:opacity-40 transition-all"
-                  style={{ background: "var(--gradient-button)" }}
-                >
-                  {posting ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <Send className="w-3.5 h-3.5" />
-                  )}
-                  Submit thread
-                </button>
-              ) : (
-                <Link
-                  to="/auth"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-primary-foreground"
-                  style={{ background: "var(--gradient-button)" }}
-                >
-                  Sign in to post
-                </Link>
-              )}
+            <div className="rounded-[calc(1.5rem-1px)] bg-card/85 backdrop-blur-xl p-5">
+              <div className="flex items-center gap-2 mb-3 text-[11px] text-muted-foreground">
+                <Flower2 className="w-3.5 h-3.5 text-primary" />
+                Start a new thread — admins approve before it goes live
+              </div>
+              <textarea
+                value={composer}
+                onChange={(e) => setComposer(e.target.value)}
+                placeholder={
+                  user
+                    ? "What's on your mind? Use #tags so others can find you…"
+                    : "Sign in to share with The Circle…"
+                }
+                disabled={!user}
+                maxLength={1000}
+                rows={3}
+                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/70 text-[15px] leading-relaxed focus:outline-none resize-none disabled:opacity-60"
+              />
+              <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
+                <span className="text-[11px] text-muted-foreground">
+                  {composer.length}/1000 · #tags supported
+                </span>
+                {user ? (
+                  <button
+                    onClick={handlePost}
+                    disabled={!composer.trim() || posting}
+                    className="group inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold text-primary-foreground disabled:opacity-40 transition-all shadow-soft hover:shadow-glow hover:-translate-y-0.5"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--rose)))",
+                    }}
+                  >
+                    {posting ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Send className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    )}
+                    Submit thread
+                  </button>
+                ) : (
+                  <Link
+                    to="/auth"
+                    className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold text-primary-foreground shadow-soft"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--rose)))",
+                    }}
+                  >
+                    Sign in to post
+                  </Link>
+                )}
+              </div>
             </div>
           </motion.div>
 
@@ -517,11 +503,19 @@ const Community = () => {
               <button
                 key={opt.key}
                 onClick={() => setSort(opt.key)}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                   sort === opt.key
-                    ? "bg-primary text-primary-foreground shadow-soft"
-                    : "bg-card border border-border/50 text-muted-foreground hover:text-foreground"
+                    ? "text-primary-foreground shadow-soft"
+                    : "bg-card/60 backdrop-blur border border-border/40 text-muted-foreground hover:text-foreground hover:border-primary/30"
                 }`}
+                style={
+                  sort === opt.key
+                    ? {
+                        background:
+                          "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--rose)))",
+                      }
+                    : undefined
+                }
               >
                 <opt.icon className="w-3 h-3" />
                 {opt.label}
@@ -561,8 +555,14 @@ const Community = () => {
               <Loader2 className="w-6 h-6 text-primary animate-spin" />
             </div>
           ) : visible.length === 0 ? (
-            <div className="glass-card rounded-2xl p-10 text-center">
-              <span className="text-4xl block mb-3">🌸</span>
+            <div className="glass-card rounded-3xl p-12 text-center">
+              <motion.span
+                animate={{ rotate: [0, 8, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="text-5xl block mb-3"
+              >
+                🌸
+              </motion.span>
               <p className="font-display text-lg font-bold text-foreground mb-1">
                 The Circle is quiet right now
               </p>
@@ -572,7 +572,7 @@ const Community = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <AnimatePresence initial={false}>
                 {visible.map((post) => {
                   const replies = openReplies[post.id];
@@ -580,245 +580,318 @@ const Community = () => {
                   const isOwner = user?.id === post.user_id;
                   const isPending = post.status === "pending";
                   const isRejected = post.status === "rejected";
+                  const accent = accentFor(post.id);
 
                   return (
                     <motion.article
                       key={post.id}
                       layout
-                      initial={{ opacity: 0, y: 12 }}
+                      initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.97 }}
-                      className={`glass-card rounded-2xl overflow-hidden transition-all hover:shadow-soft ${
-                        isPending
-                          ? "ring-1 ring-yellow-400/40"
-                          : isRejected
-                            ? "ring-1 ring-destructive/40 opacity-70"
-                            : ""
+                      whileHover={{ y: -2 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      className={`relative rounded-3xl overflow-hidden group ${
+                        isRejected ? "opacity-70" : ""
                       }`}
+                      style={{
+                        padding: "1px",
+                        background: isPending
+                          ? "linear-gradient(135deg, hsl(var(--gold) / 0.6), hsl(var(--gold) / 0.15))"
+                          : isRejected
+                            ? "linear-gradient(135deg, hsl(var(--destructive) / 0.5), hsl(var(--destructive) / 0.15))"
+                            : `linear-gradient(135deg, hsl(var(--${accent}) / 0.45), hsl(var(--border) / 0.4) 60%)`,
+                      }}
                     >
-                      <div className="flex">
-                        {/* Vote rail */}
-                        <div className="flex flex-col items-center gap-1 px-3 py-4 bg-gradient-to-b from-primary/5 to-transparent border-r border-border/20 min-w-[56px]">
-                          <button
-                            onClick={() => handleLike(post)}
-                            aria-label="Upvote"
-                            className={`p-1.5 rounded-lg transition-all ${
-                              post.liked
-                                ? "bg-primary text-primary-foreground shadow-soft"
-                                : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
-                            }`}
+                      <div className="relative rounded-[calc(1.5rem-1px)] bg-card/90 backdrop-blur-xl overflow-hidden">
+                        {/* Corner glow */}
+                        <div
+                          aria-hidden
+                          className="absolute -top-16 -right-16 w-40 h-40 rounded-full blur-3xl opacity-40 pointer-events-none"
+                          style={{ background: `hsl(var(--${accent}) / 0.5)` }}
+                        />
+
+                        <div className="relative flex">
+                          {/* Vote rail */}
+                          <div
+                            className="flex flex-col items-center justify-start gap-1 px-3 py-5 min-w-[64px] border-r border-border/20"
+                            style={{
+                              background: `linear-gradient(180deg, hsl(var(--${accent}) / 0.08), transparent)`,
+                            }}
                           >
-                            <ChevronUp
-                              className={`w-5 h-5 ${post.liked ? "fill-current" : ""}`}
-                            />
-                          </button>
-                          <span
-                            className={`font-display text-sm font-bold ${
-                              post.liked ? "text-primary" : "text-foreground"
-                            }`}
-                          >
-                            {post.likes}
-                          </span>
-                          <span className="text-[9px] uppercase tracking-wider text-muted-foreground">
-                            karma
-                          </span>
-                        </div>
-
-                        {/* Body */}
-                        <div className="flex-1 p-4 min-w-0">
-                          <div className="flex items-center gap-2 mb-2 flex-wrap">
-                            <span className="text-xl">{post.profile.avatar_emoji}</span>
-                            <span className="text-sm font-bold text-foreground">
-                              {post.profile.display_name}
-                            </span>
-                            <span className="text-muted-foreground text-xs">·</span>
-                            <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-                              <Clock className="w-2.5 h-2.5" />
-                              {timeAgo(post.created_at)}
-                            </span>
-                            {isPending && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-400/15 text-yellow-600 dark:text-yellow-300 text-[10px] font-semibold">
-                                <Hourglass className="w-2.5 h-2.5" />
-                                Pending review
-                              </span>
-                            )}
-                            {isRejected && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-destructive/15 text-destructive text-[10px] font-semibold">
-                                Not approved
-                              </span>
-                            )}
-                          </div>
-
-                          <p className="text-[15px] text-foreground leading-relaxed whitespace-pre-wrap mb-3">
-                            {post.body}
-                          </p>
-
-                          {post.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1.5 mb-3">
-                              {post.tags.map((t) => (
-                                <button
-                                  key={t}
-                                  onClick={() => setTagFilter(t)}
-                                  className="px-2 py-0.5 rounded-full bg-muted/40 text-[10px] font-medium text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                                >
-                                  #{t}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-
-                          <div className="flex items-center gap-1.5 pt-2 border-t border-border/20">
                             <button
-                              onClick={() => loadReplies(post.id)}
-                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                                open
-                                  ? "bg-primary/15 text-primary"
+                              onClick={() => handleLike(post)}
+                              aria-label="Upvote"
+                              className={`p-2 rounded-xl transition-all active:scale-90 ${
+                                post.liked
+                                  ? "text-primary-foreground shadow-glow"
                                   : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
                               }`}
+                              style={
+                                post.liked
+                                  ? {
+                                      background:
+                                        "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--rose)))",
+                                    }
+                                  : undefined
+                              }
                             >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                              {post.replies}{" "}
-                              {post.replies === 1 ? "reply" : "replies"}
+                              <ChevronUp
+                                className={`w-5 h-5 ${post.liked ? "fill-current" : ""}`}
+                              />
                             </button>
-                            {isOwner && (
-                              <button
-                                onClick={() => handleDeletePost(post)}
-                                disabled={deletingId === post.id}
-                                className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all disabled:opacity-40"
-                                aria-label="Delete thread"
+                            <span
+                              className={`font-display text-base font-black tracking-tight ${
+                                post.liked ? "text-primary" : "text-foreground"
+                              }`}
+                            >
+                              {post.likes}
+                            </span>
+                            <span className="text-[9px] uppercase tracking-widest text-muted-foreground font-semibold">
+                              karma
+                            </span>
+                          </div>
+
+                          {/* Body */}
+                          <div className="flex-1 p-5 min-w-0">
+                            <div className="flex items-center gap-2 mb-3 flex-wrap">
+                              <div
+                                className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0 border border-border/40"
+                                style={{
+                                  background: `linear-gradient(135deg, hsl(var(--${accent}) / 0.25), hsl(var(--card)))`,
+                                }}
                               >
-                                {deletingId === post.id ? (
-                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                ) : (
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                )}
-                                Delete
-                              </button>
+                                {post.profile.avatar_emoji}
+                              </div>
+                              <div className="flex flex-col leading-tight">
+                                <span className="text-sm font-bold text-foreground">
+                                  {post.profile.display_name}
+                                </span>
+                                <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                                  <Clock className="w-2.5 h-2.5" />
+                                  {timeAgo(post.created_at)}
+                                </span>
+                              </div>
+                              {isPending && (
+                                <span className="ml-auto inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gold/15 text-gold text-[10px] font-bold uppercase tracking-wider">
+                                  <Hourglass className="w-2.5 h-2.5" />
+                                  Pending
+                                </span>
+                              )}
+                              {isRejected && (
+                                <span className="ml-auto inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-destructive/15 text-destructive text-[10px] font-bold uppercase tracking-wider">
+                                  Not approved
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-[15px] text-foreground leading-relaxed whitespace-pre-wrap mb-3">
+                              {post.body}
+                            </p>
+
+                            {post.tags.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 mb-4">
+                                {post.tags.map((t) => (
+                                  <button
+                                    key={t}
+                                    onClick={() => setTagFilter(t)}
+                                    className="px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all hover:-translate-y-0.5"
+                                    style={{
+                                      background: `hsl(var(--${accent}) / 0.12)`,
+                                      color: `hsl(var(--${accent}))`,
+                                    }}
+                                  >
+                                    #{t}
+                                  </button>
+                                ))}
+                              </div>
                             )}
+
+                            <div className="flex items-center gap-1.5 pt-3 border-t border-border/20">
+                              <button
+                                onClick={() => loadReplies(post.id)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                                  open
+                                    ? "bg-primary/15 text-primary"
+                                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                                }`}
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                                {post.replies}{" "}
+                                {post.replies === 1 ? "reply" : "replies"}
+                              </button>
+                              <button
+                                onClick={() => handleLike(post)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                                  post.liked
+                                    ? "bg-rose/15 text-rose"
+                                    : "text-muted-foreground hover:bg-rose/10 hover:text-rose"
+                                }`}
+                              >
+                                <Heart
+                                  className={`w-3.5 h-3.5 ${post.liked ? "fill-current" : ""}`}
+                                />
+                                {post.liked ? "Loved" : "Love"}
+                              </button>
+                              {isOwner && (
+                                <button
+                                  onClick={() =>
+                                    setConfirmDelete({ type: "post", post })
+                                  }
+                                  disabled={deletingId === post.id}
+                                  className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all disabled:opacity-40"
+                                  aria-label="Delete thread"
+                                >
+                                  {deletingId === post.id ? (
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  )}
+                                  Delete
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Threaded replies */}
-                      <AnimatePresence>
-                        {open && !isPending && !isRejected && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pl-6 pr-4 pb-4 pt-1 border-t border-border/20 bg-muted/10">
-                              {replies === null && (
-                                <div className="flex justify-center py-4">
-                                  <Loader2 className="w-4 h-4 text-primary animate-spin" />
-                                </div>
-                              )}
-                              {Array.isArray(replies) && replies.length > 0 && (
-                                <div className="space-y-2 mt-3">
-                                  {replies.map((r) => {
-                                    const isReplyOwner = user?.id === r.user_id;
-                                    return (
-                                      <div
-                                        key={r.id}
-                                        className="relative pl-5 group"
-                                      >
-                                        <span
-                                          className="absolute left-0 top-0 bottom-0 w-px bg-border/40"
-                                          aria-hidden
-                                        />
-                                        <CornerDownRight
-                                          className="absolute -left-0.5 top-2 w-3 h-3 text-border"
-                                          aria-hidden
-                                        />
-                                        <div className="rounded-xl bg-background/60 border border-border/30 px-3 py-2.5">
-                                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                            <span className="text-sm">
-                                              {r.profile.avatar_emoji}
-                                            </span>
-                                            <span className="text-xs font-semibold text-foreground">
-                                              {r.profile.display_name}
-                                            </span>
-                                            <span className="text-[10px] text-muted-foreground">
-                                              {timeAgo(r.created_at)}
-                                            </span>
-                                            {isReplyOwner && (
-                                              <button
-                                                onClick={() =>
-                                                  handleDeleteReply(post.id, r)
-                                                }
-                                                className="ml-auto text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
-                                                aria-label="Delete reply"
-                                              >
-                                                <Trash2 className="w-3 h-3" />
-                                              </button>
-                                            )}
+                        {/* Threaded replies */}
+                        <AnimatePresence>
+                          {open && !isPending && !isRejected && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div
+                                className="pl-6 pr-5 pb-5 pt-2 border-t border-border/20"
+                                style={{
+                                  background: `linear-gradient(180deg, hsl(var(--${accent}) / 0.05), transparent)`,
+                                }}
+                              >
+                                {replies === null && (
+                                  <div className="flex justify-center py-4">
+                                    <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                                  </div>
+                                )}
+                                {Array.isArray(replies) && replies.length > 0 && (
+                                  <div className="space-y-2 mt-3">
+                                    {replies.map((r) => {
+                                      const isReplyOwner = user?.id === r.user_id;
+                                      return (
+                                        <div
+                                          key={r.id}
+                                          className="relative pl-5 group/reply"
+                                        >
+                                          <span
+                                            className="absolute left-0 top-0 bottom-0 w-px"
+                                            style={{
+                                              background: `linear-gradient(180deg, hsl(var(--${accent}) / 0.5), transparent)`,
+                                            }}
+                                            aria-hidden
+                                          />
+                                          <CornerDownRight
+                                            className="absolute -left-0.5 top-2 w-3 h-3"
+                                            style={{ color: `hsl(var(--${accent}) / 0.5)` }}
+                                            aria-hidden
+                                          />
+                                          <div className="rounded-2xl bg-background/70 border border-border/30 px-3.5 py-2.5 backdrop-blur">
+                                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                              <span className="text-sm">
+                                                {r.profile.avatar_emoji}
+                                              </span>
+                                              <span className="text-xs font-bold text-foreground">
+                                                {r.profile.display_name}
+                                              </span>
+                                              <span className="text-[10px] text-muted-foreground">
+                                                {timeAgo(r.created_at)}
+                                              </span>
+                                              {isReplyOwner && (
+                                                <button
+                                                  onClick={() =>
+                                                    setConfirmDelete({
+                                                      type: "reply",
+                                                      postId: post.id,
+                                                      reply: r,
+                                                    })
+                                                  }
+                                                  className="ml-auto text-muted-foreground hover:text-destructive opacity-0 group-hover/reply:opacity-100 transition-opacity"
+                                                  aria-label="Delete reply"
+                                                >
+                                                  <Trash2 className="w-3 h-3" />
+                                                </button>
+                                              )}
+                                            </div>
+                                            <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                                              {r.body}
+                                            </p>
                                           </div>
-                                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                                            {r.body}
-                                          </p>
                                         </div>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              )}
+                                      );
+                                    })}
+                                  </div>
+                                )}
 
-                              <div className="flex gap-2 mt-3 pl-5">
-                                <input
-                                  type="text"
-                                  value={replyDrafts[post.id] || ""}
-                                  onChange={(e) =>
-                                    setReplyDrafts((d) => ({
-                                      ...d,
-                                      [post.id]: e.target.value,
-                                    }))
-                                  }
-                                  onKeyDown={(e) =>
-                                    e.key === "Enter" && submitReply(post.id)
-                                  }
-                                  placeholder={
-                                    user
-                                      ? "Reply with kindness…"
-                                      : "Sign in to reply…"
-                                  }
-                                  disabled={!user}
-                                  maxLength={500}
-                                  className="flex-1 px-3 py-2 rounded-xl bg-background/70 border border-border/40 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
-                                />
-                                <button
-                                  onClick={() => submitReply(post.id)}
-                                  disabled={
-                                    !user ||
-                                    !replyDrafts[post.id]?.trim() ||
-                                    replying === post.id
-                                  }
-                                  className="px-3 py-2 rounded-xl bg-primary text-primary-foreground disabled:opacity-40"
-                                  aria-label="Send reply"
-                                >
-                                  {replying === post.id ? (
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                  ) : (
-                                    <Send className="w-4 h-4" />
-                                  )}
-                                </button>
+                                <div className="flex gap-2 mt-3 pl-5">
+                                  <input
+                                    type="text"
+                                    value={replyDrafts[post.id] || ""}
+                                    onChange={(e) =>
+                                      setReplyDrafts((d) => ({
+                                        ...d,
+                                        [post.id]: e.target.value,
+                                      }))
+                                    }
+                                    onKeyDown={(e) =>
+                                      e.key === "Enter" && submitReply(post.id)
+                                    }
+                                    placeholder={
+                                      user
+                                        ? "Reply with kindness…"
+                                        : "Sign in to reply…"
+                                    }
+                                    disabled={!user}
+                                    maxLength={500}
+                                    className="flex-1 px-3.5 py-2 rounded-full bg-background/80 border border-border/40 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 disabled:opacity-60 transition-all"
+                                  />
+                                  <button
+                                    onClick={() => submitReply(post.id)}
+                                    disabled={
+                                      !user ||
+                                      !replyDrafts[post.id]?.trim() ||
+                                      replying === post.id
+                                    }
+                                    className="px-3 py-2 rounded-full text-primary-foreground disabled:opacity-40 shadow-soft transition-transform active:scale-95"
+                                    style={{
+                                      background:
+                                        "linear-gradient(135deg, hsl(var(--primary)), hsl(var(--rose)))",
+                                    }}
+                                    aria-label="Send reply"
+                                  >
+                                    {replying === post.id ? (
+                                      <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                      <Send className="w-4 h-4" />
+                                    )}
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          </motion.div>
-                        )}
-                        {open && (isPending || isRejected) && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="px-5 py-3 border-t border-border/20 text-xs text-muted-foreground">
-                              Replies open once an admin approves this thread.
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                            </motion.div>
+                          )}
+                          {open && (isPending || isRejected) && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="px-5 py-3 border-t border-border/20 text-xs text-muted-foreground">
+                                Replies open once an admin approves this thread.
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </motion.article>
                   );
                 })}
@@ -827,6 +900,45 @@ const Community = () => {
           )}
         </div>
       </main>
+
+      {/* Delete confirmation */}
+      <AlertDialog
+        open={!!confirmDelete}
+        onOpenChange={(o) => !o && setConfirmDelete(null)}
+      >
+        <AlertDialogContent className="rounded-3xl border-border/40">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-display flex items-center gap-2">
+              <Trash2 className="w-4 h-4 text-destructive" />
+              {confirmDelete?.type === "post"
+                ? "Delete this thread?"
+                : "Delete this reply?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {confirmDelete?.type === "post"
+                ? "This will remove your thread and all its replies from The Circle. This can't be undone."
+                : "This reply will be permanently removed. This can't be undone."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-full">Keep it</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (!confirmDelete) return;
+                if (confirmDelete.type === "post") {
+                  performDeletePost(confirmDelete.post);
+                } else {
+                  performDeleteReply(confirmDelete.postId, confirmDelete.reply);
+                }
+                setConfirmDelete(null);
+              }}
+              className="rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Footer />
     </div>
