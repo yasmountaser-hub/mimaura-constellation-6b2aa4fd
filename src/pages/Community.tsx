@@ -309,19 +309,55 @@ const Community = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-8 space-y-3"
+            className="relative text-center mb-8 space-y-3"
           >
+            {/* Y2K retro stickers */}
+            <motion.div
+              aria-hidden
+              animate={{ rotate: [-10, -6, -10] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="hidden sm:flex absolute -top-2 -left-2 md:-left-4 items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-rose to-primary text-primary-foreground text-[10px] font-bold font-display shadow-glow border-2 border-background select-none"
+              style={{ letterSpacing: "0.08em" }}
+            >
+              ✦ ur fav circle ✦
+            </motion.div>
+            <motion.div
+              aria-hidden
+              animate={{ rotate: [8, 12, 8], y: [0, -3, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="hidden sm:flex absolute -top-3 -right-2 md:-right-4 items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-gold to-accent text-accent-foreground text-[10px] font-bold font-display shadow-soft border-2 border-background select-none"
+              style={{ letterSpacing: "0.08em" }}
+            >
+              ★ new ★
+            </motion.div>
+
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-medium text-primary">
               <ShieldCheck className="w-3 h-3" />
               Moderated for kindness — every thread reviewed
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold relative inline-block">
               The <span className="text-gradient">Circle</span>
+              <motion.span
+                aria-hidden
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                className="absolute -top-2 -right-7 text-2xl text-primary/70"
+              >
+                ✿
+              </motion.span>
             </h1>
             <p className="text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
               A safe, threaded space to share, ask, and feel seen. Upvote what
               resonates, reply with care.
             </p>
+            {/* retro ribbon */}
+            <div className="flex justify-center pt-1">
+              <div className="inline-flex items-center gap-2 text-[10px] font-bold font-display tracking-[0.2em] uppercase text-primary/70">
+                <span>♡</span>
+                <span>be kind · stay soft · post real</span>
+                <span>♡</span>
+              </div>
+            </div>
           </motion.div>
 
           {/* Stats */}
